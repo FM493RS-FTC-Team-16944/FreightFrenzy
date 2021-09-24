@@ -1,0 +1,5 @@
+package org.firstinspires.ftc.teamcode;
+
+public class HiddenTest {
+    Boolean canSee = false;
+}

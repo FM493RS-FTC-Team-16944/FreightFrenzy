@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class posVolCtrlFF {
-    public static double destination = 0; //will be adjusted as driver moves arm
+    private double destination = 0; //will be adjusted when method is called
     public static double targetVelocity = 0; // also needs to be fixed
     public static double targetAccel = 0; // needs to be fixed
     private DcMotor motor;
@@ -29,7 +29,7 @@ public class posVolCtrlFF {
          motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
          motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
          **/
-
+        this.destination = 0; // input will replace 0
         waitForStart();
 
         if (opModeIsActive()) {

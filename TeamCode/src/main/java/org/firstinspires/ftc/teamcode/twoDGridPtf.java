@@ -11,6 +11,7 @@ public class twoDGridPtf {
     private int count = 0;
 
     public ArrayList<String> returnPath(int x, int y){
+        possPaths = new HashMap<Integer, ArrayList<String>>();
         int currentPosition = (0)(int); //call localization
         int currentX;
         int currentY;
@@ -27,7 +28,14 @@ public class twoDGridPtf {
         ArrayList<String> path = new ArrayList<String>();
         findSolutions(currentX, currentY, x,y, path, 0);
         //loop through solutions and pass the shortest one
-        for()
+        double shortDistance = Double.POSITIVE_INFINITY;
+        ArrayList<String> shortestPath;
+        for(Map.Entry<String,String> entry : possPaths.entrySet()){
+            if(entry.key < shortDistance){
+                shortDistance = entry.key;
+                shortestPath = entry.value;
+            }
+        }
     }
 
     public void findSolutions(int onX, int onY, int targetX, int targetY, ArrayList<String> path, double distanceTraveled){

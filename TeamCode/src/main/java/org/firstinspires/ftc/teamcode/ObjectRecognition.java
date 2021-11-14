@@ -123,7 +123,7 @@ public class ObjectRecognition extends LinearOpMode {
 
 
 
-        }
+    }
     /**
      * Initialize the Vuforia localization engine.
      */

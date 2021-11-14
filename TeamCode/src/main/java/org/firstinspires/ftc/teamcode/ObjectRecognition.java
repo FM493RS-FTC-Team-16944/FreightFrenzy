@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 
-@Autonomous(name = "ObjectRecognition", group = "Autonomous")
+@Autonomous(name = "ObjectRecognition", group = "vision")
 
 public class ObjectRecognition extends LinearOpMode {
 

@@ -2,17 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -93,11 +88,11 @@ public class ObjectRecognition extends LinearOpMode {
                                 recognition.getRight(), recognition.getBottom());
 
                         if (recognition.getLabel() == "Quad") {               //Takes the string and determines what type of object it is
-                            Path = 2;
+                            Path = 2;                                     //allows the robot to take a choice dpeending on whatever path is picked
                             break;                                              //Exits the loop early if one ring is detected
                         } else if (recognition.getLabel() == "Single") {
-                            Path = 1;
-                            break;                                             //Exits the loop once the stack of rings is detected
+                            Path = 1;                      //allows the robot to take a choice depending on what it sees
+                            break;                                             //Exits the loop once it makes a decision
                         }
                     }
 
@@ -122,8 +117,8 @@ public class ObjectRecognition extends LinearOpMode {
         /**Tensor flow end */
 
 
-
     }
+
     /**
      * Initialize the Vuforia localization engine.
      */

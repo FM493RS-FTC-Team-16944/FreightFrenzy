@@ -3,14 +3,18 @@ package org.firstinspires.ftc.teamcode;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 
+import org.firstinspires.ftc.teamcode.models.Coordinate;
+import org.firstinspires.ftc.teamcode.models.Field;
+
 public class GridBuilder {
-    final int GRID_LENGTH = 24;
-    final int GRID_WIDTH = 24;
+    final int GRID_LENGTH = 48;
+    final int GRID_WIDTH = 48;
 
     private final ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
+    private final Gson gson = new Gson();
 
     public static Field deserializeField(String json) {
-        return Gson.fromJson(json, Field.class);
+        return gson.fromJson(json, Field.class);
     }
 
     public Gson serializeField() {

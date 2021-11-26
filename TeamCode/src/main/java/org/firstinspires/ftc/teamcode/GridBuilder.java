@@ -10,15 +10,16 @@ public class GridBuilder {
     final int GRID_LENGTH = 48;
     final int GRID_WIDTH = 48;
 
+    public static final Gson gson = new Gson();
+
     private final ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
-    private final Gson gson = new Gson();
 
     public static Field deserializeField(String json) {
         return gson.fromJson(json, Field.class);
     }
 
-    public Gson serializeField() {
-        return Gson.toJson(this.matrix);
+    public String serializeField() {
+        return gson.toJson(this.matrix);
     }
 
     public Field build() {

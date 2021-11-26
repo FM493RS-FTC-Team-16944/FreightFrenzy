@@ -9,4 +9,9 @@ public class XyhVector {
         this.x = x;
         this.h = h;
     }
+    XyhVector(XyhVector vector){
+        this.x = vector.x;
+        this.y = vector.y;
+        this.h = vector.h;
+    }
 }

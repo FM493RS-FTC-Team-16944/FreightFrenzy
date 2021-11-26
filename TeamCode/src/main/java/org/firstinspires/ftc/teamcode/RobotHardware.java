@@ -45,8 +45,8 @@ public class RobotHardware {
     private double R = 2.54;
     private double N = 8192;
     private double cm_per_tick = 2.0 * Math.PI * R / N;
-    public XyhVector START_POS = new XyhVector();
-    public XyhVector pos = new XyHVector(START_POS);
+    public XyhVector START_POS = new XyhVector(0,0,0);
+    public XyhVector pos = new XyhVector(START_POS);
 
     private double previousRightPos = 0;
     private double previousLeftPos = 0;

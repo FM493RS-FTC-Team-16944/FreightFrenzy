@@ -69,7 +69,8 @@ public class AltObjectDetection extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
             "ball",
-            ""
+            "block",
+            "duck"
     };
 
     /*
@@ -180,6 +181,7 @@ public class AltObjectDetection extends LinearOpMode {
         tfodParameters.minResultConfidence = 0.8f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 320;
+
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
     }

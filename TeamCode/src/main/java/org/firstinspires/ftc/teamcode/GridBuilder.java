@@ -10,11 +10,11 @@ public class GridBuilder {
     private final ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
 
     public static Field deserializeField(String json) {
-        return gson.fromJson(json, Field.class);
+        return Gson.fromJson(json, Field.class);
     }
 
-    public GSON serializeField() {
-        return gson.toJson(this.matrix);
+    public Gson serializeField() {
+        return Gson.toJson(this.matrix);
     }
 
     public Field build() {

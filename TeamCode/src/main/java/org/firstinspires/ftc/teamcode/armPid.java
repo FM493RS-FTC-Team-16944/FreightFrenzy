@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class armPid extends LinearOpMode {
 
 
-    public static double angle = 0 //will be adjusted as driver moves arm
+    public static double angle = 0; //will be adjusted as driver moves arm
     public static PIDCoefficients pidCos = new PIDCoefficients(0, 0, 0); //PID coefficients that need to be tuned
     public PIDCoefficients pidGs = new PIDCoefficients(0, 0, 0); //PID gains which we will define later in the process
     ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS); //timer

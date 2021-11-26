@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+/*
 public class posVolCtrlFF {
     public static double targetVelocity = 0; // also needs to be fixed
     public static double targetAccel = 0; // needs to be fixed
@@ -17,13 +17,13 @@ public class posVolCtrlFF {
     private DcMotor motor;
 
     public void runOpMode() {
-        /**initilization of motors
+        initilization of motors
          arm.hardwareMap.get("needs to be filled in");
 
          resetting and starting encoders to track angle
          motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
          motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         **/
+
         this.destination = 0; // input will replace 0
         waitForStart();
 
@@ -58,4 +58,4 @@ public class posVolCtrlFF {
         PIDTimer.reset();
 
     }
-}
+}*/

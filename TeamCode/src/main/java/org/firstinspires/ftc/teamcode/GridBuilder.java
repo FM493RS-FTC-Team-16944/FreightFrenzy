@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 
 public class GridBuilder {
-    final int GRID_LENGTH = 0;
-    final int GRID_WIDTH = 0;
+    final int GRID_LENGTH = 24;
+    final int GRID_WIDTH = 24;
 
     private final ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
 

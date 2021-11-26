@@ -8,20 +8,33 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class RobotHardware {
 
     private HardwareMap hardwareMap;
-    DcMotor leftEncoder, rightEncoder, auxEncoder;
+    DcMotor FrontRight, FrontLeft, BackRight, BackLeft, Intake, Lift, Flywheel, leftEncoder, rightEncoder, auxEncoder;
+    Servo Carriage;
 
     public RobotHardware(HardwareMap aHardwareMap) {
 
         hardwareMap = aHardwareMap;
 
-        DcMotor FrontRight = hardwareMap.dcMotor.get("FrontRight");
-        DcMotor FrontLeft = hardwareMap.dcMotor.get("FrontLeft");
-        DcMotor BackRight = hardwareMap.dcMotor.get("BackRight");
-        DcMotor BackLeft = hardwareMap.dcMotor.get("BackLeft");
-        DcMotor Intake = hardwareMap.dcMotor.get("Intake");
-        DcMotor Lift = hardwareMap.dcMotor.get("Lift");
-        DcMotor Flywheel = hardwareMap.dcMotor.get("Flywheel");
-        Servo Carriage = hardwareMap.servo.get("Carriage");
+        FrontRight = hardwareMap.dcMotor.get("FrontRight");
+        FrontRight.setDirection(DcMotor.Direction.FORWARD);
+        FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        FrontLeft = hardwareMap.dcMotor.get("FrontLeft");
+        FrontLeft.setDirection(DcMotor.Direction.FORWARD);
+        FrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        BackRight = hardwareMap.dcMotor.get("BackRight");
+        BackRight.setDirection(DcMotor.Direction.FORWARD);
+        BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        BackLeft = hardwareMap.dcMotor.get("BackLeft");
+        BackLeft.setDirection(DcMotor.Direction.FORWARD);
+        BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        Intake = hardwareMap.dcMotor.get("Intake");
+        Lift = hardwareMap.dcMotor.get("Lift");
+        Flywheel = hardwareMap.dcMotor.get("Flywheel");
+        Carriage = hardwareMap.servo.get("Carriage");
         Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Flywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -35,9 +48,24 @@ public class RobotHardware {
     }
 
     public void resetDriveEncoders() {
+        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        Intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        Flywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Flywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public void odometry(){
+        while(opModeIsActive()){
+            RobotHardware.updatePosition();
+
+            telemetry.add
+        }
+
+    }
 
 
     private double L = 24.09;
@@ -45,7 +73,7 @@ public class RobotHardware {
     private double R = 2.54;
     private double N = 8192;
     private double cm_per_tick = 2.0 * Math.PI * R / N;
-    public XyhVector START_POS = new XyhVector(0,0,0);
+    public XyhVector START_POS = new XyhVector();
     public XyhVector pos = new XyhVector(START_POS);
 
     private double previousRightPos = 0;
@@ -78,7 +106,7 @@ public class RobotHardware {
         pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
         pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
         pos.h += deltaT;
-        }
     }
+}
 
 }

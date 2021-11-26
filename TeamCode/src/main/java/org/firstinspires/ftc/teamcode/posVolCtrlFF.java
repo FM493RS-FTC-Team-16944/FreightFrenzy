@@ -1,25 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class posVolCtrlFF {
-    private double destination = 0; //will be adjusted when method is called
     public static double targetVelocity = 0; // also needs to be fixed
     public static double targetAccel = 0; // needs to be fixed
-    private DcMotor motor;
-
     //need to insert more motor variable initialization later
     public static double pidVol = 0; //PID coefficients that need to be tuned
     public static double pidAccel = 0;  //PID coefficients that need to be tuned
-
-
     ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS); //timer
+    double previousPosition = 0;//starting point
+    double previousVelocity = 0;
+    double previousAccel = 0;
+    private double destination = 0; //will be adjusted when method is called
+    private DcMotor motor;
 
     public void runOpMode() {
         /**initilization of motors
@@ -42,17 +37,13 @@ public class posVolCtrlFF {
         }
     }
 
-    double previousPosition = 0;//starting point
-    double previousVelocity = 0;
-    double previousAccel = 0;
-
-    public void PID(double targetPosition, double targetVelocity, double targetAccel){
+    public void PID(double targetPosition, double targetVelocity, double targetAccel) {
 
         double currentPosition = 0; //call localization function
-        double currentVelocity = (currentPosition - previousPosition)/(PIDTimer.time());
+        double currentVelocity = (currentPosition - previousPosition) / (PIDTimer.time());
         double velocityErr = targetVelocity - currentVelocity;
 
-        double currentAccel = (currentVelocity - previousVelocity)/(PIDTimer.time());
+        double currentAccel = (currentVelocity - previousVelocity) / (PIDTimer.time());
         double accelErr = targetAccel - currentAccel;
 
         double outputControl = pidVol * velocityErr + pidAccel * accelErr;

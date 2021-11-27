@@ -11,11 +11,33 @@ import org.firstinspires.ftc.teamcode.RobotHardware;
 @TeleOp(name = "GamePad")
 public class TeleOP extends LinearOpMode {
 
+    Mode currentMode = Mode.DRIVER_CONTROL;
+    DcMotor frontRightMotor, frontLeftMotor, backRightMotor, backLeftMotor = null;
+    DcMotor intake, lift, flyWheel;
+    Servo carriage;
     private RobotHardware robot;
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+        robot = new RobotHardware(hardwareMap);
+
+        waitForStart();
+
+        while (opModeIsActive() && !isStopRequested()) {
+            robot.odometry();
+            //TODO: Display odom telemetry readings (pos.x,pos.y,pos.h)
+            //TODO: Deleted mode switch, put in again
+        }
+    }
 
     enum Operation {
         ON,
         OFF
+    }
+    enum Mode {
+        DRIVER_CONTROL,
+        AUTOMATIC_CONTROL
     }
 
     class IntakeControl {
@@ -29,29 +51,5 @@ public class TeleOP extends LinearOpMode {
 
     class FlyWheelControl {
         Operation operation = Operation.OFF;
-    }
-
-    Mode currentMode = Mode.DRIVER_CONTROL;
-
-    DcMotor frontRightMotor, frontLeftMotor, backRightMotor, backLeftMotor = null;
-    DcMotor intake, lift, flyWheel;
-    Servo carriage;
-
-    @Override
-    public void runOpMode() throws InterruptedException {
-
-        robot = new RobotHardware(hardwareMap);
-
-        waitForStart();
-
-        while (opModeIsActive() && !isStopRequested()) {
-            robot.odometry();
-        }
-    }
-
-
-    enum Mode {
-        DRIVER_CONTROL,
-        AUTOMATIC_CONTROL
     }
 }

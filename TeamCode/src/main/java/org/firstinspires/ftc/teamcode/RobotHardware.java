@@ -14,8 +14,20 @@ public class RobotHardware {
     DcMotor FrontRight, FrontLeft, BackRight, BackLeft, Intake, Lift, Flywheel, leftEncoder, rightEncoder, auxEncoder;
     Servo Carriage;
     private HardwareMap hardwareMap;
+    /**
+     * ...........................................................................................
+     * ........................................ODOMETRY...........................................
+     * ...........................................................................................
+     */
 
-
+    private double L = 24.09;                              //Robot Geometry for odom
+    private double B = 10;                                 //needs to be remeasured
+    private double R = 2.54;
+    private double N = 8192;
+    private double cm_per_tick = 2.0 * Math.PI * R / N;
+    private double previousRightPos = 0;
+    private double previousLeftPos = 0;
+    private double previousAuxPos = 0;
     /**
      * ...........................................................................................
      * ........................................HARDWARE...........................................
@@ -75,21 +87,6 @@ public class RobotHardware {
         BackRight.setPower(0);
         BackLeft.setPower(0);
     }
-
-    /**
-     * ...........................................................................................
-     * ........................................ODOMETRY...........................................
-     * ...........................................................................................
-     */
-
-    private double L = 24.09;                              //Robot Geometry for odom
-    private double B = 10;                                 //needs to be remeasured
-    private double R = 2.54;
-    private double N = 8192;
-    private double cm_per_tick = 2.0 * Math.PI * R / N;
-    private double previousRightPos = 0;
-    private double previousLeftPos = 0;
-    private double previousAuxPos = 0;
 
     public void odometry() {
         this.previousRightPos = this.currentRightPos;

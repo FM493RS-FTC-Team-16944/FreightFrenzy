@@ -3,10 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class posVolCtrlFF {
+public class PositionVelocityCtrl {
     public static double targetVelocity = 0; // also needs to be fixed
     public static double targetAccel = 0; // needs to be fixed
-    //need to insert more motor variable initialization later
+
+    // need to insert more motor variable initialization later
     public static double pidVol = 0; //PID coefficients that need to be tuned
     public static double pidAccel = 0;  //PID coefficients that need to be tuned
     ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS); //timer

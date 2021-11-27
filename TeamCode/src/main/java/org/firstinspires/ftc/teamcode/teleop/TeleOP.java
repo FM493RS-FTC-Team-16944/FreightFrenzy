@@ -5,9 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.RobotHardware;
+
 
 @TeleOp(name = "GamePad")
-public class GamePad extends LinearOpMode {
+public class TeleOP extends LinearOpMode {
+
+    private RobotHardware robot;
+
     enum Operation {
         ON,
         OFF
@@ -34,27 +39,13 @@ public class GamePad extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        frontRightMotor = hardwareMap.dcMotor.get("FrontRight");
-        frontLeftMotor = hardwareMap.dcMotor.get("FrontLeft");
 
-        backRightMotor = hardwareMap.dcMotor.get("BackRight");
-        backLeftMotor = hardwareMap.dcMotor.get("BackLeft");
-
-        intake = hardwareMap.dcMotor.get("Intake");
-        lift = hardwareMap.dcMotor.get("Lift");
-        flyWheel = hardwareMap.dcMotor.get("Flywheel");
+        robot = new RobotHardware(hardwareMap);
 
         waitForStart();
 
-        if (isStopRequested()) return;
-
-        gamepad1
         while (opModeIsActive() && !isStopRequested()) {
-            // We follow different logic based on whether we are in manual driver control or switch
-            // control to the automatic mode
-            switch (currentMode) {
-
-            }
+            robot.odometry();
         }
     }
 

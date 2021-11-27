@@ -1,21 +1,32 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class RobotHardware {
 
-    private HardwareMap hardwareMap;
+    public XyhVector START_POS = new XyhVector(0, 0, 0);    //Robot starts at 0,0,0 coord (Can be adjusted later)
+    public XyhVector pos = new XyhVector(START_POS);
+    public double currentRightPos = 0;
+    public double currentLeftPos = 0;
+    public double currentAuxPos = 0;
     DcMotor FrontRight, FrontLeft, BackRight, BackLeft, Intake, Lift, Flywheel, leftEncoder, rightEncoder, auxEncoder;
     Servo Carriage;
+    private HardwareMap hardwareMap;
+
+
+    /**
+     * ...........................................................................................
+     * ........................................HARDWARE...........................................
+     * ...........................................................................................
+     */
 
     public RobotHardware(HardwareMap aHardwareMap) {
 
         hardwareMap = aHardwareMap;
 
-        FrontRight = hardwareMap.dcMotor.get("FrontRight");
+        FrontRight = hardwareMap.dcMotor.get("FrontRight");               //TODO: Find out which motors should be FORWARD or BACKWARD
         FrontRight.setDirection(DcMotor.Direction.FORWARD);
         FrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -58,40 +69,36 @@ public class RobotHardware {
         Flywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void odometry(){
-        while(opModeIsActive()){
-            RobotHardware.updatePosition();
-
-            telemetry.add
-        }
-
+    public void stop() {
+        FrontRight.setPower(0);
+        FrontLeft.setPower(0);
+        BackRight.setPower(0);
+        BackLeft.setPower(0);
     }
 
+    /**
+     * ...........................................................................................
+     * ........................................ODOMETRY...........................................
+     * ...........................................................................................
+     */
 
-    private double L = 24.09;
-    private double B = 10; //needs to be fixed
+    private double L = 24.09;                              //Robot Geometry for odom
+    private double B = 10;                                 //needs to be remeasured
     private double R = 2.54;
     private double N = 8192;
     private double cm_per_tick = 2.0 * Math.PI * R / N;
-    public XyhVector START_POS = new XyhVector();
-    public XyhVector pos = new XyhVector(START_POS);
-
     private double previousRightPos = 0;
     private double previousLeftPos = 0;
     private double previousAuxPos = 0;
 
-    public double currentRightPos = 0;
-    public double currentLeftPos = 0;
-    public double currentAuxPos = 0;
-
-    public void updatePostition(){
-        this.previousLeftPos = this.currentLeftPos;
+    public void odometry() {
         this.previousRightPos = this.currentRightPos;
+        this.previousLeftPos = this.currentLeftPos;
         this.previousAuxPos = this.currentAuxPos;
 
-        this.currentLeftPos = leftEncoder.getCurrentPosition();
-        this.currentRightPos = rightEncoder.getCurrentPosition();
-        this.currentAuxPos = auxEncoder.getCurrentPosition();
+        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
+        this.currentLeftPos = this.leftEncoder.getCurrentPosition();
+        this.currentAuxPos = this.auxEncoder.getCurrentPosition();
 
         double deltaLeft = this.currentLeftPos - this.previousLeftPos;
         double deltaRight = this.currentRightPos - this.previousRightPos;
@@ -107,7 +114,9 @@ public class RobotHardware {
         pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
         pos.h += deltaT;
     }
-}
 
 }
+
+
+
 

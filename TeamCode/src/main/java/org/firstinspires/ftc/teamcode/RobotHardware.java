@@ -24,8 +24,8 @@ public class RobotHardware {
     public HardwareMap hardwareMap;
     public Mode currentMode = Mode.DRIVER_CONTROL;
 
-    Operation intakeOperation = Operation.OFF;
-    Operation flyWheelOperation = Operation.OFF;
+    public Operation intakeOperation = Operation.OFF;
+    public Operation flyWheelOperation = Operation.OFF;
 
     class LiftPositions {
         final double downPosition = 0.0;
@@ -116,9 +116,11 @@ public class RobotHardware {
         pos.h += deltaT;
     }
 
-    enum Operation {
+    public enum Operation {
         ON,
         OFF
     }
+
+    public int speedScale = 0;
 
 }

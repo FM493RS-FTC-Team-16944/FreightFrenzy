@@ -1,93 +1,124 @@
 package org.firstinspires.ftc.teamcode;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.models.Mode;
+
 public class RobotHardware {
 
-    private HardwareMap hardwareMap;
-    DcMotor leftEncoder, rightEncoder, auxEncoder;
-
-    public RobotHardware(HardwareMap aHardwareMap) {
-
-        hardwareMap = aHardwareMap;
-
-        DcMotor FrontRight = hardwareMap.dcMotor.get("FrontRight");
-        DcMotor FrontLeft = hardwareMap.dcMotor.get("FrontLeft");
-        DcMotor BackRight = hardwareMap.dcMotor.get("BackRight");
-        DcMotor BackLeft = hardwareMap.dcMotor.get("BackLeft");
-        DcMotor Intake = hardwareMap.dcMotor.get("Intake");
-        DcMotor Lift = hardwareMap.dcMotor.get("Lift");
-        DcMotor Flywheel = hardwareMap.dcMotor.get("Flywheel");
-        Servo Carriage = hardwareMap.servo.get("Carriage");
-        Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Flywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightEncoder = Lift;
-        auxEncoder = Intake;
-        leftEncoder = Flywheel;
-
-        stop();
-        resetDriveEncoders();
-
-    }
-
-    public void resetDriveEncoders() {
-
-    }
-
-
-    public void odometry(){
-        while(opModeIsActive()){
-            this.updatePosition();
-
-            telemetry.addData()
-        }
-
-    }
-
-
-    private double L = 24.09;
-    private double B = 10; //needs to be fixed
-    private double R = 2.54;
-    private double N = 8192;
-    private double cm_per_tick = 2.0 * Math.PI * R / N;
-    public XyhVector START_POS = new XyhVector(0,0,0);
+    public XyhVector START_POS = new XyhVector(0, 0, 0);    //Robot starts at 0,0,0 coord (Can be adjusted later)
     public XyhVector pos = new XyhVector(START_POS);
-
-    private double previousRightPos = 0;
-    private double previousLeftPos = 0;
-    private double previousAuxPos = 0;
-
     public double currentRightPos = 0;
     public double currentLeftPos = 0;
     public double currentAuxPos = 0;
 
-    public void updatePosition(){
-        this.previousLeftPos = this.currentLeftPos;
+
+    DcMotor frontRightMotor, frontLeftMotor, backRightMotor, backLeftMotor;
+    DcMotor intake, lift, flywheel;
+    DcMotor leftEncoder, rightEncoder, auxEncoder;
+
+    Servo carriage;
+
+    public HardwareMap hardwareMap;
+    public Mode currentMode = Mode.DRIVER_CONTROL;
+
+    Operation intakeOperation = Operation.OFF;
+    Operation flyWheelOperation = Operation.OFF;
+
+    class LiftPositions {
+        final double downPosition = 0.0;
+        final double upPosition = 1.0;
+    }
+
+    private double L = 24.09;                              //Robot Geometry for odom
+    private double B = 10;                                 //needs to be remeasured
+    private double R = 2.54;
+    private double N = 8192;
+    private double cm_per_tick = 2.0 * Math.PI * R / N;
+    private double previousRightPos = 0;
+    private double previousLeftPos = 0;
+    private double previousAuxPos = 0;
+    /**
+     * ...........................................................................................
+     * ........................................HARDWARE...........................................
+     * ...........................................................................................
+     */
+
+    public RobotHardware(HardwareMap aHardwareMap) {
+        hardwareMap = aHardwareMap;
+        frontRightMotor = hardwareMap.dcMotor.get("FrontRight");
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeftMotor = hardwareMap.dcMotor.get("FrontLeft");
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);   //So that all motors forward goes forward
+        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightMotor = hardwareMap.dcMotor.get("BackRight");
+        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftMotor = hardwareMap.dcMotor.get("BackLeft");      //So that all motors forward goes forward
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake = hardwareMap.dcMotor.get("Intake");
+        lift = hardwareMap.dcMotor.get("Lift");
+        flywheel = hardwareMap.dcMotor.get("Flywheel");
+        carriage = hardwareMap.servo.get("Carriage");
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightEncoder = lift;
+        auxEncoder = intake;
+        leftEncoder = flywheel;
+        stop();
+        resetDriveEncoders();
+    }
+    public void resetDriveEncoders() {
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flywheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flywheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    public void stop() {
+        frontRightMotor.setPower(0);
+        frontLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
+        backLeftMotor.setPower(0);
+    }
+
+
+
+    /**
+     * ...........................................................................................
+     * ........................................ODOMETRY...........................................
+     * ...........................................................................................
+     */
+
+
+    public void odometry() {
         this.previousRightPos = this.currentRightPos;
+        this.previousLeftPos = this.currentLeftPos;
         this.previousAuxPos = this.currentAuxPos;
-
-        this.currentLeftPos = leftEncoder.getCurrentPosition();
-        this.currentRightPos = rightEncoder.getCurrentPosition();
-        this.currentAuxPos = auxEncoder.getCurrentPosition();
-
+        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
+        this.currentLeftPos = this.leftEncoder.getCurrentPosition();
+        this.currentAuxPos = this.auxEncoder.getCurrentPosition();
         double deltaLeft = this.currentLeftPos - this.previousLeftPos;
         double deltaRight = this.currentRightPos - this.previousRightPos;
         double deltaAux = this.currentAuxPos - this.previousAuxPos;
-
         double deltaT = cm_per_tick * (deltaRight - deltaLeft);
         double dx = cm_per_tick * (deltaLeft + deltaRight);
         double dy = cm_per_tick * (deltaAux - (deltaRight - deltaLeft) * B / L);
-
-
         double theta = pos.h + (deltaT / 2.0);
         pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
         pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
         pos.h += deltaT;
-        }
+    }
+
+    enum Operation {
+        ON,
+        OFF
     }
 
 }

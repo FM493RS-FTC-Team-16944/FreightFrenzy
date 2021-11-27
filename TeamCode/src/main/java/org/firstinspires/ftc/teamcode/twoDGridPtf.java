@@ -2,16 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
 
 public class twoDGridPtf {
-/*
+    /*
     public static int[][] matArray = {{1, 1, 1, 1}, {0, 0, 0, 0}, {1, 0, 1, 0}} //just an example of what the array would look like, not actual
     private HashMap<Integer, ArrayList<String>> possPaths = new HashMap<Integer, ArrayList<String>>();
     private final int count = 0;
 
-    /**public ArrayList<String> returnPath(int x, int y) {
+    public ArrayList<String> returnPath(int x, int y) {
         possPaths = new HashMap<Integer, ArrayList<String>>();
         int currentPosition = (0) ( int)//call localization
         int currentX;
@@ -55,5 +53,5 @@ public class twoDGridPtf {
             }
         }
     }
-    */
+     */
 }

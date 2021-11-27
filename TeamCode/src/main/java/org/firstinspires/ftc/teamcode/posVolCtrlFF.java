@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-/*
+
 public class posVolCtrlFF {
     public static double targetVelocity = 0; // also needs to be fixed
     public static double targetAccel = 0; // needs to be fixed
@@ -16,8 +16,9 @@ public class posVolCtrlFF {
     private double destination = 0; //will be adjusted when method is called
     private DcMotor motor;
 
+    /*
     public void runOpMode() {
-        initilization of motors
+        // initilization of motors
          arm.hardwareMap.get("needs to be filled in");
 
          resetting and starting encoders to track angle
@@ -36,6 +37,7 @@ public class posVolCtrlFF {
             }
         }
     }
+    */
 
     public void PID(double targetPosition, double targetVelocity, double targetAccel) {
 
@@ -58,4 +60,4 @@ public class posVolCtrlFF {
         PIDTimer.reset();
 
     }
-}*/
+}

@@ -17,7 +17,6 @@ public class Field {
         this.rows = this.matrix.length;
     }
 
-    // TODO: COULD BE BUG HERE
     private boolean isCoordinateMatrix(Coordinate coordinate) {
         return coordinate.x >= 0 && coordinate.y >= 0
                 && coordinate.x < this.columns && coordinate.y < this.rows;

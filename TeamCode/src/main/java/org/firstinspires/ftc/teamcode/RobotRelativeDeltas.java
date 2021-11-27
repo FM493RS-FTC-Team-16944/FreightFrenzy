@@ -6,8 +6,7 @@ public class RobotRelativeDeltas {
 
         waitForStart();
         if (opModeIsActive()) {
-            while (opModeIsActive()) {
-
+            while (opModeIsActive()){
 
                 telemetry.update();
             }

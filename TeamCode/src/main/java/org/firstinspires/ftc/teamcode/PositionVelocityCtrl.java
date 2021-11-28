@@ -1,53 +1,82 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class PositionVelocityCtrl {
-    public static double targetVelocity = 0; // also needs to be fixed
-    public static double targetAccel = 0; // needs to be fixed
+import org.firstinspires.ftc.teamcode.teleop.TeleOP;
 
-    // need to insert more motor variable initialization later
-    public static double pidVol = 0; //PID coefficients that need to be tuned
-    public static double pidAccel = 0;  //PID coefficients that need to be tuned
-    ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS); //timer
-    double previousPosition = 0;//starting point
-    double previousVelocity = 0;
-    double previousAccel = 0;
-    private double destination = 0; //will be adjusted when method is called
-    private DcMotor motor;
+public class PositionVelocityCtrl {
+    public TeleOP teleOP;
+
+    private final ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    private final XyhVector targetPosition;
+
+    public final double propGain = 0.5f;
+    public final double intGain = 0.002f;
+    public final double derivGain = 0.005f;
+
+    public static XyhVector integralVelo = new XyhVector();
+    public static XyhVector errPos = new XyhVector();
+
+    public PositionVelocityCtrl(TeleOP teleOP, XyhVector targetPosition) {
+        this.teleOP = teleOP;
+
+        this.targetPosition = targetPosition;
+    }
+
+    public XyhVector handlePos(XyhVector currentPosition) {
+        double currentPosErrX = targetPosition.x - currentPosition.x;
+        double currentPosErrY = targetPosition.y - currentPosition.y;
+        double currentPosErrH = targetPosition.h - currentPosition.h;
+
+        integralVelo.x += errPos.x * PIDTimer.time();
+        integralVelo.y += errPos.y * PIDTimer.time();
+        integralVelo.h += errPos.h * PIDTimer.time();
+
+        XyhVector posDerivative = new XyhVector(
+                (currentPosErrX - errPos.x) / PIDTimer.time(),
+                (currentPosErrY - errPos.y) / PIDTimer.time(),
+                (currentPosErrH - errPos.h) / PIDTimer.time()
+        );
+
+        double outX = propGain * currentPosErrX +
+                intGain * integralVelo.x +
+                derivGain * posDerivative.x;
+
+        double outY = propGain * currentPosErrY +
+                intGain * integralVelo.y +
+                derivGain * posDerivative.y;
+
+        double outH = propGain * currentPosErrH +
+                intGain * integralVelo.h +
+                derivGain * posDerivative.h;
+
+        errPos.x = currentPosErrX;
+        errPos.y = currentPosErrY;
+        errPos.h = currentPosErrH;
+
+        return new XyhVector(outX, outY, outH);
+    }
+
+
+    public void runPID(XyhVector currentPosition) {
+        handlePos(currentPosition);
+    }
 
     /*
-    public void runOpMode() {
-        // initilization of motors
-         arm.hardwareMap.get("needs to be filled in");
+    public void runPID(XyhVector currentPosition, XyhVector targetPosition, XyhVector targetVelocity, XyhVector targetAccel) {
+        XyhVector subtractedPositionVectors = subtractVectors(currentPosition, previousPosition);
 
-         resetting and starting encoders to track angle
-         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        double currentVelocityX = subtractedPositionVectors.x / (PIDTimer.time());
+        double currentVelocityY = subtractedPositionVectors.y / (PIDTimer.time());
 
-        this.destination = 0; // input will replace 0
-        waitForStart();
+        double velocityErrX = targetVelocity.x - currentVelocityX;
+        double velocityErrY = targetVelocity.y - currentVelocityY;
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
+        double currentAccelX = (currentVelocityX - previousVelocity.x) / (PIDTimer.time());
+        double currentAccelY = (currentVelocityY - previousVelocity.y) / (PIDTimer.time());
 
-                PID(destination, targetVelocity, targetAccel); //running the PID algorithm at our target angle while the opMode is active
-
-                telemetry.update();
-            }
-        }
-    }
-    */
-
-    public void PID(double targetPosition, double targetVelocity, double targetAccel) {
-
-        double currentPosition = 0; //call localization function
-        double currentVelocity = (currentPosition - previousPosition) / (PIDTimer.time());
-        double velocityErr = targetVelocity - currentVelocity;
-
-        double currentAccel = (currentVelocity - previousVelocity) / (PIDTimer.time());
-        double accelErr = targetAccel - currentAccel;
+        double accelErrX = targetAccel.x - currentAccelX;
+        double accelErrY = targetAccel.y - currentAccelX;
 
         double outputControl = pidVol * velocityErr + pidAccel * accelErr;
 
@@ -59,6 +88,6 @@ public class PositionVelocityCtrl {
         previousVelocity = currentVelocity;
         previousAccel = currentAccel;
         PIDTimer.reset();
-
     }
+    */
 }

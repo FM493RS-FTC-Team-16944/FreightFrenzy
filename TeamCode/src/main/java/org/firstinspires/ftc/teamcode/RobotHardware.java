@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -18,6 +19,7 @@ public class RobotHardware {
     public DcMotor intake, lift, flywheel;
     public DcMotor leftEncoder, rightEncoder, auxEncoder;
 
+    public BNO055IMU imu;
     public Servo carriage;
 
     public HardwareMap hardwareMap;
@@ -35,7 +37,7 @@ public class RobotHardware {
     private double B = 10;                                 //needs to be remeasured
     private double R = 2.54;
     private double N = 8192;
-    private double cm_per_tick = 2.0 * Math.PI * R / N;
+    private double cm_per_tick = 2.54 * Math.PI * R / N;
     private double previousRightPos = 0;
     private double previousLeftPos = 0;
     private double previousAuxPos = 0;
@@ -72,6 +74,10 @@ public class RobotHardware {
         flywheel = hardwareMap.dcMotor.get("Flywheel");
         carriage = hardwareMap.servo.get("Carriage");
 
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        imu.initialize(parameters);
         setEncodersMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightEncoder = lift;
@@ -107,8 +113,13 @@ public class RobotHardware {
      * ...........................................................................................
      */
 
+    /**
+     * ...........................................................................................
+     * ........................................MECANUM ODOMETRY...........................................
+     * ...........................................................................................
+     */
 
-    public void odometry() {
+    /*public void odometry() {
         this.previousRightPos = this.currentRightPos;
         this.previousLeftPos = this.currentLeftPos;
         this.previousAuxPos = this.currentAuxPos;
@@ -129,5 +140,45 @@ public class RobotHardware {
         pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
         pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
         pos.h += deltaT;
+    }
+}*
+    /**
+     * .........................................................................................* ...........................................................................................
+     */
+    public int angle = (int) imu.getAngularOrientation().firstAngle;
+
+    public void odometry() {
+        double currentHeading = imu.getAngularOrientation().firstAngle;
+        ;
+        this.previousRightPos = this.currentRightPos;
+        this.previousLeftPos = this.currentLeftPos;
+        this.previousAuxPos = this.currentAuxPos;
+
+        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
+        this.currentLeftPos = this.leftEncoder.getCurrentPosition();
+        this.currentAuxPos = this.auxEncoder.getCurrentPosition();
+
+        double deltaLeft = this.currentLeftPos - this.previousLeftPos;
+        double deltaRight = this.currentRightPos - this.previousRightPos;
+        //double deltaAux = this.currentAuxPos - this.previousAuxPos;
+
+        double deltaT = cm_per_tick * (deltaRight - deltaLeft);
+        double dx = cm_per_tick * (deltaLeft + deltaRight);
+        //double dy = cm_per_tick * (deltaAux - (deltaRight - deltaLeft) * B / L);
+        //double theta = pos.h + (deltaT / 2.0);
+
+        if (currentHeading > 90 && currentHeading < 270) {
+            pos.x -= 1 / Math.cos(dx);
+        } else {
+            pos.x += 1 / Math.cos(dx);
+        }
+        if (currentHeading > 180 && currentHeading < 380) {
+            pos.y -= 1 / Math.sin(dx);
+        } else {
+            pos.y += 1 / Math.sin(dx);
+        }
+        //pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
+        //pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
+        pos.h += currentHeading;
     }
 }

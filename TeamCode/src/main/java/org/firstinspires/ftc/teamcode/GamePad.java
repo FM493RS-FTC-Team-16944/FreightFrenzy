@@ -1,10 +1,7 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.DriveMovement;
-import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.models.Mode;
 
 public class GamePad {
@@ -15,6 +12,7 @@ public class GamePad {
     public GamePad(Robot robot, Gamepad hardwareGamepad) {
         this.hardware = robot.hardware;
         this.movement = robot.movement;
+
         this.gamepad = hardwareGamepad;
     }
 

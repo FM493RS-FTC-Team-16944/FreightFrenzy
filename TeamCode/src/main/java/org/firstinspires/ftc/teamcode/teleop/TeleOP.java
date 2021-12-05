@@ -3,27 +3,23 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.GamePad;
 import org.firstinspires.ftc.teamcode.PositionVelocityCtrl;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.XyhVector;
 
-
 @TeleOp(name = "TeleOp")
 public class TeleOP extends LinearOpMode {
-    public RobotHardware hardware;
-    public GamePad gamepad;
+    private Robot robot = new Robot(this);
 
-    private Robot robot;
+    public RobotHardware hardware = robot.hardware;
+    public GamePad gamepad = new GamePad(robot, gamepad1);
 
     @Override
-    public void runOpMode() throws InterruptedException {
-        hardware = new RobotHardware(hardwareMap);
-
-        robot = new Robot(this);
-        gamepad = new GamePad(robot, gamepad1);
-
+    public void runOpMode() {
         waitForStart();
+
         PositionVelocityCtrl posVeloCtrl = new PositionVelocityCtrl(
                 this,
                 new XyhVector(60, 0, Math.toRadians(90))
@@ -37,7 +33,7 @@ public class TeleOP extends LinearOpMode {
             telemetry.addData("Position Y", hardware.pos.y);
             telemetry.addData("Position H", hardware.pos.h);
 
-            XyhVector xyhVector = posVeloCtrl.handlePos(hardware.pos);
+            XyhVector xyhVector = posVeloCtrl.runPID(hardware.pos);
 
             telemetry.addData("PID Output X", xyhVector.x);
             telemetry.addData("PID Output Y", xyhVector.y);

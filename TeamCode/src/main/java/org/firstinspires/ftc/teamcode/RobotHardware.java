@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -39,14 +39,15 @@ public class RobotHardware {
     private double previousRightPos = 0;
     private double previousLeftPos = 0;
     private double previousAuxPos = 0;
+
     /**
      * ...........................................................................................
      * ........................................HARDWARE...........................................
      * ...........................................................................................
      */
 
-    public RobotHardware(HardwareMap aHardwareMap) {
-        hardwareMap = aHardwareMap;
+    public RobotHardware(Robot robot) {
+        hardwareMap = robot.teleOP.hardwareMap;
 
         frontRightMotor = hardwareMap.dcMotor.get("FrontRight");
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);

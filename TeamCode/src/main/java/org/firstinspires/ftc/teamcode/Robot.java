@@ -9,8 +9,8 @@ public class Robot {
 
     public Robot(TeleOP teleOP) {
         this.teleOP = teleOP;
-        this.hardware = teleOP.hardware;
 
+        this.hardware = new RobotHardware(this);
         this.movement = new DriveMovement(this);
     }
 }

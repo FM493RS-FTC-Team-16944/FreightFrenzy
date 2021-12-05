@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 public class DriveMovement {
-    Robot robot;
     RobotHardware hardware;
 
     DriveMovement(Robot robot) {
-        this.robot = robot;
         this.hardware = robot.hardware;
     }
 

@@ -23,7 +23,7 @@ public class PositionVelocityCtrl {
         this.targetPosition = targetPosition;
     }
 
-    public XyhVector handlePos(XyhVector currentPosition) {
+    public XyhVector runPID(XyhVector currentPosition) {
         double currentPosErrX = targetPosition.x - currentPosition.x;
         double currentPosErrY = targetPosition.y - currentPosition.y;
         double currentPosErrH = targetPosition.h - currentPosition.h;
@@ -56,38 +56,4 @@ public class PositionVelocityCtrl {
 
         return new XyhVector(outX, outY, outH);
     }
-
-
-    public void runPID(XyhVector currentPosition) {
-        handlePos(currentPosition);
-    }
-
-    /*
-    public void runPID(XyhVector currentPosition, XyhVector targetPosition, XyhVector targetVelocity, XyhVector targetAccel) {
-        XyhVector subtractedPositionVectors = subtractVectors(currentPosition, previousPosition);
-
-        double currentVelocityX = subtractedPositionVectors.x / (PIDTimer.time());
-        double currentVelocityY = subtractedPositionVectors.y / (PIDTimer.time());
-
-        double velocityErrX = targetVelocity.x - currentVelocityX;
-        double velocityErrY = targetVelocity.y - currentVelocityY;
-
-        double currentAccelX = (currentVelocityX - previousVelocity.x) / (PIDTimer.time());
-        double currentAccelY = (currentVelocityY - previousVelocity.y) / (PIDTimer.time());
-
-        double accelErrX = targetAccel.x - currentAccelX;
-        double accelErrY = targetAccel.y - currentAccelX;
-
-        double outputControl = pidVol * velocityErr + pidAccel * accelErr;
-
-
-        //needs to be altered to consider all four motors
-        motor.setPower(outputControl);
-
-        previousPosition = currentPosition;
-        previousVelocity = currentVelocity;
-        previousAccel = currentAccel;
-        PIDTimer.reset();
-    }
-    */
 }

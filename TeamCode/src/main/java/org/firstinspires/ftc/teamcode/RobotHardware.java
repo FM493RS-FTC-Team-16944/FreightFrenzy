@@ -30,6 +30,8 @@ public class RobotHardware {
     public double liftHorizontalSpeed = 0.0;
     public double liftVerticalSpeed = 0.0;
 
+    public int angle = 0;
+
     class LiftPositions {
         final double downPosition = 0.0;
         final double upPosition = 0.5;
@@ -151,9 +153,9 @@ public class RobotHardware {
     /**
      * .........................................................................................* ...........................................................................................
      */
-    public int angle = (int) imu.getAngularOrientation().firstAngle;
 
     public void odometry() {
+        angle = (int) imu.getAngularOrientation().firstAngle;
         double currentHeading = imu.getAngularOrientation().firstAngle;
 
         this.previousRightPos = this.currentRightPos;

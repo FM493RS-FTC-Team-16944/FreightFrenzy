@@ -51,7 +51,7 @@ public class GamePad {
         }
 
         if (gamepad.x) {
-
+            movement.toggleClaw();
         }
 
         if (gamepad.y) {

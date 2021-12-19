@@ -11,14 +11,18 @@ import org.firstinspires.ftc.teamcode.XyhVector;
 
 @TeleOp(name = "TeleOp")
 public class TeleOP extends LinearOpMode {
-    private Robot robot = new Robot(this);
+    private Robot robot;
 
-    public RobotHardware hardware = robot.hardware;
-    public GamePad gamepad = new GamePad(robot, gamepad1);
+    public RobotHardware hardware;
+    public GamePad gamepad;
 
     @Override
     public void runOpMode() {
         waitForStart();
+
+        robot = new Robot(this);
+        hardware = robot.hardware;
+        gamepad = new GamePad(robot, gamepad1);
 
         PositionVelocityCtrl posVeloCtrl = new PositionVelocityCtrl(
                 this,
@@ -38,7 +42,6 @@ public class TeleOP extends LinearOpMode {
             telemetry.addData("PID Output X", xyhVector.x);
             telemetry.addData("PID Output Y", xyhVector.y);
             telemetry.addData("PID Output H", xyhVector.h);
-
             telemetry.update();
         }
     }

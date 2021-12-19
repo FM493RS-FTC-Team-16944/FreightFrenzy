@@ -60,4 +60,14 @@ public class DriveMovement {
             hardware.liftHorizontal.setPower(0.5);
         }
     }
+
+    public void toggleClaw() {
+        if(hardware.clawPosition == 0.5) {
+            hardware.clawPosition = 0.0;
+            hardware.claw.setPosition(0.0);
+        } else {
+            hardware.clawPosition = 0.5;
+            hardware.claw.setPosition(0.5);
+        }
+    }
 }

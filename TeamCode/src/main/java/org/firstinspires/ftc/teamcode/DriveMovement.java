@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.Servo;
+
 public class DriveMovement {
     RobotHardware hardware;
 
@@ -52,22 +54,27 @@ public class DriveMovement {
     }
 
     public void toggleTranslateLift() {
-        if(hardware.liftHorizontalSpeed == 0.5) {
+        if(hardware.liftHorizontalSpeed == 0.25) {
             hardware.liftHorizontalSpeed = 0.0;
             hardware.liftHorizontal.setPower(0.0);
         } else {
-            hardware.liftHorizontalSpeed = 0.5;
-            hardware.liftHorizontal.setPower(0.5);
+            hardware.liftHorizontalSpeed = 0.25;
+            hardware.liftHorizontal.setPower(0.25);
         }
     }
 
+    public void toggleTranslateLift(double power) {
+        hardware.liftHorizontalSpeed = power;
+        hardware.liftHorizontal.setPower(power);
+    }
+
     public void toggleClaw() {
-        if(hardware.clawPosition == 0.5) {
-            hardware.clawPosition = 0.0;
-            hardware.claw.setPosition(0.0);
+        if(hardware.clawPosition == 1) {
+            hardware.clawPosition = 0.75;
+            hardware.claw.setPosition(0.75);
         } else {
-            hardware.clawPosition = 0.5;
-            hardware.claw.setPosition(0.5);
+            hardware.clawPosition = 1;
+            hardware.claw.setPosition(1);
         }
     }
 }

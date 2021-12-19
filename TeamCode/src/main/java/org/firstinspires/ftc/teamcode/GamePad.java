@@ -77,6 +77,8 @@ public class GamePad {
 
         if(gamepad.dpad_left || gamepad.dpad_right) {
             movement.toggleTranslateLift();
+        } else {
+            movement.toggleTranslateLift(0);
         }
     }
 }

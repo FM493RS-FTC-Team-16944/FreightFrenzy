@@ -40,4 +40,24 @@ public class DriveMovement {
             hardware.intake.setPower(1.0);
         }
     }
+
+    public void toggleRaiseLift() {
+        if(hardware.liftVerticalSpeed == 0.5) {
+            hardware.liftVerticalSpeed = 0.0;
+            hardware.liftVertical.setPower(0.0);
+        } else {
+            hardware.liftVerticalSpeed = 0.5;
+            hardware.liftVertical.setPower(0.5);
+        }
+    }
+
+    public void toggleTranslateLift() {
+        if(hardware.liftHorizontalSpeed == 0.5) {
+            hardware.liftHorizontalSpeed = 0.0;
+            hardware.liftHorizontal.setPower(0.0);
+        } else {
+            hardware.liftHorizontalSpeed = 0.5;
+            hardware.liftHorizontal.setPower(0.5);
+        }
+    }
 }

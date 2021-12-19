@@ -16,21 +16,23 @@ public class RobotHardware {
     public double currentAuxPos = 0;
 
     public DcMotor frontRightMotor, frontLeftMotor, backRightMotor, backLeftMotor;
-    public DcMotor intake, lift, flywheel;
+    public DcMotor intake, liftVertical, liftHorizontal, flywheel;
     public DcMotor leftEncoder, rightEncoder, auxEncoder;
 
     public BNO055IMU imu;
-    public Servo carriage;
+    public Servo claw;
 
     public HardwareMap hardwareMap;
     public Mode currentMode = Mode.DRIVER_CONTROL;
 
     public double intakeSpeed = 0.0;
     public double flyWheelSpeed = 0.0;
+    public double liftHorizontalSpeed = 0.0;
+    public double liftVerticalSpeed = 0.0;
 
     class LiftPositions {
         final double downPosition = 0.0;
-        final double upPosition = 1.0;
+        final double upPosition = 0.5;
     }
 
     private double L = 24.09;                              //Robot Geometry for odom
@@ -70,19 +72,22 @@ public class RobotHardware {
         intake = hardwareMap.dcMotor.get("Intake");
         intake.setDirection(DcMotor.Direction.REVERSE);
 
-        lift = hardwareMap.dcMotor.get("Lift");
+        liftVertical = hardwareMap.dcMotor.get("LiftV");
+        liftHorizontal = hardwareMap.dcMotor.get("LiftH");
         flywheel = hardwareMap.dcMotor.get("Flywheel");
-        carriage = hardwareMap.servo.get("Carriage");
+        claw = hardwareMap.servo.get("Claw");
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         imu.initialize(parameters);
+
         setEncodersMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        rightEncoder = lift;
-        auxEncoder = intake;
-        leftEncoder = flywheel;
+        rightEncoder = frontRightMotor;
+        auxEncoder = backRightMotor;
+        leftEncoder = backLeftMotor;
 
         stop();
         resetDriveEncoders();
@@ -94,7 +99,8 @@ public class RobotHardware {
     }
 
     public void setEncodersMode(DcMotor.RunMode mode) {
-        lift.setMode(mode);
+        liftHorizontal.setMode(mode);
+        liftVertical.setMode(mode);
         intake.setMode(mode);
         flywheel.setMode(mode);
     }
@@ -149,7 +155,7 @@ public class RobotHardware {
 
     public void odometry() {
         double currentHeading = imu.getAngularOrientation().firstAngle;
-        ;
+
         this.previousRightPos = this.currentRightPos;
         this.previousLeftPos = this.currentLeftPos;
         this.previousAuxPos = this.currentAuxPos;

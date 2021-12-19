@@ -71,12 +71,12 @@ public class GamePad {
             movement.activateFlywheel();
         }
 
-        // Lift go up, lift go down
-        if (gamepad.dpad_down){
-
+        if (gamepad.dpad_up || gamepad.dpad_down) {
+            movement.toggleRaiseLift();
         }
 
-        if (gamepad.dpad_up){
+        if(gamepad.dpad_left || gamepad.dpad_right) {
+            movement.toggleTranslateLift();
         }
     }
 }

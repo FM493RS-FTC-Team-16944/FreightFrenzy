@@ -9,6 +9,8 @@ public class GamePad {
     private final RobotHardware hardware;
     private final DriveMovement movement;
 
+    private boolean previousX = false;
+
     public GamePad(Robot robot, Gamepad hardwareGamepad) {
         this.hardware = robot.hardware;
         this.movement = robot.movement;
@@ -50,10 +52,12 @@ public class GamePad {
 
         }
 
-        if (gamepad.x) {
+        if (gamepad.x && gamepad.x != previousX) {
             movement.toggleClaw();
         }
 
+        previousX = gamepad.x;
+        
         if (gamepad.y) {
         }
 

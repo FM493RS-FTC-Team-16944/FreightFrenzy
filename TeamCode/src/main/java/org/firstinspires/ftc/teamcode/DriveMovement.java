@@ -54,12 +54,12 @@ public class DriveMovement {
     }
 
     public void toggleTranslateLift() {
-        if(hardware.liftHorizontalSpeed == 0.25) {
-            hardware.liftHorizontalSpeed = 0.0;
-            hardware.liftHorizontal.setPower(0.0);
+        if(hardware.liftHorizontalSpeed == -0.4) {
+            hardware.liftHorizontalSpeed = 0.4;
+            hardware.liftHorizontal.setPower(0.4);
         } else {
-            hardware.liftHorizontalSpeed = 0.25;
-            hardware.liftHorizontal.setPower(0.25);
+            hardware.liftHorizontalSpeed = -0.4;
+            hardware.liftHorizontal.setPower(-0.4);
         }
     }
 
@@ -70,8 +70,8 @@ public class DriveMovement {
 
     public void toggleClaw() {
         if(hardware.clawPosition == 1) {
-            hardware.clawPosition = 0.75;
-            hardware.claw.setPosition(0.75);
+            hardware.clawPosition = 0.675;
+            hardware.claw.setPosition(0.675);
         } else {
             hardware.clawPosition = 1;
             hardware.claw.setPosition(1);

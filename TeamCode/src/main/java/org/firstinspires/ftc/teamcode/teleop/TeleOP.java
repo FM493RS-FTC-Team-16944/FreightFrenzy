@@ -23,11 +23,11 @@ public class TeleOP extends LinearOpMode {
         robot = new Robot(this);
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
-
         PositionVelocityCtrl posVeloCtrl = new PositionVelocityCtrl(
                 this,
                 new XyhVector(60, 0, Math.toRadians(90))
         );
+
 
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry();
@@ -37,11 +37,16 @@ public class TeleOP extends LinearOpMode {
             telemetry.addData("Position Y", hardware.pos.y);
             telemetry.addData("Position H", hardware.pos.h);
 
-            XyhVector xyhVector = posVeloCtrl.runPID(hardware.pos);
+            XyhVector outputCtrl = posVeloCtrl.runPID(hardware.pos);
 
-            telemetry.addData("PID Output X", xyhVector.x);
-            telemetry.addData("PID Output Y", xyhVector.y);
-            telemetry.addData("PID Output H", xyhVector.h);
+            hardware.frontLeftMotor.setPower(outputCtrl.x + outputCtrl.y + outputCtrl.h);
+            hardware.backLeftMotor.setPower(outputCtrl.x - outputCtrl.y + outputCtrl.h);
+            hardware.frontRightMotor.setPower(outputCtrl.x - outputCtrl.y - outputCtrl.h);
+            hardware.backRightMotor.setPower(outputCtrl.x + outputCtrl.y - outputCtrl.h);
+
+            telemetry.addData("PID Output X", outputCtrl.x);
+            telemetry.addData("PID Output Y", outputCtrl.y);
+            telemetry.addData("PID Output H", outputCtrl.h);
 
             telemetry.addData("Servo Position", hardware.claw.getPosition());
             telemetry.update();

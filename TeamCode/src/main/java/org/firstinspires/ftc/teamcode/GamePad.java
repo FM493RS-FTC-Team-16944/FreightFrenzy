@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.models.Mode;
 public class GamePad {
     private final Gamepad gamepad;
     private final RobotHardware hardware;
-    private final DriveMovement movement;
+    private final RobotMovement movement;
 
     private boolean previousX = false;
 
@@ -20,20 +20,11 @@ public class GamePad {
 
     public void updateRobot() {
         if(hardware.currentMode == Mode.DRIVER_CONTROL) {
-            double y = -gamepad.left_stick_y; // Remember, this is reversed!
             double x = gamepad.left_stick_x;
-            double rx = gamepad.right_stick_x;
+            double y = -gamepad.left_stick_y; // Remember, this is reversed!
+            double h = gamepad.right_stick_x;
 
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y - x + rx) / denominator;
-            double backLeftPower = (y + x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
-
-            hardware.frontLeftMotor.setPower(frontLeftPower);
-            hardware.backLeftMotor.setPower(backLeftPower);
-            hardware.frontRightMotor.setPower(frontRightPower);
-            hardware.backRightMotor.setPower(backRightPower);
+            movement.strafe(x, y, h);
         }
 
         // change mode

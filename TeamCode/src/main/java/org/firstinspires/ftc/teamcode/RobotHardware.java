@@ -31,12 +31,9 @@ public class RobotHardware {
     public double liftVerticalSpeed = 0.0;
     public double clawPosition = 0.0;
 
-    public int angle = 0;
+    public boolean freightLoaded = true;
 
-    class LiftPositions {
-        final double downPosition = 0.0;
-        final double upPosition = 0.5;
-    }
+    public int angle = 0;
 
     private double L = 24.09;                              //Robot Geometry for odom
     private double B = 10;                                 //needs to be remeasured

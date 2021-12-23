@@ -1,16 +1,24 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.Servo;
 
-public class DriveMovement {
+public class RobotMovement {
     RobotHardware hardware;
 
-    DriveMovement(Robot robot) {
+    RobotMovement(Robot robot) {
         this.hardware = robot.hardware;
     }
 
-    public void strafe() {
+    public void strafe(double x, double y, double h) {
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(h), 1);
+        double frontLeftPower = (y - x + h) / denominator;
+        double backLeftPower = (y + x + h) / denominator;
+        double frontRightPower = (y - x - h) / denominator;
+        double backRightPower = (y + x - h) / denominator;
 
+        hardware.frontLeftMotor.setPower(frontLeftPower);
+        hardware.backLeftMotor.setPower(backLeftPower);
+        hardware.frontRightMotor.setPower(frontRightPower);
+        hardware.backRightMotor.setPower(backRightPower);
     }
 
     public void activateFlywheel(double speed) {
@@ -69,6 +77,8 @@ public class DriveMovement {
     }
 
     public void toggleClaw() {
+        // 1 is closed, 0.675 is opened
+
         if(hardware.clawPosition == 1) {
             hardware.clawPosition = 0.675;
             hardware.claw.setPosition(0.675);

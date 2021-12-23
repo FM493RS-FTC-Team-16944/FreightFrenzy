@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.teamcode.teleop.TeleOP;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class Robot {
-    public TeleOP teleOP;
+    public LinearOpMode teleOP;
     public RobotHardware hardware;
-    public DriveMovement movement;
+    public RobotMovement movement;
 
-    public Robot(TeleOP teleOP) {
+    public Robot(LinearOpMode teleOP) {
         this.teleOP = teleOP;
 
         this.hardware = new RobotHardware(this);
-        this.movement = new DriveMovement(this);
+        this.movement = new RobotMovement(this);
     }
 }

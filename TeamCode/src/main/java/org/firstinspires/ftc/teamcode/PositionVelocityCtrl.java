@@ -10,9 +10,9 @@ public class PositionVelocityCtrl {
     private final ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     private final XyhVector targetPosition;
 
-    public final double propGain = 0.5f;
-    public final double intGain = 0.002f;
-    public final double derivGain = 0.005f;
+    public final double propGain = 0.05f;
+    public final double intGain = 0.0;
+    public final double derivGain = 0.0;
 
     public static XyhVector integralVelo = new XyhVector();
     public static XyhVector errPos = new XyhVector();
@@ -58,7 +58,7 @@ public class PositionVelocityCtrl {
         errPos.y = currentPosErrY;
         errPos.h = currentPosErrH;
         PIDTimer.reset();
-
+        //return new XyhVector(currentPosErrX, currentPosErrY, currentPosErrH);
         return new XyhVector(x_rotated, y_rotated, outH);
     }
 }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.GamePad;
 import org.firstinspires.ftc.teamcode.PositionVelocityCtrl;
@@ -25,10 +26,10 @@ public class TeleOP extends LinearOpMode {
         gamepad = new GamePad(robot, gamepad1);
         PositionVelocityCtrl posVeloCtrl = new PositionVelocityCtrl(
                 this,
-                new XyhVector(60, 0, Math.toRadians(90))
+                new XyhVector(0, 20, Math.toRadians(0))
         );
 
-
+        hardware.resetDriveEncoders();
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry();
             gamepad.updateRobot();
@@ -39,10 +40,16 @@ public class TeleOP extends LinearOpMode {
 
             XyhVector outputCtrl = posVeloCtrl.runPID(hardware.pos);
 
-            hardware.frontLeftMotor.setPower(outputCtrl.x + outputCtrl.y + outputCtrl.h);
-            hardware.backLeftMotor.setPower(outputCtrl.x - outputCtrl.y + outputCtrl.h);
-            hardware.frontRightMotor.setPower(outputCtrl.x - outputCtrl.y - outputCtrl.h);
-            hardware.backRightMotor.setPower(outputCtrl.x + outputCtrl.y - outputCtrl.h);
+//            hardware.frontLeftMotor.setPower(-0.5*(outputCtrl.x + outputCtrl.y + outputCtrl.h));
+//            hardware.backLeftMotor.setPower(-0.5*(outputCtrl.x - outputCtrl.y + outputCtrl.h));
+//            hardware.frontRightMotor.setPower(-0.5*(outputCtrl.x - outputCtrl.y - outputCtrl.h));
+//            hardware.backRightMotor.setPower(-0.5*(outputCtrl.x + outputCtrl.y - outputCtrl.h));
+
+
+            telemetry.addData("frontLeft", outputCtrl.x + outputCtrl.y + outputCtrl.h);
+            telemetry.addData("backLeft", outputCtrl.x - outputCtrl.y + outputCtrl.h);
+            telemetry.addData("frontRight", outputCtrl.x - outputCtrl.y - outputCtrl.h);
+            telemetry.addData("backRight", outputCtrl.x + outputCtrl.y - outputCtrl.h);
 
             telemetry.addData("PID Output X", outputCtrl.x);
             telemetry.addData("PID Output Y", outputCtrl.y);

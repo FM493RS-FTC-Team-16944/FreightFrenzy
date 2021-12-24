@@ -62,11 +62,11 @@ public class RobotHardware {
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backRightMotor = hardwareMap.dcMotor.get("BackRight");
-        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backLeftMotor = hardwareMap.dcMotor.get("BackLeft");      //So that all motors forward goes forward
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         intake = hardwareMap.dcMotor.get("Intake");
@@ -119,7 +119,7 @@ public class RobotHardware {
      * ...........................................................................................
      */
 
-    /*public void odometry() {
+    public void odometry() {
         this.previousRightPos = this.currentRightPos;
         this.previousLeftPos = this.currentLeftPos;
         this.previousAuxPos = this.currentAuxPos;
@@ -141,44 +141,43 @@ public class RobotHardware {
         pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
         pos.h += deltaT;
     }
-}*
-    /**
+}    /**
      * .........................................................................................* ...........................................................................................
      */
 
-    public void odometry() {
-        angle = (int) imu.getAngularOrientation().firstAngle;
-        double currentHeading = imu.getAngularOrientation().firstAngle;
-
-        this.previousRightPos = this.currentRightPos;
-        this.previousLeftPos = this.currentLeftPos;
-        this.previousAuxPos = this.currentAuxPos;
-
-        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
-        this.currentLeftPos = this.leftEncoder.getCurrentPosition();
-        this.currentAuxPos = this.auxEncoder.getCurrentPosition();
-
-        double deltaLeft = this.currentLeftPos - this.previousLeftPos;
-        double deltaRight = this.currentRightPos - this.previousRightPos;
-        //double deltaAux = this.currentAuxPos - this.previousAuxPos;
-
-        double deltaT = cm_per_tick * (deltaRight - deltaLeft);
-        double dx = cm_per_tick * (deltaLeft + deltaRight);
-        //double dy = cm_per_tick * (deltaAux - (deltaRight - deltaLeft) * B / L);
-        //double theta = pos.h + (deltaT / 2.0);
-
-        if (currentHeading > 90 && currentHeading < 270) {
-            pos.x -= 1 / Math.cos(dx);
-        } else {
-            pos.x += 1 / Math.cos(dx);
-        }
-        if (currentHeading > 180 && currentHeading < 380) {
-            pos.y -= 1 / Math.sin(dx);
-        } else {
-            pos.y += 1 / Math.sin(dx);
-        }
-        //pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
-        //pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
-        pos.h += currentHeading;
-    }
-}
+//    public void odometry() {
+//        angle = (int) imu.getAngularOrientation().firstAngle;
+//        double currentHeading = imu.getAngularOrientation().firstAngle;
+//
+//        this.previousRightPos = this.currentRightPos;
+//        this.previousLeftPos = this.currentLeftPos;
+//        this.previousAuxPos = this.currentAuxPos;
+//
+//        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
+//        this.currentLeftPos = this.leftEncoder.getCurrentPosition();
+//        this.currentAuxPos = this.auxEncoder.getCurrentPosition();
+//
+//        double deltaLeft = this.currentLeftPos - this.previousLeftPos;
+//        double deltaRight = this.currentRightPos - this.previousRightPos;
+//        //double deltaAux = this.currentAuxPos - this.previousAuxPos;
+//
+//        double deltaT = cm_per_tick * (deltaRight - deltaLeft);
+//        double dx = cm_per_tick * (deltaLeft + deltaRight);
+//        //double dy = cm_per_tick * (deltaAux - (deltaRight - deltaLeft) * B / L);
+//        //double theta = pos.h + (deltaT / 2.0);
+//
+//        if (currentHeading > 90 && currentHeading < 270) {
+//            pos.x -= 1 / Math.cos(dx);
+//        } else {
+//            pos.x += 1 / Math.cos(dx);
+//        }
+//        if (currentHeading > 180 && currentHeading < 380) {
+//            pos.y -= 1 / Math.sin(dx);
+//        } else {
+//            pos.y += 1 / Math.sin(dx);
+//        }
+//        pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
+//        pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
+//        pos.h += currentHeading;
+//    }
+//}

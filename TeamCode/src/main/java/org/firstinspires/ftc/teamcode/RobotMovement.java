@@ -10,10 +10,10 @@ public class RobotMovement {
 
     public void strafe(double x, double y, double h) {
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(h), 1);
-        double frontLeftPower = (y - x + h) / denominator;
-        double backLeftPower = (y + x + h) / denominator;
-        double frontRightPower = (y - x - h) / denominator;
-        double backRightPower = (y + x - h) / denominator;
+        double frontLeftPower = (y   + x + h) / denominator;
+        double backLeftPower = (x - y + h) / denominator;
+        double frontRightPower = (x - y - h) / denominator;
+        double backRightPower = (x + y - h) / denominator;
 
         hardware.frontLeftMotor.setPower(frontLeftPower);
         hardware.backLeftMotor.setPower(backLeftPower);

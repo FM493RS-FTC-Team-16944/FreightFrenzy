@@ -84,6 +84,10 @@ public class RobotMovement {
         }
     }
 
+    public void toggleClaw(double position) {
+        hardware.claw.setPosition(position);
+    }
+
     public void toggleArm() {
         // 1 is closed, 0.675 is opened
 
@@ -94,5 +98,9 @@ public class RobotMovement {
             hardware.armPosition = 0.98;
             hardware.arm.setPosition(0.98);
         }
+    }
+
+    public void toggleArm(double position) {
+        hardware.arm.setPosition(position);
     }
 }

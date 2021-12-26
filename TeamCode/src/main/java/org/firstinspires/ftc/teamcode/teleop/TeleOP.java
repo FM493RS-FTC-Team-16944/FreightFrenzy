@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.XyhVector;
 
 @TeleOp(name = "TeleOp")
 public class TeleOP extends LinearOpMode {
-    private Robot robot;
+    public Robot robot;
 
     public RobotHardware hardware;
     public GamePad gamepad;

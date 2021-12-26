@@ -104,7 +104,9 @@ public class RobotHardware {
     public void setEncodersMode(DcMotor.RunMode mode) {
         flywheel.setMode(mode);
         backLeftMotor.setMode(mode);
+        backRightMotor.setMode(mode);
         frontLeftMotor.setMode(mode);
+        frontRightMotor.setMode(mode);
     }
 
     public void stop() {
@@ -126,21 +128,21 @@ public class RobotHardware {
         this.previousLeftPos = this.currentLeftPos;
         this.previousAuxPos = this.currentAuxPos;
 
-        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
-        this.currentLeftPos = this.leftEncoder.getCurrentPosition();
+        this.currentRightPos = -this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
+        this.currentLeftPos = -this.leftEncoder.getCurrentPosition();
         this.currentAuxPos = this.auxEncoder.getCurrentPosition();
 
         double deltaLeft = this.currentLeftPos - this.previousLeftPos;
         double deltaRight = this.currentRightPos - this.previousRightPos;
         double deltaAux = this.currentAuxPos - this.previousAuxPos;
 
-        double deltaT = cm_per_tick * (deltaRight - deltaLeft);
-        double dx = cm_per_tick * (deltaLeft + deltaRight);
+        double deltaT = cm_per_tick * (deltaRight - deltaLeft) / L;
+        double dx = cm_per_tick * (deltaLeft + deltaRight) / 2.0;
         double dy = cm_per_tick * (deltaAux - (deltaRight - deltaLeft) * B / L);
         double theta = pos.h + (deltaT / 2.0);
 
         pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
-        pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
+        pos.y += dx * Math.sin(theta) + dy * Math.cos(theta);
         pos.h += deltaT;
     }
 }    /**

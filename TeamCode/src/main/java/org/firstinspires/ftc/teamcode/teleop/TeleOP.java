@@ -26,7 +26,7 @@ public class TeleOP extends LinearOpMode {
         gamepad = new GamePad(robot, gamepad1);
         PositionVelocityCtrl posVeloCtrl = new PositionVelocityCtrl(
                 this,
-                new XyhVector(0, 20, Math.toRadians(0))
+                new XyhVector(0, 0, Math.toRadians(90))
         );
 
         hardware.resetDriveEncoders();
@@ -36,15 +36,17 @@ public class TeleOP extends LinearOpMode {
 
             telemetry.addData("Position X", hardware.pos.x);
             telemetry.addData("Position Y", hardware.pos.y);
-            telemetry.addData("Position H", hardware.pos.h);
+            telemetry.addData("Position H", Math.toDegrees(hardware.pos.h));
 
             XyhVector outputCtrl = posVeloCtrl.runPID(hardware.pos);
 
-//            hardware.frontLeftMotor.setPower(-0.5*(outputCtrl.x + outputCtrl.y + outputCtrl.h));
-//            hardware.backLeftMotor.setPower(-0.5*(outputCtrl.x - outputCtrl.y + outputCtrl.h));
-//            hardware.frontRightMotor.setPower(-0.5*(outputCtrl.x - outputCtrl.y - outputCtrl.h));
-//            hardware.backRightMotor.setPower(-0.5*(outputCtrl.x + outputCtrl.y - outputCtrl.h));
 
+//            double frontLeftPower = (x  + y + h) / denominator;
+//            double backLeftPower = (x - y - h) / denominator;
+//            double frontRightPower = (x + y - h) / denominator;
+//            double backRightPower = (x - y + h) / denominator;
+
+//           sa
 
             telemetry.addData("frontLeft", outputCtrl.x + outputCtrl.y + outputCtrl.h);
             telemetry.addData("backLeft", outputCtrl.x - outputCtrl.y + outputCtrl.h);

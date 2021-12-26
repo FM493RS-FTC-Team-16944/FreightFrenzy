@@ -10,10 +10,10 @@ public class RobotMovement {
 
     public void strafe(double x, double y, double h) {
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(h), 1);
-        double frontLeftPower = (y   + x + h) / denominator;
-        double backLeftPower = (x - y + h) / denominator;
-        double frontRightPower = (x - y - h) / denominator;
-        double backRightPower = (x + y - h) / denominator;
+        double frontLeftPower = (x  + y + h) / denominator;
+        double backLeftPower = (x - y - h) / denominator;
+        double frontRightPower = (x + y - h) / denominator;
+        double backRightPower = (x - y + h) / denominator;
 
         hardware.frontLeftMotor.setPower(frontLeftPower);
         hardware.backLeftMotor.setPower(backLeftPower);
@@ -52,29 +52,25 @@ public class RobotMovement {
     }
 
     public void toggleRaiseLift() {
-        if(hardware.liftVerticalSpeed == 0.5) {
-            hardware.liftVerticalSpeed = 0.0;
-            hardware.liftVertical.setPower(0.0);
+        if(hardware.liftSpeed == 0.5) {
+            hardware.liftSpeed = 0.0;
+            hardware.lift.setPower(0.0);
         } else {
-            hardware.liftVerticalSpeed = 0.5;
-            hardware.liftVertical.setPower(0.5);
+            hardware.liftSpeed = 0.5;
+            hardware.lift.setPower(0.5);
         }
     }
 
-    public void toggleTranslateLift() {
-        if(hardware.liftHorizontalSpeed == -0.4) {
-            hardware.liftHorizontalSpeed = 0.4;
-            hardware.liftHorizontal.setPower(0.4);
+    public void toggleLowerLift() {
+        if(hardware.liftSpeed == -0.2) {
+            hardware.liftSpeed = 0.0;
+            hardware.lift.setPower(0.0);
         } else {
-            hardware.liftHorizontalSpeed = -0.4;
-            hardware.liftHorizontal.setPower(-0.4);
+            hardware.liftSpeed = -0.2;
+            hardware.lift.setPower(-0.2);
         }
     }
 
-    public void toggleTranslateLift(double power) {
-        hardware.liftHorizontalSpeed = power;
-        hardware.liftHorizontal.setPower(power);
-    }
 
     public void toggleClaw() {
         // 1 is closed, 0.675 is opened
@@ -85,6 +81,18 @@ public class RobotMovement {
         } else {
             hardware.clawPosition = 1;
             hardware.claw.setPosition(1);
+        }
+    }
+
+    public void toggleArm() {
+        // 1 is closed, 0.675 is opened
+
+        if(hardware.armPosition == 0.98) {
+            hardware.armPosition = 0.5;
+            hardware.arm.setPosition(0.5);
+        } else {
+            hardware.armPosition = 0.98;
+            hardware.arm.setPosition(0.98);
         }
     }
 }

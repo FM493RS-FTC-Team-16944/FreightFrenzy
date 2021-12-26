@@ -16,20 +16,20 @@ public class RobotHardware {
     public double currentAuxPos = 0;
 
     public DcMotor frontRightMotor, frontLeftMotor, backRightMotor, backLeftMotor;
-    public DcMotor intake, liftVertical, liftHorizontal, flywheel;
+    public DcMotor intake, lift, flywheel;
     public DcMotor leftEncoder, rightEncoder, auxEncoder;
 
     public BNO055IMU imu;
-    public Servo claw;
+    public Servo claw, arm;
 
     public HardwareMap hardwareMap;
     public Mode currentMode = Mode.DRIVER_CONTROL;
 
     public double intakeSpeed = 0.0;
     public double flyWheelSpeed = 0.0;
-    public double liftHorizontalSpeed = 0.0;
-    public double liftVerticalSpeed = 0.0;
+    public double liftSpeed = 0.0;
     public double clawPosition = 0.0;
+    public double armPosition = 0.0;
 
     public boolean freightLoaded = true;
 
@@ -72,22 +72,25 @@ public class RobotHardware {
         intake = hardwareMap.dcMotor.get("Intake");
         intake.setDirection(DcMotor.Direction.REVERSE);
 
-        liftVertical = hardwareMap.dcMotor.get("LiftV");
-        liftHorizontal = hardwareMap.dcMotor.get("LiftH");
+        lift = hardwareMap.dcMotor.get("Lift");
         flywheel = hardwareMap.dcMotor.get("Flywheel");
         claw = hardwareMap.servo.get("Claw");
+        arm = hardwareMap.servo.get("Arm");
 
+        /*
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         imu.initialize(parameters);
 
+         */
+
         setEncodersMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        rightEncoder = frontRightMotor;
-        auxEncoder = backRightMotor;
-        leftEncoder = backLeftMotor;
+        rightEncoder = flywheel;
+        auxEncoder = backLeftMotor;
+        leftEncoder = frontLeftMotor;
 
         stop();
         resetDriveEncoders();
@@ -99,10 +102,9 @@ public class RobotHardware {
     }
 
     public void setEncodersMode(DcMotor.RunMode mode) {
-        liftHorizontal.setMode(mode);
-        liftVertical.setMode(mode);
-        intake.setMode(mode);
         flywheel.setMode(mode);
+        backLeftMotor.setMode(mode);
+        frontLeftMotor.setMode(mode);
     }
 
     public void stop() {

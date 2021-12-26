@@ -10,6 +10,11 @@ public class GamePad {
     private final RobotMovement movement;
 
     private boolean previousX = false;
+    private boolean previousY = false;
+    private boolean previousIn = false;
+    private boolean previousFly = false;
+    private boolean previousUp = false;
+    private boolean previousDown = false;
 
     public GamePad(Robot robot, Gamepad hardwareGamepad) {
         this.hardware = robot.hardware;
@@ -43,37 +48,45 @@ public class GamePad {
 
         }
 
+        // claw
         if (gamepad.x && gamepad.x != previousX) {
             movement.toggleClaw();
         }
 
         previousX = gamepad.x;
-        
-        if (gamepad.y) {
+
+        // arm
+        if (gamepad.y && gamepad.y != previousY) {
+            movement.toggleArm();
         }
+
+        previousY = gamepad.y;
 
         // intake
         if (gamepad.left_trigger != 0) {
             movement.activateIntake(gamepad.left_trigger);
-        } else if (gamepad.left_bumper) {
+        } else if (gamepad.left_bumper && gamepad.left_bumper != previousIn) {
             movement.activateIntake();
         }
+
+        previousIn = gamepad.left_bumper;
 
         // flywheel
         if (gamepad.right_trigger != 0) {
             movement.activateFlywheel(gamepad.right_trigger);
-        } else if (gamepad.right_bumper) {
+        } else if (gamepad.right_bumper && gamepad.right_bumper != previousFly) {
             movement.activateFlywheel();
         }
+        previousFly = gamepad.right_bumper;
 
-        if (gamepad.dpad_up || gamepad.dpad_down) {
+        if (gamepad.dpad_up && gamepad.dpad_up != previousUp) {
             movement.toggleRaiseLift();
         }
+        previousUp = gamepad.dpad_up;
 
-        if(gamepad.dpad_left || gamepad.dpad_right) {
-            movement.toggleTranslateLift();
-        } else {
-            movement.toggleTranslateLift(0);
+        if (gamepad.dpad_down && gamepad.dpad_down != previousDown) {
+            movement.toggleLowerLift();
         }
+        previousDown = gamepad.dpad_down;
     }
 }

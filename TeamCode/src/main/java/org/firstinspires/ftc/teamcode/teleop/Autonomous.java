@@ -68,7 +68,7 @@ public class Autonomous extends LinearOpMode {
             goToPlace(x, y, h);
 
             // TODO: im pretty sure this moves it down but i forgot and am dumb pls check
-            if(hardware.liftHorizontalSpeed != 0.0) {
+            if(hardware.liftSpeed != 0.0) {
                 robot.movement.toggleRaiseLift();
             }
 
@@ -95,7 +95,7 @@ public class Autonomous extends LinearOpMode {
 
         goToPlace(x, y, h);
 
-        if(hardware.liftHorizontalSpeed != 0.5) {
+        if(hardware.liftSpeed != 0.5) {
             robot.movement.toggleRaiseLift();
         }
 

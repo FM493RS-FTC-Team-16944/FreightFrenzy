@@ -55,7 +55,8 @@ public class TeleOP extends LinearOpMode {
             telemetry.addData("PID Output Y", outputCtrl.y);
             telemetry.addData("PID Output H", outputCtrl.h);
 
-            telemetry.addData("Servo Position", hardware.claw.getPosition());
+            telemetry.addData("Claw Position", hardware.claw.getPosition());
+            telemetry.addData("Arm Position", hardware.arm.getPosition());
             telemetry.update();
         }
     }

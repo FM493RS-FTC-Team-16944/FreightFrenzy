@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 public class RobotMovement {
     RobotHardware hardware;
+    public int open = 0;
 
     RobotMovement(Robot robot) {
         this.hardware = robot.hardware;
@@ -15,10 +16,10 @@ public class RobotMovement {
         double frontRightPower = (x + y - h) / denominator;
         double backRightPower = (x - y + h) / denominator;
 
-        hardware.frontLeftMotor.setPower(frontLeftPower);
-        hardware.backLeftMotor.setPower(backLeftPower);
-        hardware.frontRightMotor.setPower(frontRightPower);
-        hardware.backRightMotor.setPower(backRightPower);
+        hardware.frontLeftMotor.setPower(0.5*frontLeftPower);
+        hardware.backLeftMotor.setPower(0.5*backLeftPower);
+        hardware.frontRightMotor.setPower(0.5*frontRightPower);
+        hardware.backRightMotor.setPower(0.5*backRightPower);
     }
 
     public void activateFlywheel(double speed) {
@@ -52,12 +53,14 @@ public class RobotMovement {
     }
 
     public void toggleRaiseLift() {
-        if(hardware.liftSpeed == 0.5) {
-            hardware.liftSpeed = 0.0;
-            hardware.lift.setPower(0.0);
-        } else {
-            hardware.liftSpeed = 0.5;
-            hardware.lift.setPower(0.5);
+        if(open == 0) {
+            if (hardware.liftSpeed == 0.5) {
+                hardware.liftSpeed = 0.0;
+                hardware.lift.setPower(0.0);
+            } else {
+                hardware.liftSpeed = 0.5;
+                hardware.lift.setPower(0.5);
+            }
         }
     }
 
@@ -94,9 +97,11 @@ public class RobotMovement {
         if(hardware.armPosition == 0.98) {
             hardware.armPosition = 0.5;
             hardware.arm.setPosition(0.5);
+            open = 1;
         } else {
             hardware.armPosition = 0.98;
             hardware.arm.setPosition(0.98);
+            open = 0;
         }
     }
 

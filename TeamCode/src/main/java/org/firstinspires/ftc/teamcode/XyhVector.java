@@ -5,7 +5,7 @@ public class XyhVector {
     public double y;
     public double h;
 
-    XyhVector(double x, double y, double h) {
+    public XyhVector(double x, double y, double h) {
         this.y = y;
         this.x = x;
         this.h = h;
@@ -15,5 +15,11 @@ public class XyhVector {
         this.x = vector.x;
         this.y = vector.y;
         this.h = vector.h;
+    }
+
+    XyhVector() {
+        this.x = 0;
+        this.y = 0;
+        this.h = 0;
     }
 }

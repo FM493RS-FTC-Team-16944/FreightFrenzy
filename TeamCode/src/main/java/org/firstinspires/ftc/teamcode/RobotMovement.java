@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 public class RobotMovement {
     RobotHardware hardware;
+
     public int open = 0;
 
     RobotMovement(Robot robot) {

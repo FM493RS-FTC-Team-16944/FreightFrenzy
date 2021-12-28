@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.models;
 
-public enum lift {
+public enum Lift {
     UP,
-    DOWN,
-    NONE
+    DOWN
 }

@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.models.Lift;
 import org.firstinspires.ftc.teamcode.models.Mode;
 
 public class GamePad {
     private final Gamepad gamepad;
+
     private final RobotHardware hardware;
     private final RobotMovement movement;
 
@@ -77,16 +79,23 @@ public class GamePad {
         } else if (gamepad.right_bumper && gamepad.right_bumper != previousFly) {
             movement.activateFlywheel();
         }
+
         previousFly = gamepad.right_bumper;
 
         if (gamepad.dpad_up && gamepad.dpad_up != previousUp) {
-            movement.toggleRaiseLift();
+            LiftMacro liftMacro = new LiftMacro(movement, Lift.UP);
+            Thread t1 = new Thread(liftMacro);
+            t1.start();
         }
+
         previousUp = gamepad.dpad_up;
 
         if (gamepad.dpad_down && gamepad.dpad_down != previousDown) {
-            movement.toggleLowerLift();
+            LiftMacro liftMacro = new LiftMacro(movement, Lift.DOWN);
+            Thread t1 = new Thread(liftMacro);
+            t1.start();
         }
+
         previousDown = gamepad.dpad_down;
     }
 }

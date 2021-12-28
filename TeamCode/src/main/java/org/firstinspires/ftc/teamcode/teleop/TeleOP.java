@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.GamePad;
 import org.firstinspires.ftc.teamcode.GoToPosition;
@@ -14,7 +13,7 @@ import org.firstinspires.ftc.teamcode.GoToPosition;
 
 @TeleOp(name = "TeleOp")
 public class TeleOP extends LinearOpMode {
-    private Robot robot;
+    public Robot robot;
 
     public RobotHardware hardware;
     public GamePad gamepad;

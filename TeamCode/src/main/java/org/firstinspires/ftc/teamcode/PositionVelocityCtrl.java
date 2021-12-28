@@ -77,7 +77,6 @@ public class PositionVelocityCtrl {
         double x_rotated = outX * Math.cos(currentPosition.h) - outY * Math.sin(currentPosition.h);
         double y_rotated = outX * Math.sin(currentPosition.h) + outY * Math.cos(currentPosition.h);
 
-
         errPos.x = currentPosErrX;
         errPos.y = currentPosErrY;
         errPos.h = currentPosErrH;

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 public class RobotMovement {
     RobotHardware hardware;
+
     public int open = 0;
 
     RobotMovement(Robot robot) {
@@ -87,6 +88,10 @@ public class RobotMovement {
         }
     }
 
+    public void toggleClaw(double position) {
+        hardware.claw.setPosition(position);
+    }
+
     public void toggleArm() {
         // 1 is closed, 0.675 is opened
 
@@ -99,5 +104,9 @@ public class RobotMovement {
             hardware.arm.setPosition(0.98);
             open = 0;
         }
+    }
+
+    public void toggleArm(double position) {
+        hardware.arm.setPosition(position);
     }
 }

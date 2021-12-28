@@ -20,6 +20,7 @@ public class RobotHardware {
     public DcMotor leftEncoder, rightEncoder, auxEncoder;
 
     public BNO055IMU imu;
+
     public Servo claw, arm;
 
     public HardwareMap hardwareMap;
@@ -77,14 +78,16 @@ public class RobotHardware {
         claw = hardwareMap.servo.get("Claw");
         arm = hardwareMap.servo.get("Arm");
 
-        /*
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        imu.initialize(parameters);
 
-         */
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
+
+        imu.initialize(parameters);
 
         setEncodersMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

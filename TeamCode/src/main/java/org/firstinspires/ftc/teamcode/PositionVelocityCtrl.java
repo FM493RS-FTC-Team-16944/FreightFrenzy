@@ -7,15 +7,15 @@ import org.firstinspires.ftc.teamcode.teleop.TeleOP;
 public class PositionVelocityCtrl {
     public TeleOP teleOP;
 
-    private final ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-    private final XyhVector targetPosition;
+    private final ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
+    public final XyhVector targetPosition;
 
     public final double propGain = 0.05f;
-    public final double intGain = 0.0;
-    public final double derivGain = 0.0;
+    public final double intGain = 0.01f;
+    public final double derivGain = 0.01f;
 
-    public static XyhVector integralVelo = new XyhVector();
-    public static XyhVector errPos = new XyhVector();
+    public static XyhVector integralSum = new XyhVector();
+    public static XyhVector errPos = new XyhVector(0,0,0);
 
     public PositionVelocityCtrl(TeleOP teleOP, XyhVector targetPosition) {
         this.teleOP = teleOP;
@@ -26,10 +26,10 @@ public class PositionVelocityCtrl {
 
     public double angleWrap(double radians) {
 
-        while (radians > Math.PI) {
+        if (radians > Math.PI) {
             radians -= 2 * Math.PI;
         }
-        while (radians < -Math.PI) {
+        if (radians < -Math.PI) {
             radians += 2 * Math.PI;
         }
 
@@ -37,14 +37,24 @@ public class PositionVelocityCtrl {
         return radians;
     }
 
-    public XyhVector runPID(XyhVector currentPosition) {
+    public XyhVector calculatePID(XyhVector currentPosition) {
         double currentPosErrX = targetPosition.x - currentPosition.x;
         double currentPosErrY = targetPosition.y - currentPosition.y;
         double currentPosErrH = targetPosition.h - currentPosition.h;
 
-        integralVelo.x += errPos.x * PIDTimer.time();
-        integralVelo.y += errPos.y * PIDTimer.time();
-        integralVelo.h += errPos.h * PIDTimer.time();
+        teleOP.telemetry.addData("Target X", targetPosition.x);
+        teleOP.telemetry.addData("Target Y", targetPosition.y);
+        teleOP.telemetry.addData("Target H", targetPosition.h);
+
+        teleOP.telemetry.addData("Error X", currentPosErrX);
+        teleOP.telemetry.addData("Error Y", currentPosErrY);
+        teleOP.telemetry.addData("Error H", currentPosErrH);
+
+
+        integralSum.x += currentPosErrX * PIDTimer.time();
+        integralSum.y += currentPosErrY * PIDTimer.time();
+        integralSum.h += currentPosErrH * PIDTimer.time();
+
 
         XyhVector posDerivative = new XyhVector(
                 (currentPosErrX - errPos.x) / PIDTimer.time(),
@@ -53,15 +63,15 @@ public class PositionVelocityCtrl {
         );
 
         double outX = propGain * currentPosErrX +
-                intGain * integralVelo.x +
+                intGain * integralSum.x +
                 derivGain * posDerivative.x;
 
         double outY = propGain * currentPosErrY +
-                intGain * integralVelo.y +
+                intGain * integralSum.y +
                 derivGain * posDerivative.y;
 
         double outH = propGain * currentPosErrH +
-                intGain * integralVelo.h +
+                intGain * integralSum.h +
                 derivGain * posDerivative.h;
 
         double x_rotated = outX * Math.cos(currentPosition.h) - outY * Math.sin(currentPosition.h);

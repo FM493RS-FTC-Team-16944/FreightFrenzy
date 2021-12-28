@@ -35,11 +35,11 @@ public class RobotHardware {
 
     public int angle = 0;
 
-    private double L = 24.09;                              //Robot Geometry for odom
-    private double B = 10;                                 //needs to be remeasured
+    private double L = 30;                              //Robot Geometry for odom
+    private double B = 11;                                 //needs to be remeasured
     private double R = 2.54;
     private double N = 8192;
-    private double cm_per_tick = 2.54 * Math.PI * R / N;
+    private double cm_per_tick = 2.0 * Math.PI * R / N;
     private double previousRightPos = 0;
     private double previousLeftPos = 0;
     private double previousAuxPos = 0;
@@ -128,7 +128,7 @@ public class RobotHardware {
         this.previousLeftPos = this.currentLeftPos;
         this.previousAuxPos = this.currentAuxPos;
 
-        this.currentRightPos = -this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
+        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
         this.currentLeftPos = -this.leftEncoder.getCurrentPosition();
         this.currentAuxPos = this.auxEncoder.getCurrentPosition();
 
@@ -141,8 +141,8 @@ public class RobotHardware {
         double dy = cm_per_tick * (deltaAux - (deltaRight - deltaLeft) * B / L);
         double theta = pos.h + (deltaT / 2.0);
 
-        pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
-        pos.y += dx * Math.sin(theta) + dy * Math.cos(theta);
+        pos.y += dx * Math.cos(theta) - dy * Math.sin(theta);
+        pos.x += dx * Math.sin(theta) + dy * Math.cos(theta);
         pos.h += deltaT;
     }
 }    /**

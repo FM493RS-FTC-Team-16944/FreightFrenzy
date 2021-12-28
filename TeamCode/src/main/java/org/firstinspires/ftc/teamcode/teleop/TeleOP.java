@@ -5,10 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.GamePad;
+import org.firstinspires.ftc.teamcode.GoToPosition;
 import org.firstinspires.ftc.teamcode.PositionVelocityCtrl;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.XyhVector;
+import org.firstinspires.ftc.teamcode.GoToPosition;
 
 @TeleOp(name = "TeleOp")
 public class TeleOP extends LinearOpMode {
@@ -24,38 +26,21 @@ public class TeleOP extends LinearOpMode {
         robot = new Robot(this);
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
-        PositionVelocityCtrl posVeloCtrl = new PositionVelocityCtrl(
-                this,
-                new XyhVector(0, 0, Math.toRadians(90))
-        );
+        XyhVector targetVector = new XyhVector(0,20,Math.toRadians(0));
+        GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
         hardware.resetDriveEncoders();
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry();
             gamepad.updateRobot();
 
+            runToTarget.runWithPID(3);
+
+
             telemetry.addData("Position X", hardware.pos.x);
             telemetry.addData("Position Y", hardware.pos.y);
-            telemetry.addData("Position H", Math.toDegrees(hardware.pos.h));
+            telemetry.addData("Posiion H", Math.toDegrees(hardware.pos.h));
 
-            XyhVector outputCtrl = posVeloCtrl.runPID(hardware.pos);
-
-
-//            double frontLeftPower = (x  + y + h) / denominator;
-//            double backLeftPower = (x - y - h) / denominator;
-//            double frontRightPower = (x + y - h) / denominator;
-//            double backRightPower = (x - y + h) / denominator;
-
-//           sa
-
-            telemetry.addData("frontLeft", outputCtrl.x + outputCtrl.y + outputCtrl.h);
-            telemetry.addData("backLeft", outputCtrl.x - outputCtrl.y + outputCtrl.h);
-            telemetry.addData("frontRight", outputCtrl.x - outputCtrl.y - outputCtrl.h);
-            telemetry.addData("backRight", outputCtrl.x + outputCtrl.y - outputCtrl.h);
-
-            telemetry.addData("PID Output X", outputCtrl.x);
-            telemetry.addData("PID Output Y", outputCtrl.y);
-            telemetry.addData("PID Output H", outputCtrl.h);
 
             telemetry.addData("Claw Position", hardware.claw.getPosition());
             telemetry.addData("Arm Position", hardware.arm.getPosition());

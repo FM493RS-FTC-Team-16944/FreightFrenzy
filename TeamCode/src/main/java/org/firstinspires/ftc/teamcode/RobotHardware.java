@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -36,7 +37,7 @@ public class RobotHardware {
 
     public int angle = 0;
 
-    private double L = 30;                              //Robot Geometry for odom
+    private double L = 29;                              //Robot Geometry for odom
     private double B = 11;                                 //needs to be remeasured
     private double R = 2.54;
     private double N = 8192;
@@ -63,11 +64,11 @@ public class RobotHardware {
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backRightMotor = hardwareMap.dcMotor.get("BackRight");
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backLeftMotor = hardwareMap.dcMotor.get("BackLeft");      //So that all motors forward goes forward
-        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         intake = hardwareMap.dcMotor.get("Intake");
@@ -133,7 +134,7 @@ public class RobotHardware {
 
         this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
         this.currentLeftPos = -this.leftEncoder.getCurrentPosition();
-        this.currentAuxPos = this.auxEncoder.getCurrentPosition();
+        this.currentAuxPos = -this.auxEncoder.getCurrentPosition();
 
         double deltaLeft = this.currentLeftPos - this.previousLeftPos;
         double deltaRight = this.currentRightPos - this.previousRightPos;
@@ -147,6 +148,7 @@ public class RobotHardware {
         pos.y += dx * Math.cos(theta) - dy * Math.sin(theta);
         pos.x += dx * Math.sin(theta) + dy * Math.cos(theta);
         pos.h += deltaT;
+        pos.h %= 2*Math.PI;
     }
 }    /**
      * .........................................................................................* ...........................................................................................

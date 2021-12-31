@@ -2,14 +2,18 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.sun.source.tree.Tree;
 
 import org.firstinspires.ftc.teamcode.GamePad;
 import org.firstinspires.ftc.teamcode.GoToPosition;
 import org.firstinspires.ftc.teamcode.PositionVelocityCtrl;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.SequentialMovements;
 import org.firstinspires.ftc.teamcode.XyhVector;
 import org.firstinspires.ftc.teamcode.GoToPosition;
+
+import java.util.TreeMap;
 
 @TeleOp(name = "TeleOp")
 public class TeleOP extends LinearOpMode {
@@ -29,8 +33,10 @@ public class TeleOP extends LinearOpMode {
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
         XyhVector secondTarget = new XyhVector(0,0,Math.toRadians(0));
         GoToPosition runBackToOrigin = new GoToPosition(robot, secondTarget, this);
-        GoToPosition waypoints[] = {runToTarget};
-
+        TreeMap<GoToPosition, Boolean> waypoints = new TreeMap<GoToPosition, Boolean>();
+        waypoints.put(runToTarget, false);
+        waypoints.put(runBackToOrigin, false);
+        SequentialMovements path = new SequentialMovements(waypoints, 3);
         int navigator = 0;
 
 
@@ -38,12 +44,8 @@ public class TeleOP extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry();
             gamepad.updateRobot();
-//            boolean isRunning = waypoints[navigator].runWithPID(3);
-//            if(isRunning == false && (waypoints.length-1) >= navigator + 1){
-//                navigator++;
-//
-//                telemetry.addData("next waypoint", navigator);
-//            }
+
+            path.runMovements();
 
             telemetry.addData("Position X", hardware.pos.x);
             telemetry.addData("Position Y", hardware.pos.y);

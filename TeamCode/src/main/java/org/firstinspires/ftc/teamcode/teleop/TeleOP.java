@@ -2,16 +2,13 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.sun.source.tree.Tree;
 
 import org.firstinspires.ftc.teamcode.GamePad;
 import org.firstinspires.ftc.teamcode.GoToPosition;
-import org.firstinspires.ftc.teamcode.PositionVelocityCtrl;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.SequentialMovements;
-import org.firstinspires.ftc.teamcode.XyhVector;
-import org.firstinspires.ftc.teamcode.GoToPosition;
+import org.firstinspires.ftc.teamcode.models.XyhVector;
 
 import java.util.TreeMap;
 
@@ -29,6 +26,7 @@ public class TeleOP extends LinearOpMode {
         robot = new Robot(this);
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
+
         XyhVector targetVector = new XyhVector(20,0,Math.toRadians(0));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
         XyhVector secondTarget = new XyhVector(0,0,Math.toRadians(0));

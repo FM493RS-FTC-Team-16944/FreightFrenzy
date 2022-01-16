@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.models;
 
 public class XyhVector {
     public double x;
@@ -11,13 +11,13 @@ public class XyhVector {
         this.h = h;
     }
 
-    XyhVector(XyhVector vector) {
+    public XyhVector(XyhVector vector) {
         this.x = vector.x;
         this.y = vector.y;
         this.h = vector.h;
     }
 
-    XyhVector() {
+    public XyhVector() {
         this.x = 0;
         this.y = 0;
         this.h = 0;

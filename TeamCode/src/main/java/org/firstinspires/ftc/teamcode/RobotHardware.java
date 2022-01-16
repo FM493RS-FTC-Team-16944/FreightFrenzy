@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.models.Mode;
+import org.firstinspires.ftc.teamcode.models.XyhVector;
 
 public class RobotHardware {
     public XyhVector START_POS = new XyhVector(0, 0, 0);    //Robot starts at 0,0,0 coord (Can be adjusted later)
@@ -150,43 +150,4 @@ public class RobotHardware {
         pos.h += deltaT;
         pos.h %= 2*Math.PI;
     }
-}    /**
-     * .........................................................................................* ...........................................................................................
-     */
-
-//    public void odometry() {
-//        angle = (int) imu.getAngularOrientation().firstAngle;
-//        double currentHeading = imu.getAngularOrientation().firstAngle;
-//
-//        this.previousRightPos = this.currentRightPos;
-//        this.previousLeftPos = this.currentLeftPos;
-//        this.previousAuxPos = this.currentAuxPos;
-//
-//        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
-//        this.currentLeftPos = this.leftEncoder.getCurrentPosition();
-//        this.currentAuxPos = this.auxEncoder.getCurrentPosition();
-//
-//        double deltaLeft = this.currentLeftPos - this.previousLeftPos;
-//        double deltaRight = this.currentRightPos - this.previousRightPos;
-//        //double deltaAux = this.currentAuxPos - this.previousAuxPos;
-//
-//        double deltaT = cm_per_tick * (deltaRight - deltaLeft);
-//        double dx = cm_per_tick * (deltaLeft + deltaRight);
-//        //double dy = cm_per_tick * (deltaAux - (deltaRight - deltaLeft) * B / L);
-//        //double theta = pos.h + (deltaT / 2.0);
-//
-//        if (currentHeading > 90 && currentHeading < 270) {
-//            pos.x -= 1 / Math.cos(dx);
-//        } else {
-//            pos.x += 1 / Math.cos(dx);
-//        }
-//        if (currentHeading > 180 && currentHeading < 380) {
-//            pos.y -= 1 / Math.sin(dx);
-//        } else {
-//            pos.y += 1 / Math.sin(dx);
-//        }
-//        pos.x += dx * Math.cos(theta) - dy * Math.sin(theta);
-//        pos.y += dx * Math.sin(theta) - dy * Math.cos(theta);
-//        pos.h += currentHeading;
-//    }
-//}
+}

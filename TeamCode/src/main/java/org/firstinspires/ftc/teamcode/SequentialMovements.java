@@ -12,7 +12,7 @@ public class SequentialMovements {
         this.threshold = threshold;
     }
 
-    public boolean runMovements(){
+    public boolean runMovements() {
         GoToPosition currentWaypoint = null;
         for(GoToPosition waypoint : waypoints.keySet()){
             if(!waypoints.get(waypoint) && currentWaypoint == null){
@@ -23,10 +23,13 @@ public class SequentialMovements {
         if(currentWaypoint == null){
             return true;
         }
+
         boolean finished = currentWaypoint.runWithPID(threshold);
-        if(finished == true){
+
+        if(finished){
             waypoints.put(currentWaypoint,false);
         }
+
         return false;
 
     }

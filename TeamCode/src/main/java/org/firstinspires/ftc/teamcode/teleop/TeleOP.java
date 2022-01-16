@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.SequentialMovements;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 @TeleOp(name = "TeleOp")
 public class TeleOP extends LinearOpMode {
@@ -29,16 +29,20 @@ public class TeleOP extends LinearOpMode {
 
         XyhVector targetVector = new XyhVector(20,0,Math.toRadians(0));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
+
         XyhVector secondTarget = new XyhVector(0,0,Math.toRadians(0));
         GoToPosition runBackToOrigin = new GoToPosition(robot, secondTarget, this);
-        TreeMap<GoToPosition, Boolean> waypoints = new TreeMap<GoToPosition, Boolean>();
+
+        LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
         waypoints.put(runToTarget, false);
         waypoints.put(runBackToOrigin, false);
+
         SequentialMovements path = new SequentialMovements(waypoints, 3);
+
         int navigator = 0;
 
-
         hardware.resetDriveEncoders();
+
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry();
             gamepad.updateRobot();
@@ -48,7 +52,6 @@ public class TeleOP extends LinearOpMode {
             telemetry.addData("Position X", hardware.pos.x);
             telemetry.addData("Position Y", hardware.pos.y);
             telemetry.addData("Posiion H", Math.toDegrees(hardware.pos.h));
-
 
             telemetry.addData("Claw Position", hardware.claw.getPosition());
             telemetry.addData("Arm Position", hardware.arm.getPosition());

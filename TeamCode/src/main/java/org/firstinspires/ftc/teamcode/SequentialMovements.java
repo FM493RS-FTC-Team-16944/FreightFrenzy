@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 public class SequentialMovements {
-    public TreeMap<GoToPosition, Boolean> waypoints;
+    public LinkedHashMap<GoToPosition, Boolean> waypoints;
     public int threshold;
 
-
-    public SequentialMovements(TreeMap<GoToPosition, Boolean> waypoints, int threshold){
+    public SequentialMovements(LinkedHashMap<GoToPosition, Boolean> waypoints, int threshold){
         this.waypoints = waypoints;
         this.threshold = threshold;
     }

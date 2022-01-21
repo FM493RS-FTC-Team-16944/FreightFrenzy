@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.models.Mode;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 
@@ -35,7 +39,7 @@ public class RobotHardware {
 
     public boolean freightLoaded = true;
 
-    public int angle = 0;
+    Orientation lastAngles = new Orientation();
 
     private double L = 29;                              //Robot Geometry for odom
     private double B = 11;                                 //needs to be remeasured
@@ -45,6 +49,7 @@ public class RobotHardware {
     private double previousRightPos = 0;
     private double previousLeftPos = 0;
     private double previousAuxPos = 0;
+    private double globalAngle;
 
     /**
      * ...........................................................................................
@@ -84,7 +89,7 @@ public class RobotHardware {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
         parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.RADIANS;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled      = false;
 
@@ -98,6 +103,11 @@ public class RobotHardware {
 
         stop();
         resetDriveEncoders();
+
+        while (!robot.teleOP.isStopRequested() && !imu.isGyroCalibrated()) {
+            robot.teleOP.sleep(50);
+            robot.teleOP.idle();
+        }
     }
 
     public void resetDriveEncoders() {
@@ -127,6 +137,35 @@ public class RobotHardware {
      * ...........................................................................................
      */
 
+    public void resetAngle() {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
+
+        globalAngle = 0;
+    }
+
+    private double getAngle() {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -Math.PI)
+            deltaAngle += 2 * Math.PI;
+        else if (deltaAngle > Math.PI)
+            deltaAngle -= 2 * Math.PI;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
+    }
+
+
     public void odometry() {
         this.previousRightPos = this.currentRightPos;
         this.previousLeftPos = this.currentLeftPos;
@@ -147,7 +186,6 @@ public class RobotHardware {
 
         pos.y += dx * Math.cos(theta) - dy * Math.sin(theta);
         pos.x += dx * Math.sin(theta) + dy * Math.cos(theta);
-        pos.h += deltaT;
-        pos.h %= 2*Math.PI;
+        pos.h = getAngle();
     }
 }

@@ -24,12 +24,12 @@ public class XyhVector {
     }
 
     public XyhVector subtract(XyhVector xyhVector) {
-        xyhVector = new XyhVector();
+        XyhVector subVector = new XyhVector();
 
-        xyhVector.x = this.x - xyhVector.x;
-        xyhVector.y = this.y - xyhVector.y;
-        xyhVector.h = this.h - xyhVector.h;
+        subVector.x = this.x - xyhVector.x;
+        subVector.y = this.y - xyhVector.y;
+        subVector.h = this.h - xyhVector.h;
 
-        return xyhVector;
+        return subVector;
     }
 }

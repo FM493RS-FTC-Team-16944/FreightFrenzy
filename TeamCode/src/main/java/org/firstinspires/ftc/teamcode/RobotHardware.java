@@ -41,8 +41,8 @@ public class RobotHardware {
     public BNO055IMU imu;
     Orientation lastAngles = new Orientation();
 
-    private double auxWidth = 4;                              //Robot Geometry for odom
-    private double trackWidth = 11;                                 //needs to be remeasured
+    private double auxWidth = 11;                              //Robot Geometry for odom
+    private double trackWidth = 29;                                 //needs to be remeasured
     private double R = 2.54;
     private double N = 8192;
     private double cm_per_tick = 2.0 * Math.PI * R / N;

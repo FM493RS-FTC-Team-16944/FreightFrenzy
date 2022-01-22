@@ -26,13 +26,15 @@ public class PositionVelocityCtrl {
     public XyhVector calculatePID(XyhVector currentPosition) {
         XyhVector currentPosErr = targetPosition.subtract(currentPosition);
 
-        this.telemetry.addData("Target X", targetPosition.x);
-        this.telemetry.addData("Target Y", targetPosition.y);
-        this.telemetry.addData("Target H", targetPosition.h);
+        this.telemetry.addData("PID Target X", targetPosition.x);
+        this.telemetry.addData("PID Target Y", targetPosition.y);
+        this.telemetry.addData("PID Target H", targetPosition.h);
 
-        this.telemetry.addData("Error X", currentPosErr.x);
-        this.telemetry.addData("Error Y", currentPosErr.y);
-        this.telemetry.addData("Error H", currentPosErr.h);
+        this.telemetry.addData("PID Error X", currentPosErr.x);
+        this.telemetry.addData("PID Error Y", currentPosErr.y);
+        this.telemetry.addData("PID Error H", currentPosErr.h);
+
+        this.telemetry.update();
 
         integralSum.x += currentPosErr.x * PIDTimer.time();
         integralSum.y += currentPosErr.y * PIDTimer.time();

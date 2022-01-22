@@ -34,6 +34,8 @@ public class GoToPosition {
         if(completeH && completeX && completeY) {
             this.telemetry.addLine("PID FINISHED");
 
+            this.telemetry.update();
+
             return false;
         } else {
             XyhVector forwardCtrl = forward.calculatePID(position);
@@ -51,6 +53,8 @@ public class GoToPosition {
             this.telemetry.addData("PID Output X", forwardCtrl.x);
             this.telemetry.addData("PID Output Y", forwardCtrl.y);
             this.telemetry.addData("PID Output H", forwardCtrl.h);
+
+            this.telemetry.update();
 
             this.movement.strafe(forwardCtrl.x, forwardCtrl.y, forwardCtrl.h);
 

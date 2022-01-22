@@ -27,12 +27,15 @@ public class SequentialMovements {
                 currentWaypoint = waypoint;
 
                 this.telemetry.addData("Current Waypoint :",  currentWaypoint.targetPosition.x);
+                this.telemetry.update();
+
                 break;
             }
         }
 
         if(currentWaypoint == null) {
             this.telemetry.addLine("Sequential Movements finished");
+            this.telemetry.update();
 
             return;
         }

@@ -1,64 +1,60 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
-import org.firstinspires.ftc.teamcode.teleop.TeleOP;
 
 public class GoToPosition {
-    public TeleOP teleOP;
-    public RobotHardware hardware;
+    private final Odometry odometry;
+    private final Telemetry telemetry;
+
     public RobotMovement movement;
-    public RobotHardware correctedHardware;
     public XyhVector targetPosition;
     public PositionVelocityCtrl forward;
 
-    public GoToPosition(Robot robot, XyhVector targetPosition, TeleOP teleOP) {
-        this.teleOP = teleOP;
-        this.hardware = robot.hardware;
+    public GoToPosition(Robot robot, XyhVector targetPosition, Telemetry telemetry) {
+        this.telemetry = telemetry;
+        this.odometry = robot.hardware.odometry;
         this.movement = robot.movement;
-        this.correctedHardware = robot.hardware;
 
         this.targetPosition = targetPosition;
 
         forward = new PositionVelocityCtrl(
-                teleOP,
+                telemetry,
                 targetPosition
         );
     }
 
     public boolean runWithPID(int threshold) {
-        boolean complete_x = Math.abs(correctedHardware.pos.x - targetPosition.x) <= threshold;
-        boolean complete_y = Math.abs(correctedHardware.pos.y - targetPosition.y) <= threshold;
-        boolean complete_h = Math.abs(correctedHardware.pos.h - targetPosition.h) <= Math.toRadians(threshold * 5);
+        XyhVector position = odometry.getPosition();
 
-        if(complete_h && complete_x && complete_y) {
-            teleOP.telemetry.addLine("PID FINISHED");
+        boolean completeX = Math.abs(position.x - targetPosition.x) <= threshold;
+        boolean completeY = Math.abs(position.y - targetPosition.y) <= threshold;
+        boolean completeH = Math.abs(position.h - targetPosition.h) <= Math.toRadians(threshold * 5);
+
+        if(completeH && completeX && completeY) {
+            this.telemetry.addLine("PID FINISHED");
 
             return false;
         } else {
-            XyhVector forwardCtrl = forward.calculatePID(correctedHardware.pos);
+            XyhVector forwardCtrl = forward.calculatePID(position);
 
-            if(complete_x) {
-                correctedHardware.pos.x = targetPosition.x;
+            if(completeX) {
                 forwardCtrl.x = 0;
-            } else if(complete_y) {
-                correctedHardware.pos.y = targetPosition.y;
+            } else if(completeY) {
                 forwardCtrl.y = 0;
-            } else if(complete_h) {
-                correctedHardware.pos.h = targetPosition.h;
+            } else if(completeH) {
                 forwardCtrl.h = 0;
             }
 
-            teleOP.telemetry.addData("PID Output X", forwardCtrl.x);
-            teleOP.telemetry.addData("PID Output Y", forwardCtrl.y);
-            teleOP.telemetry.addData("PID Output H", forwardCtrl.h);
+            odometry.setPosition(targetPosition);
 
-            movement.strafe(forwardCtrl.x, forwardCtrl.y, forwardCtrl.h);
+            this.telemetry.addData("PID Output X", forwardCtrl.x);
+            this.telemetry.addData("PID Output Y", forwardCtrl.y);
+            this.telemetry.addData("PID Output H", forwardCtrl.h);
+
+            this.movement.strafe(forwardCtrl.x, forwardCtrl.y, forwardCtrl.h);
 
             return true;
         }
     }
-
-
-
-
 }

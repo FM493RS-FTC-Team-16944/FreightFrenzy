@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.models.Lift;
 import org.firstinspires.ftc.teamcode.models.Mode;
 
@@ -43,11 +44,6 @@ public class GamePad {
                 case AUTOMATIC_CONTROL:
                     hardware.currentMode = Mode.DRIVER_CONTROL;
             }
-        }
-
-        // no clue
-        if (gamepad.b) {
-
         }
 
         // claw

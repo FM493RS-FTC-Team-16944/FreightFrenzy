@@ -1,17 +1,20 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.modes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.Odometry;
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous()
-public class Autonomous extends LinearOpMode {
+@Autonomous
+public class AutonomousMode extends LinearOpMode {
     private Robot robot;
 
     public RobotHardware hardware;
+    public Odometry odometry;
     public ObjectDetection recognition;
 
     public XyhVector warehouse;
@@ -24,6 +27,7 @@ public class Autonomous extends LinearOpMode {
 
         robot = new Robot(this);
         hardware = robot.hardware;
+        odometry = hardware.odometry;
         recognition = new ObjectDetection(hardware);
 
         recognition.setupDetection();
@@ -43,20 +47,18 @@ public class Autonomous extends LinearOpMode {
         goToWarehouse();
     }
 
-    public void goToPlace(double x, double y, double h) {
+    public void goToPlace(XyhVector position) {
         // TODO: USE THIS FUNCTION FOR PID AND CALL IT FROM EVERY WEHRE ELSE
     }
 
     public void goToWarehouse() {
-        double x = hardware.pos.x - warehouse.x;
-        double y = hardware.pos.y - warehouse.y; // TODO: im pretty sure this isnt negative but uh YEP
-        double h = hardware.pos.h - warehouse.h;
+        XyhVector place = odometry.getPosition().subtract(warehouse);
 
-        goToPlace(x, y, h);
+        goToPlace(place);
     }
 
     public void pickUpNearestFreight() {
-        if(!hardware.freightLoaded) {
+        if(!hardware.state.freightLoaded) {
             Recognition object = recognition.getNearestObject();
 
             // TODO: Im guessing this is the  distance from the robot to the object but pls test i beg tnx
@@ -64,53 +66,51 @@ public class Autonomous extends LinearOpMode {
             double y = object.getLeft();
             double h = 0.0; // TODO: FIX
 
-            goToPlace(x, y, h);
+            goToPlace(
+                    new XyhVector(x, y, h)
+            );
 
             // TODO: im pretty sure this moves it down but i forgot and am dumb pls check
-            if(hardware.liftSpeed != 0.0) {
+            if(hardware.state.liftSpeed != 0.0) {
                 robot.movement.toggleRaiseLift();
             }
 
-            if(hardware.clawPosition == 1) {
+            if(hardware.state.clawPosition == 1) {
                 robot.movement.toggleClaw();
             }
 
             robot.movement.activateIntake();
 
-            if(hardware.clawPosition == 0.675) {
+            if(hardware.state.clawPosition == 0.675) {
                 robot.movement.toggleClaw();
             }
 
             robot.movement.activateIntake();
 
-            hardware.freightLoaded = true;
+            hardware.state.freightLoaded = true;
         }
     }
 
     public void goDropShippingHub() {
-        double x = hardware.pos.x - shippingHub.x;
-        double y = hardware.pos.y - shippingHub.y;
-        double h = hardware.pos.h - shippingHub.h;
+        XyhVector position = odometry.getPosition().subtract(shippingHub);
 
-        goToPlace(x, y, h);
+        goToPlace(position);
 
-        if(hardware.liftSpeed != 0.5) {
+        if(hardware.state.liftSpeed != 0.5) {
             robot.movement.toggleRaiseLift();
         }
 
-        if(hardware.clawPosition == 1) {
+        if(hardware.state.clawPosition == 1) {
             robot.movement.toggleClaw();
         }
     }
 
     public void getCarouselDucks() {
-        double x = hardware.pos.x - carousel.x;
-        double y = hardware.pos.y - carousel.y;
-        double h = hardware.pos.h - carousel.h;
+        XyhVector position = odometry.getPosition().subtract(carousel);
 
-        goToPlace(x, y, h);
+        goToPlace(position);
 
-        if(hardware.flyWheelSpeed == 0) {
+        if(hardware.state.flyWheelSpeed == 0) {
             robot.movement.activateFlywheel();
         }
 

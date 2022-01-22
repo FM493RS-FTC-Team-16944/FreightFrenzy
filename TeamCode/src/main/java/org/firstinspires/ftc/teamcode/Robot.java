@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
+
 public class Robot {
     public LinearOpMode teleOP;
     public RobotHardware hardware;
@@ -11,6 +13,6 @@ public class Robot {
         this.teleOP = teleOP;
 
         this.hardware = new RobotHardware(this);
-        this.movement = new RobotMovement(this);
+        this.movement = new RobotMovement(this.hardware);
     }
 }

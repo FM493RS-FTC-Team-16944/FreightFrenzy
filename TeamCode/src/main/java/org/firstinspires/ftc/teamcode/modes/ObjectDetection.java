@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.modes;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.vuforia.CameraDevice;
@@ -37,8 +37,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.RobotHardware;
-
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 public class ObjectDetection {
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
@@ -70,7 +69,6 @@ public class ObjectDetection {
             tfod.setZoom(1.0, 16.0/9.0);
         }
     }
-
 
     public Recognition getNearestObject() {
         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();

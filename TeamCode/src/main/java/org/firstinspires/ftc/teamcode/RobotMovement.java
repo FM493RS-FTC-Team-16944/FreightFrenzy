@@ -1,113 +1,121 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.teamcode.hardware.Manipulator;
+import org.firstinspires.ftc.teamcode.hardware.MecanumDriveTrain;
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 public class RobotMovement {
-    RobotHardware hardware;
+    private final RobotHardware.State state;
+    private final MecanumDriveTrain driveTrain;
+    private final Manipulator manipulator;
 
-    public int open = 0;
+    RobotMovement(RobotHardware robotHardware) {
+        this.driveTrain = robotHardware.driveTrain;
+        this.manipulator = robotHardware.manipulator;
 
-    RobotMovement(Robot robot) {
-        this.hardware = robot.hardware;
+        this.state = robotHardware.state;
     }
 
     public void strafe(double x, double y, double h) {
-
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(h), 1);
+
         double frontLeftPower = (y + x + h) / denominator;
         double backLeftPower = (y - x + h) / denominator;
         double frontRightPower = (y + x - h) / denominator;
         double backRightPower = (y - x - h) / denominator;
 
-        hardware.frontLeftMotor.setPower(0.5*frontLeftPower);
-        hardware.backLeftMotor.setPower(0.5*backLeftPower);
-        hardware.frontRightMotor.setPower(0.5*frontRightPower);
-        hardware.backRightMotor.setPower(0.5*backRightPower);
+        driveTrain.topLeft.setPower(0.5 * frontLeftPower);
+        driveTrain.backLeft.setPower(0.5 * backLeftPower);
+        driveTrain.topRight.setPower(0.5 * frontRightPower);
+        driveTrain.backRight.setPower(0.5 * backRightPower);
     }
 
     public void activateFlywheel(double speed) {
-        hardware.flyWheelSpeed = speed;
-        hardware.flywheel.setPower(speed);
+        this.state.flyWheelSpeed = speed;
+
+        manipulator.flyWheel.setPower(speed);
     }
 
     public void activateFlywheel() {
-        if(hardware.flyWheelSpeed == 1) {
-            hardware.flyWheelSpeed = 0.0;
-            hardware.flywheel.setPower(0.0);
+        if(this.state.flyWheelSpeed == 1) {
+            this.state.flyWheelSpeed = 0.0;
         } else {
-            hardware.flyWheelSpeed = 1.0;
-            hardware.flywheel.setPower(1.0);
+            this.state.flyWheelSpeed = 1.0;
         }
+
+        manipulator.flyWheel.setPower(this.state.flyWheelSpeed);
     }
 
     public void activateIntake(double speed) {
-        hardware.intakeSpeed = speed;
-        hardware.intake.setPower(speed);
+        this.state.intakeSpeed = speed;
+
+        manipulator.intake.setPower(speed);
     }
 
     public void activateIntake() {
-        if(hardware.intakeSpeed == 1) {
-            hardware.intakeSpeed = 0.0;
-            hardware.intake.setPower(0.0);
+        if(this.state.intakeSpeed == 1) {
+            this.state.intakeSpeed = 0.0;
         } else {
-            hardware.intakeSpeed = 1.0;
-            hardware.intake.setPower(1.0);
+            this.state.intakeSpeed = 1.0;
         }
+
+        this.manipulator.intake.setPower(1.0);
     }
 
     public void toggleRaiseLift() {
-        if(open == 0) {
-            if (hardware.liftSpeed == 0.5) {
-                hardware.liftSpeed = 0.0;
-                hardware.lift.setPower(0.0);
+        if(!this.state.armOpen) {
+            if (this.state.liftSpeed == 0.5) {
+                this.state.liftSpeed = 0.0;
             } else {
-                hardware.liftSpeed = 0.5;
-                hardware.lift.setPower(0.5);
+                this.state.liftSpeed = 0.5;
             }
+
+            this.manipulator.lift.setPower(this.state.liftSpeed);
         }
     }
 
     public void toggleLowerLift() {
-        if(hardware.liftSpeed == -0.2) {
-            hardware.liftSpeed = 0.0;
-            hardware.lift.setPower(0.0);
+        if(this.state.liftSpeed == -0.2) {
+            this.state.liftSpeed = 0.0;
         } else {
-            hardware.liftSpeed = -0.2;
-            hardware.lift.setPower(-0.2);
+            this.state.liftSpeed = -0.2;
         }
+
+        this.manipulator.lift.setPower(this.state.liftSpeed);
     }
 
 
     public void toggleClaw() {
         // 1 is closed, 0.675 is opened
 
-        if(hardware.clawPosition == 1) {
-            hardware.clawPosition = 0.675;
-            hardware.claw.setPosition(0.675);
+        if(this.state.clawPosition == 1) {
+            this.state.clawPosition = 0.675;
         } else {
-            hardware.clawPosition = 1;
-            hardware.claw.setPosition(1);
+            this.state.clawPosition = 1;
         }
+
+        this.manipulator.claw.setPosition(0.675);
     }
 
     public void toggleClaw(double position) {
-        hardware.claw.setPosition(position);
+        this.manipulator.claw.setPosition(position);
     }
 
     public void toggleArm() {
         // 1 is closed, 0.675 is opened
 
-        if(hardware.armPosition == 0.98) {
-            hardware.armPosition = 0.5;
-            hardware.arm.setPosition(0.5);
-            open = 1;
+        if(this.state.armPosition == 0.98) {
+            this.state.armPosition = 0.5;
+            this.state.armOpen = true;
         } else {
-            hardware.armPosition = 0.98;
-            hardware.arm.setPosition(0.98);
-            open = 0;
+            this.state.armPosition = 0.98;
+            this.state.armOpen = false;
         }
+
+        this.manipulator.arm.setPosition(0.5);
     }
 
     public void toggleArm(double position) {
-        hardware.arm.setPosition(position);
+        this.manipulator.arm.setPosition(position);
     }
 }

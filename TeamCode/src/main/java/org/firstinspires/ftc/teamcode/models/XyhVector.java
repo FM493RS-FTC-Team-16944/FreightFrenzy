@@ -22,4 +22,14 @@ public class XyhVector {
         this.y = 0;
         this.h = 0;
     }
+
+    public XyhVector subtract(XyhVector xyhVector) {
+        xyhVector = new XyhVector();
+
+        xyhVector.x = this.x - xyhVector.x;
+        xyhVector.y = this.y - xyhVector.y;
+        xyhVector.h = this.h - xyhVector.h;
+
+        return xyhVector;
+    }
 }

@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
+import org.firstinspires.ftc.teamcode.TelemLog;
 
 public class Manipulator {
     public final Motor intake;
@@ -12,9 +11,9 @@ public class Manipulator {
     public final Motor flyWheel;
     public final ServoMotor claw;
     public final ServoMotor arm;
-    private final Telemetry telemetry;
+    private final TelemLog telemetry;
 
-    public Manipulator(HardwareMap hardwareMap, Telemetry telemetry) {
+    public Manipulator(HardwareMap hardwareMap, TelemLog telemetry) {
         this.intake = new Motor("Intake", hardwareMap, DcMotor.Direction.REVERSE);
         this.lift = new Motor("Lift", hardwareMap);
         this.flyWheel = new Motor("Flywheel", hardwareMap);

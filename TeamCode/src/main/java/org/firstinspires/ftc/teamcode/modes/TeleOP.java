@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.GamePad;
 import org.firstinspires.ftc.teamcode.GoToPosition;
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.TelemLog;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.SequentialMovements;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
@@ -18,26 +19,28 @@ public class TeleOP extends LinearOpMode {
 
     public RobotHardware hardware;
     public GamePad gamepad;
+    public TelemLog telemLog;
 
     @Override
     public void runOpMode() {
         waitForStart();
 
-        robot = new Robot(this);
-        hardware = robot.hardware;
-        gamepad = new GamePad(robot, gamepad1);
+        this.robot = new Robot(this);
+        this.hardware = robot.hardware;
+        this.gamepad = new GamePad(robot, gamepad1);
+        this.telemLog = robot.telemLog;
 
         XyhVector targetVector = new XyhVector(50,0,Math.toRadians(0));
-        GoToPosition runToTarget = new GoToPosition(robot, targetVector, this.telemetry);
+        GoToPosition runToTarget = new GoToPosition(this.robot, targetVector, this.telemLog);
 
         XyhVector secondTarget = new XyhVector(0,0,Math.toRadians(0));
-        GoToPosition runBackToOrigin = new GoToPosition(robot, secondTarget, this.telemetry);
+        GoToPosition runBackToOrigin = new GoToPosition(this.robot, secondTarget, this.telemLog);
 
         LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
         waypoints.put(runToTarget, false);
         waypoints.put(runBackToOrigin, false);
 
-        SequentialMovements path = new SequentialMovements(waypoints, 3, this.telemetry);
+        SequentialMovements path = new SequentialMovements(waypoints, 3, this.telemLog);
 
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry.update();
@@ -45,10 +48,7 @@ public class TeleOP extends LinearOpMode {
 
             path.runMovements();
 
-            hardware.odometry.outputOdometryReadings();
-            hardware.manipulator.outputPositionReadings();
-            hardware.driveTrain.outputEncoderReadings();
-            hardware.imu.outputIMUReadings();
+            hardware.outputReadings();
 
             telemetry.update();
         }

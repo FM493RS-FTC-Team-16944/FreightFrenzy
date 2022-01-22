@@ -5,13 +5,13 @@ import org.firstinspires.ftc.teamcode.models.XyhVector;
 
 public class GoToPosition {
     private final Odometry odometry;
-    private final Telemetry telemetry;
+    private final TelemLog telemetry;
 
     public RobotMovement movement;
     public XyhVector targetPosition;
     public PositionVelocityCtrl forward;
 
-    public GoToPosition(Robot robot, XyhVector targetPosition, Telemetry telemetry) {
+    public GoToPosition(Robot robot, XyhVector targetPosition, TelemLog telemetry) {
         this.telemetry = telemetry;
         this.odometry = robot.hardware.odometry;
         this.movement = robot.movement;

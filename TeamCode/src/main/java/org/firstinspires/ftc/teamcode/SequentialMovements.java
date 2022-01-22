@@ -7,12 +7,12 @@ import java.util.LinkedHashMap;
 public class SequentialMovements {
     private final LinkedHashMap<GoToPosition, Boolean> waypoints;
     private final int threshold;
-    private final Telemetry telemetry;
+    private final TelemLog telemetry;
 
     public SequentialMovements(
             LinkedHashMap<GoToPosition, Boolean> waypoints,
             int threshold,
-            Telemetry telemetry
+            TelemLog telemetry
     ) {
         this.waypoints = waypoints;
         this.threshold = threshold;

@@ -7,12 +7,14 @@ import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.models.Tuple;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 
+import java.util.logging.Level;
+
 public class Odometry {
     private final double AUX_WIDTH = 11;
 
     private final MecanumDriveTrain driveTrain;
     private final IMU imu;
-    private final Telemetry telemetry;
+    private final TelemLog telemetry;
 
     private double previousLeftPos;
     private double previousRightPos;

@@ -12,12 +12,12 @@ public class PositionVelocityCtrl {
 
     private final ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
     private final XyhVector targetPosition;
-    private final Telemetry telemetry;
+    private final TelemLog telemetry;
 
     public static XyhVector integralSum = new XyhVector(); // TODO: THIS MIGHT BE A BUG FOR IT BEING STATIC
     public static XyhVector errPos = new XyhVector(0,0,0); // TODO: THIS TOO
 
-    public PositionVelocityCtrl(Telemetry telemetry, XyhVector targetPosition) {
+    public PositionVelocityCtrl(TelemLog telemetry, XyhVector targetPosition) {
         this.telemetry = telemetry;
 
         this.targetPosition = targetPosition;

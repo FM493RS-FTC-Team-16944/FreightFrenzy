@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.TelemLog;
 
 public class MecanumDriveTrain {
     public final Motor topLeft;
@@ -13,7 +14,7 @@ public class MecanumDriveTrain {
     public final Motor leftEncoder;
     public final Motor rightEncoder;
     public final Motor auxEncoder;
-    private final Telemetry telemetry;
+    private final TelemLog telemetry;
 
     public MecanumDriveTrain(
             String topLeftName,
@@ -24,7 +25,7 @@ public class MecanumDriveTrain {
             String rightEncoderName,
             String auxEncoderName,
             HardwareMap hardwareMap,
-            Telemetry telemetry
+            TelemLog telemetry
     ) {
         this.topRight = new Motor(topRightName, hardwareMap, DcMotor.Direction.FORWARD);
         this.topLeft = new Motor(topLeftName, hardwareMap, DcMotor.Direction.REVERSE);

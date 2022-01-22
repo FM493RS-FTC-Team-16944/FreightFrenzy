@@ -4,21 +4,21 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.TelemLog;
 import org.firstinspires.ftc.teamcode.models.Tuple;
 
 public class IMU {
     private final BNO055IMU imu;
-    private final Telemetry telemetry;
+    private final TelemLog telemetry;
     private Orientation lastAngles;
 
     private double globalAngle;
 
-    public IMU(String name, HardwareMap hardwareMap, Telemetry telemetry) {
+    public IMU(String name, HardwareMap hardwareMap, TelemLog telemetry) {
         this.imu = hardwareMap.get(BNO055IMU.class, name);
         this.telemetry = telemetry;
 

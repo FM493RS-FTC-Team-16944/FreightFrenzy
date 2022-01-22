@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Odometry;
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.TelemLog;
 import org.firstinspires.ftc.teamcode.models.Mode;
 
 public class RobotHardware {
@@ -13,7 +13,7 @@ public class RobotHardware {
     public final IMU imu;
     public final State state;
     public final Odometry odometry;
-    public final Telemetry telemetry;
+    public final TelemLog telemetry;
 
     public HardwareMap hardwareMap;
     public Mode currentMode = Mode.DRIVER_CONTROL;
@@ -33,6 +33,7 @@ public class RobotHardware {
         hardwareMap = robot.teleOP.hardwareMap;
 
         this.state = new State();
+        this.telemetry = robot.telemLog;
 
         this.driveTrain = new MecanumDriveTrain(
                 "FrontLeft",
@@ -43,24 +44,29 @@ public class RobotHardware {
                 "Flywheel",
                 "BackLeft",
                 hardwareMap,
-                robot.teleOP.telemetry
+                this.telemetry
         );
 
         this.manipulator = new Manipulator(
                 hardwareMap,
-                robot.teleOP.telemetry
+                this.telemetry
         );
 
         this.imu = new IMU(
                 "imu",
-                robot.teleOP.hardwareMap,
-                robot.teleOP.telemetry
+                hardwareMap,
+                this.telemetry
         );
 
         this.imu.calibrate(robot.teleOP);
 
         this.odometry = new Odometry(this);
+    }
 
-        this.telemetry = robot.teleOP.telemetry;
+    public void outputReadings() {
+        this.odometry.outputOdometryReadings();
+        this.manipulator.outputPositionReadings();
+        this.driveTrain.outputEncoderReadings();
+        this.imu.outputIMUReadings();
     }
 }

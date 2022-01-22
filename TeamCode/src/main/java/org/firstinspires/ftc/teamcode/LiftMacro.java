@@ -9,7 +9,7 @@ public class LiftMacro implements Runnable {
     LiftMacro(RobotMovement movement, Lift liftUpDown) {
         this.movement = movement;
         this.liftUpDown = liftUpDown;
-    }
+    }       
 
     @Override
     public void run() {

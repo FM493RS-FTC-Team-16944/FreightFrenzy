@@ -37,7 +37,7 @@ public class TeleOP extends LinearOpMode {
         waypoints.put(runToTarget, false);
         waypoints.put(runBackToOrigin, false);
 
-        SequentialMovements path = new SequentialMovements(waypoints, 3);
+        SequentialMovements path = new SequentialMovements(waypoints, 3, this);
 
         int navigator = 0;
 
@@ -47,7 +47,7 @@ public class TeleOP extends LinearOpMode {
             hardware.odometry();
             gamepad.updateRobot();
 
-            path.runMovements();
+            //path.runMovements();
 
             telemetry.addData("Position X", hardware.pos.x);
             telemetry.addData("Position Y", hardware.pos.y);
@@ -55,6 +55,17 @@ public class TeleOP extends LinearOpMode {
 
             telemetry.addData("Claw Position", hardware.claw.getPosition());
             telemetry.addData("Arm Position", hardware.arm.getPosition());
+
+            /**ODOM DEBUG **/
+            telemetry.addData("RightEncoder", hardware.currentRightPos);
+            telemetry.addData("LeftEncoder", hardware.currentLeftPos);
+            telemetry.addData("AuxEncoder", hardware.currentAuxPos);
+            telemetry.addData("IMU Angle", hardware.globalAngle);
+            telemetry.addData("RawLeft", hardware.leftEncoder.getCurrentPosition());
+            telemetry.addData("RawRight", hardware.rightEncoder.getCurrentPosition());
+            telemetry.addData("RawHori", hardware.auxEncoder.getCurrentPosition());
+
+
             telemetry.update();
         }
     }

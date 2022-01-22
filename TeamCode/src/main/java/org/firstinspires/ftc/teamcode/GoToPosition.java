@@ -28,7 +28,7 @@ public class GoToPosition {
     public boolean runWithPID(int threshold) {
         boolean complete_x = Math.abs(correctedHardware.pos.x - targetPosition.x) <= threshold;
         boolean complete_y = Math.abs(correctedHardware.pos.y - targetPosition.y) <= threshold;
-        boolean complete_h = Math.abs(correctedHardware.pos.h - targetPosition.h) <= Math.toRadians(threshold * 3);
+        boolean complete_h = Math.abs(correctedHardware.pos.h - targetPosition.h) <= Math.toRadians(threshold * 5);
 
         if(complete_h && complete_x && complete_y) {
             teleOP.telemetry.addLine("PID FINISHED");

@@ -13,18 +13,10 @@ import org.firstinspires.ftc.teamcode.models.Mode;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 
 public class RobotHardware {
-    public XyhVector START_POS = new XyhVector(0, 0, 0);    //Robot starts at 0,0,0 coord (Can be adjusted later)
-    public XyhVector pos = new XyhVector(START_POS);
-
-    public double currentRightPos = 0;
-    public double currentLeftPos = 0;
-    public double currentAuxPos = 0;
 
     public DcMotor frontRightMotor, frontLeftMotor, backRightMotor, backLeftMotor;
     public DcMotor intake, lift, flywheel;
     public DcMotor leftEncoder, rightEncoder, auxEncoder;
-
-    public BNO055IMU imu;
 
     public Servo claw, arm;
 
@@ -39,17 +31,30 @@ public class RobotHardware {
 
     public boolean freightLoaded = true;
 
+    public XyhVector START_POS = new XyhVector(0, 0, 0);    //Robot starts at 0,0,0 coord (Can be adjusted later)
+    public XyhVector pos = new XyhVector(START_POS);
+
+    public double currentRightPos = 0;
+    public double currentLeftPos = 0;
+    public double currentAuxPos = 0;
+
+    public BNO055IMU imu;
     Orientation lastAngles = new Orientation();
 
-    private double L = 29;                              //Robot Geometry for odom
-    private double B = 11;                                 //needs to be remeasured
+    private double auxWidth = 4;                              //Robot Geometry for odom
+    private double trackWidth = 11;                                 //needs to be remeasured
     private double R = 2.54;
     private double N = 8192;
     private double cm_per_tick = 2.0 * Math.PI * R / N;
     private double previousRightPos = 0;
     private double previousLeftPos = 0;
     private double previousAuxPos = 0;
-    private double globalAngle;
+    public double globalAngle = 0;
+    public double dx;
+    public double dy;
+    public double deltaLeft;
+    public double deltaRight;
+    public double deltaHorizontal;
 
     /**
      * ...........................................................................................
@@ -95,6 +100,8 @@ public class RobotHardware {
 
         imu.initialize(parameters);
 
+        resetAngle();
+
         setEncodersMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightEncoder = flywheel;
@@ -137,55 +144,49 @@ public class RobotHardware {
      * ...........................................................................................
      */
 
+    //TODO: IMU FIXES & ODOM
+
     public void resetAngle() {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
         globalAngle = 0;
     }
 
-    private double getAngle() {
-        // We experimentally determined the Z axis is the axis we want to use for heading angle.
-        // We have to process the angle because the imu works in euler angles so the Z axis is
-        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
-        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+    public void odometry() {
 
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
 
-        if (deltaAngle < -Math.PI)
-            deltaAngle += 2 * Math.PI;
-        else if (deltaAngle > Math.PI)
-            deltaAngle -= 2 * Math.PI;
+        if (globalAngle < -Math.PI)
+            globalAngle += 2 * Math.PI;
+        else if (globalAngle > Math.PI)
+            globalAngle -= 2 * Math.PI;
 
         globalAngle += deltaAngle;
-
         lastAngles = angles;
 
-        return globalAngle;
-    }
+        double leftPosition = this.leftEncoder.getCurrentPosition() *cm_per_tick;
+        double rightPosition = this.rightEncoder.getCurrentPosition() *cm_per_tick;
+        double horizontalPosition = this.auxEncoder.getCurrentPosition() *cm_per_tick;
 
+        double deltaLeft = leftPosition - previousLeftPos;
+        this.previousLeftPos = leftPosition; // Stores the current leftPosition to be used during the next update
 
-    public void odometry() {
-        this.previousRightPos = this.currentRightPos;
-        this.previousLeftPos = this.currentLeftPos;
-        this.previousAuxPos = this.currentAuxPos;
+        double deltaRight = rightPosition - previousRightPos;
+        this.previousRightPos = rightPosition; // Stores the current rightPosition to be used during the next update
+        double deltaHorizontal = horizontalPosition - previousAuxPos;
+        this.previousAuxPos = horizontalPosition; // Stores the current horizontalPosition to be used during the next update
 
-        this.currentRightPos = this.rightEncoder.getCurrentPosition(); //TODO: Determine if there should be + or -
-        this.currentLeftPos = -this.leftEncoder.getCurrentPosition();
-        this.currentAuxPos = -this.auxEncoder.getCurrentPosition();
+        double deltaHeading = (-deltaLeft + deltaRight) / trackWidth;
 
-        double deltaLeft = this.currentLeftPos - this.previousLeftPos;
-        double deltaRight = this.currentRightPos - this.previousRightPos;
-        double deltaAux = this.currentAuxPos - this.previousAuxPos;
+        double horizontalOffset = auxWidth * deltaAngle;
+        double relativeX = deltaHorizontal - horizontalOffset;
+        double relativeY = (-deltaLeft + deltaRight) / 2.0;
 
-        double deltaT = cm_per_tick * (deltaRight - deltaLeft) / L;
-        double dx = cm_per_tick * (deltaLeft + deltaRight) / 2.0;
-        double dy = cm_per_tick * (deltaAux - (deltaRight - deltaLeft) * B / L);
-        double theta = pos.h + (deltaT / 2.0);
-
-        pos.y += dx * Math.cos(theta) - dy * Math.sin(theta);
-        pos.x += dx * Math.sin(theta) + dy * Math.cos(theta);
-        pos.h = getAngle();
+        pos.x += Math.cos(globalAngle) * relativeX - Math.sin(globalAngle) * relativeY;
+        pos.y += Math.sin(globalAngle) * relativeX + Math.cos(globalAngle) * relativeY;
+        pos.h = globalAngle;
     }
 }

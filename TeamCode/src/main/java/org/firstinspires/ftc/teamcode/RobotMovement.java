@@ -11,7 +11,6 @@ public class RobotMovement {
     }
 
     public void strafe(double x, double y, double h) {
-        hardware.resetAngle();
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(h), 1);
         double frontLeftPower = (y + x + h) / denominator;

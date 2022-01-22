@@ -22,7 +22,6 @@ public class PositionVelocityCtrl {
         this.teleOP = teleOP;
 
         this.targetPosition = targetPosition;
-        this.targetPosition.h = angleWrap(this.targetPosition.h);
     }
 
     public double angleWrap(double radians) {
@@ -34,7 +33,6 @@ public class PositionVelocityCtrl {
             radians += 2 * Math.PI;
         }
 
-        // keep in mind that the result is in radians
         return radians;
     }
 

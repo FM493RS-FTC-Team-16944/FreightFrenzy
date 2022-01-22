@@ -12,7 +12,7 @@ public class PositionVelocityCtrl {
     public final XyhVector targetPosition;
 
     public final double propGain = 0.05f;
-    public final double intGain = 0.01f;
+    public final double intGain = 0.0001f;
     public final double derivGain = 0.01f;
 
     public static XyhVector integralSum = new XyhVector();
@@ -61,15 +61,15 @@ public class PositionVelocityCtrl {
                 (currentPosErrH - errPos.h) / PIDTimer.time()
         );
 
-        double outX = propGain * currentPosErrX +
+        double outX = -propGain * currentPosErrX +
                 intGain * integralSum.x +
                 derivGain * posDerivative.x;
 
-        double outY = propGain * currentPosErrY +
+        double outY = -propGain * currentPosErrY +
                 intGain * integralSum.y +
                 derivGain * posDerivative.y;
 
-        double outH = propGain * currentPosErrH +
+        double outH = -propGain * currentPosErrH +
                 intGain * integralSum.h +
                 derivGain * posDerivative.h;
 

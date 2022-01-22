@@ -27,7 +27,7 @@ public class TeleOP extends LinearOpMode {
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
 
-        XyhVector targetVector = new XyhVector(20,0,Math.toRadians(0));
+        XyhVector targetVector = new XyhVector(50,0,Math.toRadians(0));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
         XyhVector secondTarget = new XyhVector(0,0,Math.toRadians(0));
@@ -47,7 +47,7 @@ public class TeleOP extends LinearOpMode {
             hardware.odometry();
             gamepad.updateRobot();
 
-            //path.runMovements();
+            path.runMovements();
 
             telemetry.addData("Position X", hardware.pos.x);
             telemetry.addData("Position Y", hardware.pos.y);

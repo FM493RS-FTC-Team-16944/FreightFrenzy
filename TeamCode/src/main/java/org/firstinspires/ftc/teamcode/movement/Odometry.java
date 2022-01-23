@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.movement;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.TelemLog;
 import org.firstinspires.ftc.teamcode.hardware.IMU;
 import org.firstinspires.ftc.teamcode.hardware.MecanumDriveTrain;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.models.Tuple;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
-
-import java.util.concurrent.TransferQueue;
-import java.util.logging.Level;
 
 public class Odometry {
     private final double AUX_WIDTH = 11;
@@ -41,7 +37,7 @@ public class Odometry {
         double globalAngle = angles.x;
         double deltaAngle = angles.y;
 
-        double leftPosition = (Math.toRadians(globalAngle)*TRACK_WIDTH)+rightPosition; // Generate left position via heading
+        double leftPosition = (Math.toRadians(globalAngle) * TRACK_WIDTH) + rightPosition; // Generate left position via heading
 
         double deltaLeft = leftPosition - this.previousLeftPos;
         this.previousLeftPos = leftPosition; // Stores the current leftPosition to be used during the next update

@@ -1,12 +1,13 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.modes;
 
 import org.firstinspires.ftc.teamcode.models.Lift;
+import org.firstinspires.ftc.teamcode.movement.RobotMovement;
 
 public class LiftMacro implements Runnable {
     RobotMovement movement;
     Lift liftUpDown;
 
-    LiftMacro(RobotMovement movement, Lift liftUpDown) {
+    public LiftMacro(RobotMovement movement, Lift liftUpDown) {
         this.movement = movement;
         this.liftUpDown = liftUpDown;
     }       

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.movement;
 
 import org.firstinspires.ftc.teamcode.hardware.Manipulator;
 import org.firstinspires.ftc.teamcode.hardware.MecanumDriveTrain;
@@ -9,7 +9,7 @@ public class RobotMovement {
     private final MecanumDriveTrain driveTrain;
     private final Manipulator manipulator;
 
-    RobotMovement(RobotHardware robotHardware) {
+    public RobotMovement(RobotHardware robotHardware) {
         this.driveTrain = robotHardware.driveTrain;
         this.manipulator = robotHardware.manipulator;
 

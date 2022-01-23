@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.modes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.GamePad;
-import org.firstinspires.ftc.teamcode.GoToPosition;
+import org.firstinspires.ftc.teamcode.hardware.GamePad;
+import org.firstinspires.ftc.teamcode.movement.GoToPosition;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.TelemLog;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
-import org.firstinspires.ftc.teamcode.SequentialMovements;
+import org.firstinspires.ftc.teamcode.movement.SequentialMovements;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 
 import java.util.LinkedHashMap;
@@ -46,7 +46,7 @@ public class TeleOP extends LinearOpMode {
             hardware.odometry.update();
             gamepad.updateRobot();
 
-            path.runMovements();
+            //path.runMovements();
 
             hardware.outputReadings();
 

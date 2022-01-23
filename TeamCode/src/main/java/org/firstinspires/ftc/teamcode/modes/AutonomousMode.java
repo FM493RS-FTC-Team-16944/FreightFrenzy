@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.Odometry;
+import org.firstinspires.ftc.teamcode.movement.Odometry;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
@@ -40,7 +40,7 @@ public class AutonomousMode extends LinearOpMode {
             goDropShippingHub();
         }
 
-        // SPIN WHEEL, THIS SHUD BE TIMED TOO
+        // SPIN WHEEL, THIS SHOULD BE TIMED TOO
         getCarouselDucks();
 
         // LAND IN WAREHOUSE

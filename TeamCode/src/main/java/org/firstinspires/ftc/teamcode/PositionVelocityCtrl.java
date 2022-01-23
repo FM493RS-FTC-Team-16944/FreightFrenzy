@@ -11,8 +11,8 @@ public class PositionVelocityCtrl {
     private final ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
     public final XyhVector targetPosition;
 
-    public final double propGain = 0.05f;
-    public final double intGain = 0.0001f;
+    public final double propGain = 0.1f;
+    public final double intGain = 0.0005f;
     public final double derivGain = 0.01f;
 
     public static XyhVector integralSum = new XyhVector();
@@ -41,13 +41,13 @@ public class PositionVelocityCtrl {
         double currentPosErrY = targetPosition.y - currentPosition.y;
         double currentPosErrH = targetPosition.h - currentPosition.h;
 
-        teleOP.telemetry.addData("Target X", targetPosition.x);
-        teleOP.telemetry.addData("Target Y", targetPosition.y);
-        teleOP.telemetry.addData("Target H", targetPosition.h);
+        // teleOP.telemetry.addData("Target X", targetPosition.x);
+        // teleOP.telemetry.addData("Target Y", targetPosition.y);
+        // teleOP.telemetry.addData("Target H", targetPosition.h);
 
-        teleOP.telemetry.addData("Error X", currentPosErrX);
-        teleOP.telemetry.addData("Error Y", currentPosErrY);
-        teleOP.telemetry.addData("Error H", currentPosErrH);
+        // teleOP.telemetry.addData("Error X", currentPosErrX);
+        // teleOP.telemetry.addData("Error Y", currentPosErrY);
+        // teleOP.telemetry.addData("Error H", currentPosErrH);
 
 
         integralSum.x += currentPosErrX * PIDTimer.time();
@@ -69,9 +69,9 @@ public class PositionVelocityCtrl {
                 intGain * integralSum.y +
                 derivGain * posDerivative.y;
 
-        double outH = -propGain * currentPosErrH +
+        double outH = (-propGain * currentPosErrH +
                 intGain * integralSum.h +
-                derivGain * posDerivative.h;
+                derivGain * posDerivative.h) * 10;
 
         double x_rotated = outX * Math.cos(currentPosition.h) - outY * Math.sin(currentPosition.h);
         double y_rotated = outX * Math.sin(currentPosition.h) + outY * Math.cos(currentPosition.h);

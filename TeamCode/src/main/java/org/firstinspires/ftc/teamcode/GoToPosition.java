@@ -28,12 +28,19 @@ public class GoToPosition {
     public boolean runWithPID(int threshold) {
         boolean complete_x = Math.abs(correctedHardware.pos.x - targetPosition.x) <= threshold;
         boolean complete_y = Math.abs(correctedHardware.pos.y - targetPosition.y) <= threshold;
-        boolean complete_h = Math.abs(correctedHardware.pos.h - targetPosition.h) <= Math.toRadians(threshold * 5);
+        boolean complete_h = Math.abs(correctedHardware.pos.h - targetPosition.h) <= Math.toRadians(threshold);
+
+        teleOP.telemetry.addData("Current X : ", correctedHardware.pos.x);
+        teleOP.telemetry.addData("Delta X : ", Math.abs(correctedHardware.pos.x - targetPosition.x));
+        teleOP.telemetry.addData("Delta Y : ", Math.abs(correctedHardware.pos.y - targetPosition.y));
+        teleOP.telemetry.addData("Delta H : ", Math.abs(correctedHardware.pos.h - targetPosition.h));
+        teleOP.telemetry.addData("Threshold : ", threshold);
+        teleOP.telemetry.addData("Threshold H : ", Math.toRadians(threshold * 5));
 
         if(complete_h && complete_x && complete_y) {
-            teleOP.telemetry.addLine("PID FINISHED");
+            // teleOP.telemetry.addLine("PID FINISHED");
 
-            return false;
+            return true;
         } else {
             XyhVector forwardCtrl = forward.calculatePID(correctedHardware.pos);
 
@@ -48,13 +55,13 @@ public class GoToPosition {
                 forwardCtrl.h = 0;
             }
 
-            teleOP.telemetry.addData("PID Output X", forwardCtrl.x);
-            teleOP.telemetry.addData("PID Output Y", forwardCtrl.y);
-            teleOP.telemetry.addData("PID Output H", forwardCtrl.h);
+            // teleOP.telemetry.addData("PID Output X", forwardCtrl.x);
+            // teleOP.telemetry.addData("PID Output Y", forwardCtrl.y);
+            // teleOP.telemetry.addData("PID Output H", forwardCtrl.h);
 
-            movement.strafe(forwardCtrl.x, forwardCtrl.y, forwardCtrl.h);
+            movement.strafe(forwardCtrl.x, -forwardCtrl.y, forwardCtrl.h);
 
-            return true;
+            return false;
         }
     }
 

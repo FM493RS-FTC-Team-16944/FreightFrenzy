@@ -18,12 +18,11 @@ public class SequentialMovements {
 
     public boolean runMovements() {
         GoToPosition currentWaypoint = null;
-        for(GoToPosition waypoint : waypoints.keySet()){
-            if(!waypoints.get(waypoint)){
-                currentWaypoint = waypoint;
-                teleOP.telemetry.addData("Current Waypoint:",  currentWaypoint.targetPosition.x);
-                break;
-            }
+
+        for(GoToPosition waypoint : waypoints.keySet() ){
+            currentWaypoint = waypoint;
+            teleOP.telemetry.addData("Current Waypoint:",  currentWaypoint.targetPosition.x);
+            break;
         }
 
         if(currentWaypoint == null){
@@ -33,11 +32,13 @@ public class SequentialMovements {
 
         boolean finished = currentWaypoint.runWithPID(threshold);
 
-        if(!finished){
+        teleOP.telemetry.addData("Finished : ", finished);
+        teleOP.telemetry.update();
+
+        if(finished){
             waypoints.remove(currentWaypoint);
         }
 
         return false;
-
     }
 }

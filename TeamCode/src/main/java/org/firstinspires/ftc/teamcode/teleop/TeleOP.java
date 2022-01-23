@@ -27,15 +27,19 @@ public class TeleOP extends LinearOpMode {
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
 
-        XyhVector targetVector = new XyhVector(50,0,Math.toRadians(0));
+        XyhVector targetVector = new XyhVector(50,0,Math.toRadians(90));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
-        XyhVector secondTarget = new XyhVector(0,0,Math.toRadians(0));
-        GoToPosition runBackToOrigin = new GoToPosition(robot, secondTarget, this);
+        XyhVector thirdTarget = new XyhVector(0,50,Math.toRadians(0));
+        GoToPosition thirdPos = new GoToPosition(robot, thirdTarget, this);
+
+        XyhVector lastTarget = new XyhVector(0,0,Math.toRadians(0));
+        GoToPosition backToOrigin = new GoToPosition(robot, lastTarget, this);
 
         LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
         waypoints.put(runToTarget, false);
-        waypoints.put(runBackToOrigin, false);
+        waypoints.put(thirdPos, false);
+        // waypoints.put(backToOrigin, false);
 
         SequentialMovements path = new SequentialMovements(waypoints, 3, this);
 
@@ -49,24 +53,24 @@ public class TeleOP extends LinearOpMode {
 
             path.runMovements();
 
-            telemetry.addData("Position X", hardware.pos.x);
-            telemetry.addData("Position Y", hardware.pos.y);
-            telemetry.addData("Posiion H", Math.toDegrees(hardware.pos.h));
+            // telemetry.addData("Position X", hardware.pos.x);
+            // telemetry.addData("Position Y", hardware.pos.y);
+            // telemetry.addData("Posiion H", Math.toDegrees(hardware.pos.h));
 
-            telemetry.addData("Claw Position", hardware.claw.getPosition());
-            telemetry.addData("Arm Position", hardware.arm.getPosition());
+            // telemetry.addData("Claw Position", hardware.claw.getPosition());
+            // telemetry.addData("Arm Position", hardware.arm.getPosition());
 
             /**ODOM DEBUG **/
-            telemetry.addData("RightEncoder", hardware.currentRightPos);
-            telemetry.addData("LeftEncoder", hardware.currentLeftPos);
-            telemetry.addData("AuxEncoder", hardware.currentAuxPos);
-            telemetry.addData("IMU Angle", hardware.globalAngle);
-            telemetry.addData("RawLeft", hardware.leftEncoder.getCurrentPosition());
-            telemetry.addData("RawRight", hardware.rightEncoder.getCurrentPosition());
-            telemetry.addData("RawHori", hardware.auxEncoder.getCurrentPosition());
+            // telemetry.addData("RightEncoder", hardware.currentRightPos);
+            // telemetry.addData("LeftEncoder", hardware.currentLeftPos);
+            // telemetry.addData("AuxEncoder", hardware.currentAuxPos);
+            // telemetry.addData("IMU Angle", hardware.globalAngle);
+            // telemetry.addData("RawLeft", hardware.leftEncoder.getCurrentPosition());
+            // telemetry.addData("RawRight", hardware.rightEncoder.getCurrentPosition());
+            // telemetry.addData("RawHori", hardware.auxEncoder.getCurrentPosition());
 
 
-            telemetry.update();
+            // telemetry.update();
         }
     }
 }

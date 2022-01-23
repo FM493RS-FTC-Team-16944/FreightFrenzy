@@ -28,7 +28,7 @@ public class SequentialMovements {
                 currentWaypoint = waypoint;
 
                 this.telemetry.addData("Current Waypoint :",  currentWaypoint.targetPosition.x);
-                this.telemetry.update();
+                //this.telemetry.update();
 
                 break;
             }

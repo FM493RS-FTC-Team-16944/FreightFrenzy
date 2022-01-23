@@ -19,7 +19,7 @@ public class Odometry {
     private double previousRightPos;
     private double previousAuxPos;
 
-    private XyhVector pos = new XyhVector();
+    public XyhVector pos = new XyhVector();
 
     public Odometry(RobotHardware robotHardware) {
         this.driveTrain = robotHardware.driveTrain;
@@ -52,8 +52,8 @@ public class Odometry {
         double relativeX = deltaHorizontal - horizontalOffset;
         double relativeY = (deltaLeft + deltaRight) / 2.0;
 
-        pos.x += Math.cos(globalAngle) * relativeX - Math.sin(globalAngle) * relativeY;
-        pos.y += Math.sin(globalAngle) * relativeX + Math.cos(globalAngle) * relativeY;
+        pos.x += (-1)*(Math.cos(globalAngle) * relativeX - Math.sin(globalAngle) * relativeY);
+        pos.y += (-1)*(Math.sin(globalAngle) * relativeX + Math.cos(globalAngle) * relativeY);
         pos.h = globalAngle;
     }
 

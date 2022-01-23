@@ -35,27 +35,28 @@ public class GoToPosition {
         if(completeH && completeX && completeY) {
             this.telemetry.addLine("PID FINISHED");
 
-            this.telemetry.update();
+            // this.telemetry.update();
 
             return false;
         } else {
             XyhVector forwardCtrl = forward.calculatePID(position);
 
             if(completeX) {
+                this.odometry.pos.x = targetPosition.x;
                 forwardCtrl.x = 0;
             } else if(completeY) {
+                this.odometry.pos.y = targetPosition.y;
                 forwardCtrl.y = 0;
             } else if(completeH) {
+                this.odometry.pos.h = targetPosition.h;
                 forwardCtrl.h = 0;
             }
-
-            odometry.setPosition(targetPosition);
 
             this.telemetry.addData("PID Output X", forwardCtrl.x);
             this.telemetry.addData("PID Output Y", forwardCtrl.y);
             this.telemetry.addData("PID Output H", forwardCtrl.h);
 
-            this.telemetry.update();
+            // this.telemetry.update();
 
             this.movement.strafe(forwardCtrl.x, forwardCtrl.y, forwardCtrl.h);
 

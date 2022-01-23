@@ -40,7 +40,7 @@ public class TeleOP extends LinearOpMode {
         waypoints.put(runToTarget, false);
         waypoints.put(runBackToOrigin, false);
 
-        SequentialMovements path = new SequentialMovements(waypoints, 0, this.telemLog);
+        SequentialMovements path = new SequentialMovements(waypoints, 3, this.telemLog);
 
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry.update();

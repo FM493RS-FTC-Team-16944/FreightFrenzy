@@ -65,11 +65,9 @@ public class Odometry {
         this.pos = pos;
     }
 
-    public void outputOdometryReadings() {
+    public void updateOdometryReadings() {
         this.telemetry.addData("Odometry X Position Centimeters : " , this.pos.x);
         this.telemetry.addData("Odometry Y Position Centimeters : " , this.pos.y);
         this.telemetry.addData("Odometry H Position Centimeters : " , this.pos.h);
-
-        this.telemetry.update();
     }
 }

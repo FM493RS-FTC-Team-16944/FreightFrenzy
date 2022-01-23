@@ -59,11 +59,9 @@ public class MecanumDriveTrain {
         this.backLeft.setPower(0);
     }
 
-    public void outputEncoderReadings() {
+    public void updateEncoderReadings() {
         telemetry.addData("Left Encoder Position Centimeters : " , leftEncoder.getCurrentPosition());
         telemetry.addData("Right Encoder Position Centimeters : " , rightEncoder.getCurrentPosition());
         telemetry.addData("Auxiliary Encoder Position Centimeters : " , auxEncoder.getCurrentPosition());
-
-        telemetry.update();
     }
 }

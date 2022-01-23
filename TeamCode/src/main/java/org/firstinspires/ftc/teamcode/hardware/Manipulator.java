@@ -23,13 +23,11 @@ public class Manipulator {
         this.telemetry = telemetry;
     }
 
-    public void outputPositionReadings() {
+    public void updatePositionReadings() {
         telemetry.addData("Intake Position Centimeters : " , intake.getCurrentPosition());
         telemetry.addData("Lift Encoder Position Centimeters : " , lift.getCurrentPosition());
         telemetry.addData("FlyWheel Encoder Position Centimeters : " , flyWheel.getCurrentPosition());
         telemetry.addData("Claw Encoder Position Centimeters : " , claw.getCurrentPosition());
         telemetry.addData("Arm Encoder Position Centimeters : " , arm.getCurrentPosition());
-
-        telemetry.update();
     }
 }

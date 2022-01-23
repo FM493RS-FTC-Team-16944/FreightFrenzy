@@ -64,9 +64,11 @@ public class RobotHardware {
     }
 
     public void outputReadings() {
-        this.odometry.outputOdometryReadings();
-        this.manipulator.outputPositionReadings();
-        this.driveTrain.outputEncoderReadings();
-        this.imu.outputIMUReadings();
+        this.odometry.updateOdometryReadings();
+        this.manipulator.updatePositionReadings();
+        this.driveTrain.updateEncoderReadings();
+        this.imu.updateIMUReadings();
+
+        this.telemetry.update();
     }
 }

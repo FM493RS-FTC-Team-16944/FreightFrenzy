@@ -28,7 +28,7 @@ public class TelemLog {
             // This block configure the logger with handler and formatter
             String directoryPath = Environment.getExternalStorageDirectory().getPath() + "/" + BASE_FOLDER_NAME;
 
-            FileHandler fh = new FileHandler(directoryPath + "/" + "TelemLog.log");
+            FileHandler fh = new FileHandler(directoryPath + "/" + "TelemLog.log", true);
             this.log.addHandler(fh);
 
             SimpleFormatter formatter = new SimpleFormatter();
@@ -40,17 +40,17 @@ public class TelemLog {
 
     public void addData(String msg, Object value, Level level) {
         this.telemetry.addData(msg, value);
-        this.log.log(level, msg, value);
+        this.log.info(msg + value);
     }
 
     public void addData(String msg, Object value) {
         this.telemetry.addData(msg, value);
-        this.log.log(Level.ALL, msg, value);
+        this.log.info(msg + value);
     }
 
     public void addLine(String msg) {
         this.telemetry.addLine(msg);
-        this.log.log(Level.ALL, msg);
+        this.log.info(msg);
     }
 
     public void update() {

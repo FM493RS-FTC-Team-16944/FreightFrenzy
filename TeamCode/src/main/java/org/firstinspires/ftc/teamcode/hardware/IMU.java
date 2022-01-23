@@ -62,14 +62,12 @@ public class IMU {
         }
     }
 
-    public void outputIMUReadings() {
+    public void updateIMUReadings() {
         Tuple<Double, Double> angles = this.getAngle();
         double angleGlobal= angles.x;
         double deltaAngle = angles.y;
 
         this.telemetry.addData("Global Angle Encoder : " , angleGlobal);
         this.telemetry.addData("Delta Angle : " , deltaAngle);
-
-        this.telemetry.update();
     }
 }

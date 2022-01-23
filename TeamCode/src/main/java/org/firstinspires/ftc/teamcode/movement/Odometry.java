@@ -8,10 +8,12 @@ import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.models.Tuple;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 
+import java.util.concurrent.TransferQueue;
 import java.util.logging.Level;
 
 public class Odometry {
     private final double AUX_WIDTH = 11;
+    private final double TRACK_WIDTH = 29;
 
     private final MecanumDriveTrain driveTrain;
     private final IMU imu;
@@ -31,7 +33,7 @@ public class Odometry {
     }
 
     public void update() {
-        double leftPosition = this.driveTrain.leftEncoder.getCurrentPosition();
+        //double leftPosition = this.driveTrain.leftEncoder.getCurrentPosition(); //LEFT encoder is a fake encoder value
         double rightPosition = this.driveTrain.rightEncoder.getCurrentPosition();
         double horizontalPosition = this.driveTrain.auxEncoder.getCurrentPosition();
 
@@ -39,18 +41,20 @@ public class Odometry {
         double globalAngle = angles.x;
         double deltaAngle = angles.y;
 
+        double leftPosition = (Math.toRadians(globalAngle)*TRACK_WIDTH)+rightPosition; // Generate left position via heading
+
         double deltaLeft = leftPosition - this.previousLeftPos;
         this.previousLeftPos = leftPosition; // Stores the current leftPosition to be used during the next update
 
         double deltaRight = rightPosition - this.previousRightPos;
-        this.previousRightPos = rightPosition; // Stores the current rightPosition to be used during the next update
+        this.previousRightPos = rightPosition; // Stores the current rightPosition to be used during the next update h=a-b/trackwidth
 
         double deltaHorizontal = horizontalPosition - this.previousAuxPos;
         this.previousAuxPos = horizontalPosition; // Stores the current horizontalPosition to be used during the next update
 
         double horizontalOffset = AUX_WIDTH * deltaAngle;
         double relativeX = deltaHorizontal - horizontalOffset;
-        double relativeY = (-deltaLeft + deltaRight) / 2.0;
+        double relativeY = (deltaLeft + deltaRight) / 2.0;
 
         pos.x += Math.cos(globalAngle) * relativeX - Math.sin(globalAngle) * relativeY;
         pos.y += Math.sin(globalAngle) * relativeX + Math.cos(globalAngle) * relativeY;

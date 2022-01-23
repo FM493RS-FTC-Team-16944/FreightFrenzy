@@ -36,7 +36,7 @@ public class SequentialMovements {
 
         if(currentWaypoint == null) {
             this.telemetry.addLine("Sequential Movements finished");
-            this.telemetry.update();
+            //this.telemetry.update();
 
             return;
         }

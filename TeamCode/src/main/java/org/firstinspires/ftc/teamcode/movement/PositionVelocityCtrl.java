@@ -35,7 +35,7 @@ public class PositionVelocityCtrl {
         this.telemetry.addData("PID Error Y", currentPosErr.y);
         this.telemetry.addData("PID Error H", currentPosErr.h);
 
-        this.telemetry.update();
+        //this.telemetry.update();
 
         integralSum.x += currentPosErr.x * PIDTimer.time();
         integralSum.y += currentPosErr.y * PIDTimer.time();

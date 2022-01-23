@@ -24,10 +24,16 @@ public class Manipulator {
     }
 
     public void updatePositionReadings() {
-        telemetry.addData("Intake Position Centimeters : " , intake.getCurrentPosition());
-        telemetry.addData("Lift Encoder Position Centimeters : " , lift.getCurrentPosition());
-        telemetry.addData("FlyWheel Encoder Position Centimeters : " , flyWheel.getCurrentPosition());
-        telemetry.addData("Claw Encoder Position Centimeters : " , claw.getCurrentPosition());
-        telemetry.addData("Arm Encoder Position Centimeters : " , arm.getCurrentPosition());
+        String intakeT = RobotHardware.DECIMAL_FORMAT.format(intake.getCurrentPosition());
+        String liftT = RobotHardware.DECIMAL_FORMAT.format(lift.getCurrentPosition());
+        String flyWheelT = RobotHardware.DECIMAL_FORMAT.format(flyWheel.getCurrentPosition());
+        String clawT = RobotHardware.DECIMAL_FORMAT.format(claw.getCurrentPosition());
+        String armT = RobotHardware.DECIMAL_FORMAT.format(arm.getCurrentPosition());
+
+        telemetry.addData("Intake Position Centimeters : " , intakeT);
+        telemetry.addData("Lift Encoder Position Centimeters : " , liftT);
+        telemetry.addData("FlyWheel Encoder Position Centimeters : " , flyWheelT);
+        telemetry.addData("Claw Encoder Position Centimeters : " , clawT);
+        telemetry.addData("Arm Encoder Position Centimeters : " , armT);
     }
 }

@@ -60,8 +60,12 @@ public class MecanumDriveTrain {
     }
 
     public void updateEncoderReadings() {
-        telemetry.addData("Left Encoder Position Centimeters : " , leftEncoder.getCurrentPosition());
-        telemetry.addData("Right Encoder Position Centimeters : " , rightEncoder.getCurrentPosition());
-        telemetry.addData("Auxiliary Encoder Position Centimeters : " , auxEncoder.getCurrentPosition());
+        String leftEncoderT = RobotHardware.DECIMAL_FORMAT.format(leftEncoder.getCurrentPosition());
+        String rightEncoderT = RobotHardware.DECIMAL_FORMAT.format(rightEncoder.getCurrentPosition());
+        String auxEncoderT = RobotHardware.DECIMAL_FORMAT.format(auxEncoder.getCurrentPosition());
+
+        telemetry.addData("Left Encoder Position Centimeters : " , leftEncoderT);
+        telemetry.addData("Right Encoder Position Centimeters : " , rightEncoderT);
+        telemetry.addData("Auxiliary Encoder Position Centimeters : " , auxEncoderT);
     }
 }

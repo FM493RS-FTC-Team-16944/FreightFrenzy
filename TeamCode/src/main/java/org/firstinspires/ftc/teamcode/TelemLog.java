@@ -4,6 +4,7 @@ import android.os.Environment;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -26,9 +27,9 @@ public class TelemLog {
     private void setupLogFile() {
         try {
             // This block configure the logger with handler and formatter
-            String directoryPath = Environment.getExternalStorageDirectory().getPath() + "/" + BASE_FOLDER_NAME;
+            File directoryPath = Environment.getExternalStorageDirectory();
 
-            FileHandler fh = new FileHandler(directoryPath + "/" + "TelemLog.log", true);
+            FileHandler fh = new FileHandler(directoryPath.getPath() + "/TelemLog.log", true);
             this.log.addHandler(fh);
 
             SimpleFormatter formatter = new SimpleFormatter();

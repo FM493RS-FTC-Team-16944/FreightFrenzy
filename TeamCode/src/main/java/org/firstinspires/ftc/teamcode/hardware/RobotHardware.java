@@ -7,7 +7,18 @@ import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.TelemLog;
 import org.firstinspires.ftc.teamcode.models.Mode;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 public class RobotHardware {
+    public static final DecimalFormat DECIMAL_FORMAT;
+
+    static {
+        DECIMAL_FORMAT = new DecimalFormat("#.###");
+
+        DECIMAL_FORMAT.setRoundingMode(RoundingMode.FLOOR);
+    }
+
     public final Manipulator manipulator;
     public final MecanumDriveTrain driveTrain;
     public final IMU imu;

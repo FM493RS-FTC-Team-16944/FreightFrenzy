@@ -64,8 +64,9 @@ public class IMU {
 
     public void updateIMUReadings() {
         Tuple<Double, Double> angles = this.getAngle();
-        double angleGlobal= angles.x;
-        double deltaAngle = angles.y;
+
+        String angleGlobal = RobotHardware.DECIMAL_FORMAT.format(angles.x);
+        String deltaAngle = RobotHardware.DECIMAL_FORMAT.format(angles.y);
 
         this.telemetry.addData("Global Angle Encoder : " , angleGlobal);
         this.telemetry.addData("Delta Angle : " , deltaAngle);

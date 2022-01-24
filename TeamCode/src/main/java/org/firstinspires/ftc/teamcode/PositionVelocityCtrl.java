@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 import org.firstinspires.ftc.teamcode.teleop.TeleOP;
 
 public class PositionVelocityCtrl {
-    public TeleOP teleOP;
+    public LinearOpMode opMode;
 
     private final ElapsedTime PIDTimer = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
     public final XyhVector targetPosition;
@@ -18,8 +19,8 @@ public class PositionVelocityCtrl {
     public static XyhVector integralSum = new XyhVector();
     public static XyhVector errPos = new XyhVector(0,0,0);
 
-    public PositionVelocityCtrl(TeleOP teleOP, XyhVector targetPosition) {
-        this.teleOP = teleOP;
+    public PositionVelocityCtrl(LinearOpMode opMode, XyhVector targetPosition) {
+        this.opMode = opMode;
 
         this.targetPosition = targetPosition;
     }
@@ -71,7 +72,7 @@ public class PositionVelocityCtrl {
 
         double outH = (-propGain * currentPosErrH +
                 intGain * integralSum.h +
-                derivGain * posDerivative.h) * 10;
+                derivGain * posDerivative.h) * 30;
 
         double x_rotated = outX * Math.cos(currentPosition.h) - outY * Math.sin(currentPosition.h);
         double y_rotated = outX * Math.sin(currentPosition.h) + outY * Math.cos(currentPosition.h);

@@ -3,119 +3,135 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.GoToPosition;
+import org.firstinspires.ftc.teamcode.LiftMacro;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.SequentialMovements;
+import org.firstinspires.ftc.teamcode.models.Lift;
+import org.firstinspires.ftc.teamcode.models.Task;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous()
 public class Autonomous extends LinearOpMode {
     private Robot robot;
 
     public RobotHardware hardware;
-    public ObjectDetection recognition;
 
-    public XyhVector warehouse;
-    public XyhVector shippingHub;
-    public XyhVector carousel;
+    List<Task> tasks = new ArrayList<>();
 
     @Override
     public void runOpMode() {
-        waitForStart();
+        tasks.add(arg -> spinCarousel((Long) arg));
+        tasks.add(arg -> goDropShippingHub());
+        tasks.add(arg -> goToWarehouse());
 
         robot = new Robot(this);
         hardware = robot.hardware;
-        recognition = new ObjectDetection(hardware);
 
-        recognition.setupDetection();
+        robot.movement.toggleClaw(0.675);
 
-        // THIS SHOULD BE TIMED LOOP
+        waitForStart();
+
+        long timestamp = System.currentTimeMillis() / 1000;
+
         while(opModeIsActive() && !isStopRequested()) {
-            goToWarehouse();
-            pickUpNearestFreight();
+            doNextTask(timestamp);
+        }
+    }
 
-            goDropShippingHub();
+    public boolean goToWarehouse() {
+        int threshold = 3;
+
+        XyhVector crossUp = new XyhVector(20,0, Math.toRadians(0));
+        GoToPosition goToCrossUp = new GoToPosition(robot, crossUp, this);
+
+        XyhVector secondCrossUp = new XyhVector(30, 0, Math.toRadians(0));
+        GoToPosition goToSecondCrossUp = new GoToPosition(robot, secondCrossUp, this);
+
+        XyhVector warehouse = new XyhVector(0,200, Math.toRadians(0));
+        GoToPosition goToWarehouse = new GoToPosition(robot, warehouse, this);
+
+        XyhVector rotate = new XyhVector(0,200, Math.toRadians(180));
+        GoToPosition goToRotate = new GoToPosition(robot, rotate, this);
+
+        LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
+        waypoints.put(goToCrossUp, false);
+        waypoints.put(goToSecondCrossUp, false);
+        waypoints.put(goToWarehouse, false);
+        waypoints.put(goToRotate, false);
+
+        SequentialMovements seqMovements = new SequentialMovements(waypoints, threshold, this);
+
+        return seqMovements.runMovements();
+    }
+
+    public boolean goDropShippingHub() {
+        int threshold = 3;
+        XyhVector shippingHubPos = new XyhVector(0,116.84,0);
+        GoToPosition goToShippingHub = new GoToPosition(robot, shippingHubPos, this);
+
+        LiftMacro liftMacroUp = new LiftMacro(robot.movement, Lift.UP);
+        Thread t1 = new Thread(liftMacroUp);
+        t1.start();
+
+        boolean finished = goToShippingHub.runWithPID(threshold);
+
+        if(finished && !t1.isAlive()) {
+            LiftMacro liftMacroDown = new LiftMacro(robot.movement, Lift.DOWN);
+            Thread t2 = new Thread(liftMacroDown);
+            t2.start();
+
+            return !t2.isAlive();
         }
 
-        // SPIN WHEEL, THIS SHUD BE TIMED TOO
-        getCarouselDucks();
-
-        // LAND IN WAREHOUSE
-        goToWarehouse();
+        return false;
     }
 
-    public void goToPlace(double x, double y, double h) {
-        // TODO: USE THIS FUNCTION FOR PID AND CALL IT FROM EVERY WEHRE ELSE
+    public boolean spinCarousel(long start) {
+        int threshold = 3;
+        XyhVector carousel = new XyhVector(76.2,-63.5,0);
+        GoToPosition goToCarousel = new GoToPosition(robot, carousel, this);
+
+        boolean finished = goToCarousel.runWithPID(threshold);
+
+        if(finished) {
+            XyhVector rotatePos = new XyhVector(76.2,-63.5, Math.toRadians(30));
+            GoToPosition gotoRotate = new GoToPosition(robot, rotatePos, this);
+
+            boolean finishedRotate = gotoRotate.runWithPID(threshold);
+
+            if(finishedRotate) {
+                if(hardware.flyWheelSpeed != 1) {
+                    robot.movement.activateFlywheel(1);
+                    return false;
+                }
+
+                long timestamp = System.currentTimeMillis() / 1000;
+
+                if(start + 5 == timestamp) {
+                    robot.movement.activateFlywheel(0);
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
-    public void goToWarehouse() {
-        double x = hardware.pos.x - warehouse.x;
-        double y = hardware.pos.y - warehouse.y; // TODO: im pretty sure this isnt negative but uh YEP
-        double h = hardware.pos.h - warehouse.h;
+    public void doNextTask(long start) {
+        for (Task task : this.tasks) {
+            boolean done = task.run(start);
 
-        goToPlace(x, y, h);
-    }
-
-    public void pickUpNearestFreight() {
-        if(!hardware.freightLoaded) {
-            Recognition object = recognition.getNearestObject();
-
-            // TODO: Im guessing this is the  distance from the robot to the object but pls test i beg tnx
-            double x = object.getBottom();
-            double y = object.getLeft();
-            double h = 0.0; // TODO: FIX
-
-            goToPlace(x, y, h);
-
-            // TODO: im pretty sure this moves it down but i forgot and am dumb pls check
-            if(hardware.liftSpeed != 0.0) {
-                robot.movement.toggleRaiseLift();
+            if(done) {
+                this.tasks.remove(0);
             }
 
-            if(hardware.clawPosition == 1) {
-                robot.movement.toggleClaw();
-            }
-
-            robot.movement.activateIntake();
-
-            if(hardware.clawPosition == 0.675) {
-                robot.movement.toggleClaw();
-            }
-
-            robot.movement.activateIntake();
-
-            hardware.freightLoaded = true;
+            break;
         }
-    }
-
-    public void goDropShippingHub() {
-        double x = hardware.pos.x - shippingHub.x;
-        double y = hardware.pos.y - shippingHub.y;
-        double h = hardware.pos.h - shippingHub.h;
-
-        goToPlace(x, y, h);
-
-        if(hardware.liftSpeed != 0.5) {
-            robot.movement.toggleRaiseLift();
-        }
-
-        if(hardware.clawPosition == 1) {
-            robot.movement.toggleClaw();
-        }
-    }
-
-    public void getCarouselDucks() {
-        double x = hardware.pos.x - carousel.x;
-        double y = hardware.pos.y - carousel.y;
-        double h = hardware.pos.h - carousel.h;
-
-        goToPlace(x, y, h);
-
-        if(hardware.flyWheelSpeed == 0) {
-            robot.movement.activateFlywheel();
-        }
-
-        // TODO: how 2 pick up duck, do we even need to i have no clue
-
-        robot.movement.activateFlywheel();
     }
 }

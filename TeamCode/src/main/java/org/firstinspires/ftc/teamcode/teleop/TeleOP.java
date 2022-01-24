@@ -27,7 +27,7 @@ public class TeleOP extends LinearOpMode {
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
 
-        XyhVector targetVector = new XyhVector(50,0,Math.toRadians(90));
+        XyhVector targetVector = new XyhVector(0,0,Math.toRadians(90));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
         XyhVector thirdTarget = new XyhVector(0,50,Math.toRadians(0));
@@ -38,8 +38,8 @@ public class TeleOP extends LinearOpMode {
 
         LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
         waypoints.put(runToTarget, false);
-        waypoints.put(thirdPos, false);
-        // waypoints.put(backToOrigin, false);
+        //waypoints.put(thirdPos, false);
+        waypoints.put(backToOrigin, false);
 
         SequentialMovements path = new SequentialMovements(waypoints, 3, this);
 
@@ -53,9 +53,9 @@ public class TeleOP extends LinearOpMode {
 
             path.runMovements();
 
-            // telemetry.addData("Position X", hardware.pos.x);
-            // telemetry.addData("Position Y", hardware.pos.y);
-            // telemetry.addData("Posiion H", Math.toDegrees(hardware.pos.h));
+            telemetry.addData("Position X", hardware.pos.x);
+            telemetry.addData("Position Y", hardware.pos.y);
+            telemetry.addData("Posiion H", Math.toDegrees(hardware.pos.h));
 
             // telemetry.addData("Claw Position", hardware.claw.getPosition());
             // telemetry.addData("Arm Position", hardware.arm.getPosition());
@@ -70,7 +70,7 @@ public class TeleOP extends LinearOpMode {
             // telemetry.addData("RawHori", hardware.auxEncoder.getCurrentPosition());
 
 
-            // telemetry.update();
+            telemetry.update();
         }
     }
 }

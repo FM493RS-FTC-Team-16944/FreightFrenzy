@@ -6,7 +6,7 @@ public class LiftMacro implements Runnable {
     RobotMovement movement;
     Lift liftUpDown;
 
-    LiftMacro(RobotMovement movement, Lift liftUpDown) {
+    public LiftMacro(RobotMovement movement, Lift liftUpDown) {
         this.movement = movement;
         this.liftUpDown = liftUpDown;
     }       

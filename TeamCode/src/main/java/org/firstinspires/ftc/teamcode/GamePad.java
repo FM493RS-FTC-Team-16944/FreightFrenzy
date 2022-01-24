@@ -27,7 +27,7 @@ public class GamePad {
 
     public void updateRobot() {
         if(hardware.currentMode == Mode.DRIVER_CONTROL) {
-            double x = gamepad.left_stick_x;
+            double x = -gamepad.left_stick_x;
             double y = -gamepad.left_stick_y; // Remember, this is reversed!
             double h = gamepad.right_stick_x;
 

@@ -26,7 +26,7 @@ public class Autonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        tasks.add(arg -> spinCarousel((Long) arg));
+        // tasks.add(arg -> spinCarousel((Long) arg));
         tasks.add(arg -> goDropShippingHub());
         tasks.add(arg -> goToWarehouse());
 
@@ -47,21 +47,17 @@ public class Autonomous extends LinearOpMode {
     public boolean goToWarehouse() {
         int threshold = 3;
 
-        XyhVector crossUp = new XyhVector(20,0, Math.toRadians(0));
+        XyhVector crossUp = new XyhVector(13,-54, Math.toRadians(0));
         GoToPosition goToCrossUp = new GoToPosition(robot, crossUp, this);
 
-        XyhVector secondCrossUp = new XyhVector(30, 0, Math.toRadians(0));
-        GoToPosition goToSecondCrossUp = new GoToPosition(robot, secondCrossUp, this);
-
-        XyhVector warehouse = new XyhVector(0,200, Math.toRadians(0));
+        XyhVector warehouse = new XyhVector(39,-196, Math.toRadians(0));
         GoToPosition goToWarehouse = new GoToPosition(robot, warehouse, this);
 
-        XyhVector rotate = new XyhVector(0,200, Math.toRadians(180));
+        XyhVector rotate = new XyhVector(39,-196, Math.toRadians(180));
         GoToPosition goToRotate = new GoToPosition(robot, rotate, this);
 
         LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
         waypoints.put(goToCrossUp, false);
-        waypoints.put(goToSecondCrossUp, false);
         waypoints.put(goToWarehouse, false);
         waypoints.put(goToRotate, false);
 
@@ -72,21 +68,26 @@ public class Autonomous extends LinearOpMode {
 
     public boolean goDropShippingHub() {
         int threshold = 3;
-        XyhVector shippingHubPos = new XyhVector(0,116.84,0);
+        XyhVector shippingHubPos = new XyhVector(82,17,0);
         GoToPosition goToShippingHub = new GoToPosition(robot, shippingHubPos, this);
 
+        /*
         LiftMacro liftMacroUp = new LiftMacro(robot.movement, Lift.UP);
         Thread t1 = new Thread(liftMacroUp);
         t1.start();
+         */
 
         boolean finished = goToShippingHub.runWithPID(threshold);
 
-        if(finished && !t1.isAlive()) {
+        if(finished /* && !t1.isAlive() */) {
+            /*
             LiftMacro liftMacroDown = new LiftMacro(robot.movement, Lift.DOWN);
             Thread t2 = new Thread(liftMacroDown);
             t2.start();
 
             return !t2.isAlive();
+             */
+            return true;
         }
 
         return false;
@@ -94,13 +95,13 @@ public class Autonomous extends LinearOpMode {
 
     public boolean spinCarousel(long start) {
         int threshold = 3;
-        XyhVector carousel = new XyhVector(76.2,-63.5,0);
+        XyhVector carousel = new XyhVector(14,63,0);
         GoToPosition goToCarousel = new GoToPosition(robot, carousel, this);
 
         boolean finished = goToCarousel.runWithPID(threshold);
 
         if(finished) {
-            XyhVector rotatePos = new XyhVector(76.2,-63.5, Math.toRadians(30));
+            XyhVector rotatePos = new XyhVector(14,63, Math.toRadians(-32));
             GoToPosition gotoRotate = new GoToPosition(robot, rotatePos, this);
 
             boolean finishedRotate = gotoRotate.runWithPID(threshold);

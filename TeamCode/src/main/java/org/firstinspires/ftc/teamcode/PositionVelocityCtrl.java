@@ -62,11 +62,11 @@ public class PositionVelocityCtrl {
                 (currentPosErrH - errPos.h) / PIDTimer.time()
         );
 
-        double outX = -propGain * currentPosErrX +
+        double outX = propGain * currentPosErrX +
                 intGain * integralSum.x +
                 derivGain * posDerivative.x;
 
-        double outY = -propGain * currentPosErrY +
+        double outY = propGain * currentPosErrY +
                 intGain * integralSum.y +
                 derivGain * posDerivative.y;
 

@@ -105,8 +105,8 @@ public class RobotHardware {
         setEncodersMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightEncoder = flywheel;
-        auxEncoder = backLeftMotor;
-        leftEncoder = frontLeftMotor;
+        auxEncoder = frontLeftMotor;
+        leftEncoder = backLeftMotor;
 
         stop();
         resetDriveEncoders();
@@ -167,9 +167,11 @@ public class RobotHardware {
         globalAngle += deltaAngle;
         lastAngles = angles;
 
-        double leftPosition = this.leftEncoder.getCurrentPosition() *cm_per_tick;
-        double rightPosition = this.rightEncoder.getCurrentPosition() *cm_per_tick;
+
+        double leftPosition = this.leftEncoder.getCurrentPosition() *cm_per_tick; //due to poor mapping
         double horizontalPosition = this.auxEncoder.getCurrentPosition() *cm_per_tick;
+
+        double rightPosition = ((globalAngle * trackWidth) - leftPosition);
 
         double deltaLeft = leftPosition - previousLeftPos;
         this.previousLeftPos = leftPosition; // Stores the current leftPosition to be used during the next update
@@ -186,7 +188,7 @@ public class RobotHardware {
         double relativeY = (-deltaLeft + deltaRight) / 2.0;
 
         pos.x += Math.cos(globalAngle) * relativeX - Math.sin(globalAngle) * relativeY;
-        pos.y += Math.sin(globalAngle) * relativeX + Math.cos(globalAngle) * relativeY;
+        pos.y -= Math.sin(globalAngle) * relativeX + Math.cos(globalAngle) * relativeY;
         pos.h = globalAngle;
     }
 }

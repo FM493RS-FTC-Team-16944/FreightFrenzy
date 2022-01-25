@@ -98,6 +98,7 @@ public class Autonomous extends LinearOpMode {
     public boolean spinCarousel(long start) {
         boolean finished = this.goToCarousel.runWithPID(THRESHOLD);
 
+
         if(finished) {
             boolean finishedRotate = this.rotateCarousel.runWithPID(THRESHOLD);
 

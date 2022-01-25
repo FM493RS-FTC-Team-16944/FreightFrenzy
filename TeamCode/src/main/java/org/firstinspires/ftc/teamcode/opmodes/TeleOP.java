@@ -27,19 +27,19 @@ public class TeleOP extends LinearOpMode {
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
 
-        XyhVector targetVector = new XyhVector(0,0,Math.toRadians(90));
+        XyhVector targetVector = new XyhVector(0, 0, Math.toRadians(0));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
-        XyhVector thirdTarget = new XyhVector(14,63,Math.toRadians(0));
+        XyhVector thirdTarget = new XyhVector(14, 63, Math.toRadians(0));
         GoToPosition thirdPos = new GoToPosition(robot, thirdTarget, this);
 
-        XyhVector lastTarget = new XyhVector(0,0,Math.toRadians(0));
+        XyhVector lastTarget = new XyhVector(0, 0, Math.toRadians(0));
         GoToPosition backToOrigin = new GoToPosition(robot, lastTarget, this);
 
         LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
-        waypoints.put(runToTarget, false);
+        //waypoints.put(runToTarget, false);
         waypoints.put(thirdPos, false);
-        waypoints.put(backToOrigin, false);
+        //waypoints.put(backToOrigin, false);
 
         SequentialMovements path = new SequentialMovements(waypoints, 3, this);
 
@@ -78,11 +78,16 @@ public class TeleOP extends LinearOpMode {
 
     public boolean spinCarousel(long start) {
         int threshold = 3;
-        XyhVector carousel = new XyhVector(14,63,0);
+        XyhVector carousel = new XyhVector(14, 63, 0);
         GoToPosition goToCarousel = new GoToPosition(robot, carousel, this);
 
-        boolean finished = goToCarousel.runWithPID(threshold);
+        LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
+        waypoints.put(goToCarousel, false);
 
+        SequentialMovements path = new SequentialMovements(waypoints, 3, this);
+
+        path.runMovements();
+        /*
         if(finished) {
             telemetry.addLine("Gone to Carousel");
             XyhVector rotatePos = new XyhVector(14,63, Math.toRadians(-32));
@@ -105,7 +110,9 @@ public class TeleOP extends LinearOpMode {
                 }
             }
         }
+        */
 
         return false;
     }
+
 }

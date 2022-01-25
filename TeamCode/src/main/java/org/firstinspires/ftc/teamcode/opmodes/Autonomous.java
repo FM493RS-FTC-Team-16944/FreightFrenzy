@@ -1,14 +1,11 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.GoToPosition;
-import org.firstinspires.ftc.teamcode.LiftMacro;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.SequentialMovements;
-import org.firstinspires.ftc.teamcode.models.Lift;
 import org.firstinspires.ftc.teamcode.models.Task;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
 
@@ -26,9 +23,9 @@ public class Autonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        // tasks.add(arg -> spinCarousel((Long) arg));
-        tasks.add(arg -> goDropShippingHub());
-        tasks.add(arg -> goToWarehouse());
+        tasks.add(arg -> spinCarousel((Long) arg));
+        //tasks.add(arg -> goDropShippingHub());
+        //tasks.add(arg -> goToWarehouse());
 
         robot = new Robot(this);
         hardware = robot.hardware;
@@ -40,7 +37,12 @@ public class Autonomous extends LinearOpMode {
         long timestamp = System.currentTimeMillis() / 1000;
 
         while(opModeIsActive() && !isStopRequested()) {
+            hardware.odometry();
             doNextTask(timestamp);
+            telemetry.addData("X", hardware.pos.x);
+            telemetry.addData("Y", hardware.pos.y);
+            telemetry.addData("H", hardware.pos.h);
+            telemetry.update();
         }
     }
 
@@ -101,12 +103,14 @@ public class Autonomous extends LinearOpMode {
         boolean finished = goToCarousel.runWithPID(threshold);
 
         if(finished) {
+            telemetry.addLine("Gone to Carousel");
             XyhVector rotatePos = new XyhVector(14,63, Math.toRadians(-32));
             GoToPosition gotoRotate = new GoToPosition(robot, rotatePos, this);
 
             boolean finishedRotate = gotoRotate.runWithPID(threshold);
 
             if(finishedRotate) {
+                telemetry.addLine("Spinning Carousel");
                 if(hardware.flyWheelSpeed != 1) {
                     robot.movement.activateFlywheel(1);
                     return false;

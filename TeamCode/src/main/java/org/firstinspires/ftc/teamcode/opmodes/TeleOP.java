@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -30,7 +30,7 @@ public class TeleOP extends LinearOpMode {
         XyhVector targetVector = new XyhVector(0,0,Math.toRadians(90));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
-        XyhVector thirdTarget = new XyhVector(0,50,Math.toRadians(0));
+        XyhVector thirdTarget = new XyhVector(50,0,Math.toRadians(0));
         GoToPosition thirdPos = new GoToPosition(robot, thirdTarget, this);
 
         XyhVector lastTarget = new XyhVector(0,0,Math.toRadians(0));
@@ -38,7 +38,7 @@ public class TeleOP extends LinearOpMode {
 
         LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
         waypoints.put(runToTarget, false);
-        //waypoints.put(thirdPos, false);
+        waypoints.put(thirdPos, false);
         waypoints.put(backToOrigin, false);
 
         SequentialMovements path = new SequentialMovements(waypoints, 3, this);

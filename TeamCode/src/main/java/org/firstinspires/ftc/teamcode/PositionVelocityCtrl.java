@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.models.XyhVector;
-import org.firstinspires.ftc.teamcode.teleop.TeleOP;
 
 public class PositionVelocityCtrl {
     public LinearOpMode opMode;
@@ -70,7 +69,7 @@ public class PositionVelocityCtrl {
                 intGain * integralSum.y +
                 derivGain * posDerivative.y;
 
-        double outH = (-propGain * currentPosErrH +
+        double outH = -(propGain * currentPosErrH +
                 intGain * integralSum.h +
                 derivGain * posDerivative.h) * 30;
 

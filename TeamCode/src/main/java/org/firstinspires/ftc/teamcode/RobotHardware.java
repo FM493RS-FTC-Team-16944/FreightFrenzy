@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -85,6 +86,7 @@ public class RobotHardware {
         intake.setDirection(DcMotor.Direction.REVERSE);
 
         lift = hardwareMap.dcMotor.get("Lift");
+        lift.setDirection(DcMotor.Direction.REVERSE);
         flywheel = hardwareMap.dcMotor.get("Flywheel");
         claw = hardwareMap.servo.get("Claw");
         arm = hardwareMap.servo.get("Arm");

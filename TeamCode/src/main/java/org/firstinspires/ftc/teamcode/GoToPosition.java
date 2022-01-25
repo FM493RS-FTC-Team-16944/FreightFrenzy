@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.models.XyhVector;
-import org.firstinspires.ftc.teamcode.teleop.TeleOP;
 
 public class GoToPosition {
     public LinearOpMode opMode;

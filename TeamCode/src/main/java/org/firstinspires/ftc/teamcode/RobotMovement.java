@@ -76,6 +76,13 @@ public class RobotMovement {
         }
     }
 
+    public void moveLift(double Power) {
+        if (Power!=0){
+            hardware.liftSpeed = Power;
+        }
+        hardware.lift.setPower(Power);
+    }
+
 
     public void toggleClaw() {
         // 1 is closed, 0.675 is opened

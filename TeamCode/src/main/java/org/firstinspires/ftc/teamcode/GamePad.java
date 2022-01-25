@@ -86,16 +86,21 @@ public class GamePad {
             LiftMacro liftMacro = new LiftMacro(movement, Lift.UP);
             Thread t1 = new Thread(liftMacro);
             t1.start();
-        }
-
-        previousUp = gamepad.dpad_up;
-
-        if (gamepad.dpad_down && gamepad.dpad_down != previousDown) {
+        } else if (gamepad.dpad_down && gamepad.dpad_down != previousDown) {
             LiftMacro liftMacro = new LiftMacro(movement, Lift.DOWN);
             Thread t1 = new Thread(liftMacro);
             t1.start();
+        } else if (gamepad.dpad_right) {
+            movement.moveLift(0.5);
+        } else if (gamepad.dpad_left) {
+            movement.moveLift(-0.2);
+        } else {
+            movement.moveLift(0);
         }
 
+        previousUp = gamepad.dpad_up;
         previousDown = gamepad.dpad_down;
+
+
     }
 }

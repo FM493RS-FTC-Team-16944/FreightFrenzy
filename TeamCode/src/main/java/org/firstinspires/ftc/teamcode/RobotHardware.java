@@ -159,7 +159,7 @@ public class RobotHardware {
 
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+        double deltaAngle = -(angles.firstAngle - lastAngles.firstAngle);
 
         if (globalAngle < -Math.PI)
             globalAngle += 2 * Math.PI;

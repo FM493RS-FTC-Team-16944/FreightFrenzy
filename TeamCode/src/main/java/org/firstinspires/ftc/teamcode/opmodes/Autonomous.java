@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 @com.qualcomm.robotcore.eventloop.opmode.Autonomous()
 public class Autonomous extends LinearOpMode {
-    private static final int THRESHOLD = 3;
+    public static final int THRESHOLD = 3;
 
     private Robot robot;
     public RobotHardware hardware;
@@ -31,16 +31,16 @@ public class Autonomous extends LinearOpMode {
     @Override
     public void runOpMode() {
         tasks.add(arg -> spinCarousel((Long) arg));
-        tasks.add(arg -> goDropShippingHub());
-        tasks.add(arg -> goToWarehouse());
+        //tasks.add(arg -> goDropShippingHub());
+        //tasks.add(arg -> goToWarehouse());
 
         robot = new Robot(this);
         hardware = robot.hardware;
 
         robot.movement.toggleClaw(0.675);
 
-        this.goToCarousel = new GoToPosition(robot, new XyhVector(14,63,0), this);
-        this.rotateCarousel = new GoToPosition(robot, new XyhVector(14,63, Math.toRadians(-32)), this);
+        this.goToCarousel = new GoToPosition(robot, new XyhVector(25,55,0), this);
+        this.rotateCarousel = new GoToPosition(robot, new XyhVector(25,55, Math.toRadians(90)), this);
         this.goToShippingHub = new GoToPosition(robot, new XyhVector(82,17,0), this);
 
         XyhVector crossUp = new XyhVector(13,-54, Math.toRadians(0));
@@ -64,6 +64,7 @@ public class Autonomous extends LinearOpMode {
         long timestamp = System.currentTimeMillis() / 1000;
 
         while(opModeIsActive() && !isStopRequested()) {
+            hardware.odometry();
             doNextTask(timestamp);
         }
     }
@@ -97,7 +98,7 @@ public class Autonomous extends LinearOpMode {
 
     public boolean spinCarousel(long start) {
         boolean finished = this.goToCarousel.runWithPID(THRESHOLD);
-
+        telemetry.addLine("Spun carousel");
 
         if(finished) {
             boolean finishedRotate = this.rotateCarousel.runWithPID(THRESHOLD);

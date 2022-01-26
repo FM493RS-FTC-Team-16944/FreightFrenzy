@@ -69,7 +69,7 @@ public class PositionVelocityCtrl {
                 intGain * integralSum.y +
                 derivGain * posDerivative.y;
 
-        double outH = -(propGain * currentPosErrH +
+        double outH = (propGain * currentPosErrH +
                 intGain * integralSum.h +
                 derivGain * posDerivative.h) * 30;
 

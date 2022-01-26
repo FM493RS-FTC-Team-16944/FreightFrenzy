@@ -29,7 +29,7 @@ public class GoToPosition {
     public boolean runWithPID(int threshold) {
         boolean complete_x = Math.abs(correctedHardware.pos.x - targetPosition.x) <= threshold;
         boolean complete_y = Math.abs(correctedHardware.pos.y - targetPosition.y) <= threshold;
-        boolean complete_h = Math.abs(correctedHardware.pos.h - targetPosition.h) <= 3;
+        boolean complete_h = Math.abs(correctedHardware.pos.h - targetPosition.h) <= Math.toRadians(3);
 
         opMode.telemetry.addData("Current X : ", correctedHardware.pos.x);
         opMode.telemetry.addData("Delta X : ", Math.abs(correctedHardware.pos.x - targetPosition.x));
@@ -39,7 +39,7 @@ public class GoToPosition {
         opMode.telemetry.addData("Threshold H : ", Math.toRadians(threshold * 5));
 
         if(complete_h && complete_x && complete_y) {
-            // teleOP.telemetry.addLine("PID FINISHED");
+            //teleOP.telemetry.addLine("PID FINISHED");
 
             return true;
         } else {
@@ -60,7 +60,12 @@ public class GoToPosition {
             // teleOP.telemetry.addData("PID Output Y", forwardCtrl.y);
             // teleOP.telemetry.addData("PID Output H", forwardCtrl.h);
 
-            movement.strafe(forwardCtrl.x, -forwardCtrl.y, forwardCtrl.h);
+            if (targetPosition.h!=0) {
+                forwardCtrl.x = 0;
+                forwardCtrl.y = 0;
+            }
+
+            movement.strafe(forwardCtrl.x, -forwardCtrl.y, -forwardCtrl.h);
 
             return false;
         }

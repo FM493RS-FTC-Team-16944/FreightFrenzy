@@ -30,7 +30,7 @@ public class TeleOP extends LinearOpMode {
         XyhVector targetVector = new XyhVector(0, 0, Math.toRadians(0));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
-        XyhVector thirdTarget = new XyhVector(14, 63, Math.toRadians(0));
+        XyhVector thirdTarget = new XyhVector(0, 0, Math.toRadians(90));
         GoToPosition thirdPos = new GoToPosition(robot, thirdTarget, this);
 
         XyhVector lastTarget = new XyhVector(0, 0, Math.toRadians(0));
@@ -50,8 +50,6 @@ public class TeleOP extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry();
             gamepad.updateRobot();
-
-            //spinCarousel(0);      //todo: DEBUG spinCarousel(0) fails, but path.runMovements() works
 
             path.runMovements();
 
@@ -76,43 +74,5 @@ public class TeleOP extends LinearOpMode {
         }
     }
 
-    public boolean spinCarousel(long start) {
-        int threshold = 3;
-        XyhVector carousel = new XyhVector(14, 63, 0);
-        GoToPosition goToCarousel = new GoToPosition(robot, carousel, this);
-
-        LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
-        waypoints.put(goToCarousel, false);
-
-        SequentialMovements path = new SequentialMovements(waypoints, 3, this);
-
-        path.runMovements();
-        /*
-        if(finished) {
-            telemetry.addLine("Gone to Carousel");
-            XyhVector rotatePos = new XyhVector(14,63, Math.toRadians(-32));
-            GoToPosition gotoRotate = new GoToPosition(robot, rotatePos, this);
-
-            boolean finishedRotate = gotoRotate.runWithPID(threshold);
-
-            if(finishedRotate) {
-                telemetry.addLine("Spinning Carousel");
-                if(hardware.flyWheelSpeed != 1) {
-                    robot.movement.activateFlywheel(1);
-                    return false;
-                }
-
-                long timestamp = System.currentTimeMillis() / 1000;
-
-                if(start + 5 == timestamp) {
-                    robot.movement.activateFlywheel(0);
-                    return true;
-                }
-            }
-        }
-        */
-
-        return false;
-    }
 
 }

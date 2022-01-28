@@ -23,10 +23,12 @@ public class Autonomous extends LinearOpMode {
     private GoToPosition goToCarousel;
     private GoToPosition rotateCarousel;
     private GoToPosition goToShippingHub;
+    private long startSpin;
 
     private SequentialMovements goToWarehouse;
 
     List<Task> tasks = new ArrayList<>();
+    private boolean mvmt1, mvmt2, mvmt3, mvmt4;
 
     @Override
     public void runOpMode() {
@@ -40,7 +42,7 @@ public class Autonomous extends LinearOpMode {
         robot.movement.toggleClaw(0.675);
 
         this.goToCarousel = new GoToPosition(robot, new XyhVector(25,55,0), this);
-        this.rotateCarousel = new GoToPosition(robot, new XyhVector(25,55, Math.toRadians(90)), this);
+        this.rotateCarousel = new GoToPosition(robot, new XyhVector(25,55, Math.toRadians(30)), this);
         this.goToShippingHub = new GoToPosition(robot, new XyhVector(82,17,0), this);
 
         XyhVector crossUp = new XyhVector(13,-54, Math.toRadians(0));
@@ -59,6 +61,9 @@ public class Autonomous extends LinearOpMode {
 
         this.goToWarehouse = new SequentialMovements(waypoints, THRESHOLD, this);
 
+        flagsInit();
+        robot.movement.activateFlywheel(0);
+
         waitForStart();
 
         long timestamp = System.currentTimeMillis() / 1000;
@@ -66,6 +71,9 @@ public class Autonomous extends LinearOpMode {
         while(opModeIsActive() && !isStopRequested()) {
             hardware.odometry();
             doNextTask(timestamp);
+
+            telemetry.update();
+
         }
     }
 
@@ -98,20 +106,34 @@ public class Autonomous extends LinearOpMode {
 
     public boolean spinCarousel(long start) {
         boolean finished = this.goToCarousel.runWithPID(THRESHOLD);
-        telemetry.addLine("Spun carousel");
+        if (finished) {
+            mvmt1 = true;
+        }
 
-        if(finished) {
+        if(mvmt1) {
             boolean finishedRotate = this.rotateCarousel.runWithPID(THRESHOLD);
+            if (finishedRotate) {
+                mvmt2 = true;
+                telemetry.addLine("Rotated");
+            } else {
+                telemetry.addLine("u a L fr fr");
+            }
 
-            if(finishedRotate) {
-                if(hardware.flyWheelSpeed != 1) {
+            if(mvmt2) {
+                long timestamp = System.currentTimeMillis();
+
+                if(hardware.flyWheelSpeed == 0) {
                     robot.movement.activateFlywheel(1);
+                    telemetry.addLine("Spinning carousel");
+
+                    startSpin = timestamp;
                     return false;
+                } else {
+                    telemetry.addLine("Failed to start");
+
                 }
 
-                long timestamp = System.currentTimeMillis() / 1000;
-
-                if(start + 5 == timestamp) {
+                if(start + 5000000 > timestamp) {
                     robot.movement.activateFlywheel(0);
                     return true;
                 }
@@ -131,5 +153,12 @@ public class Autonomous extends LinearOpMode {
 
             break;
         }
+    }
+
+    public void flagsInit(){
+        this.mvmt1 = false;
+        this.mvmt2 = false;
+        this.mvmt3 = false;
+        this.mvmt4 = false;
     }
 }

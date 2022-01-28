@@ -27,17 +27,17 @@ public class TeleOP extends LinearOpMode {
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
 
-        XyhVector targetVector = new XyhVector(0, 0, Math.toRadians(0));
+        XyhVector targetVector = new XyhVector(10, 0, Math.toRadians(0));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
-        XyhVector thirdTarget = new XyhVector(0, 0, Math.toRadians(90));
+        XyhVector thirdTarget = new XyhVector(10, 0, Math.toRadians(90));
         GoToPosition thirdPos = new GoToPosition(robot, thirdTarget, this);
 
         XyhVector lastTarget = new XyhVector(0, 0, Math.toRadians(0));
         GoToPosition backToOrigin = new GoToPosition(robot, lastTarget, this);
 
         LinkedHashMap<GoToPosition, Boolean> waypoints = new LinkedHashMap<>();
-        //waypoints.put(runToTarget, false);
+        waypoints.put(runToTarget, false);
         waypoints.put(thirdPos, false);
         //waypoints.put(backToOrigin, false);
 

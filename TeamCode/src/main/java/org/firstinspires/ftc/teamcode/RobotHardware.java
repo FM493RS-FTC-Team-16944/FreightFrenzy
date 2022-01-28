@@ -183,7 +183,7 @@ public class RobotHardware {
         double deltaHorizontal = horizontalPosition - previousAuxPos;
         this.previousAuxPos = horizontalPosition; // Stores the current horizontalPosition to be used during the next update
 
-        double deltaHeading = (-deltaLeft + deltaRight) / trackWidth;
+        //double deltaHeading = (-deltaLeft + deltaRight) / trackWidth;
 
         double horizontalOffset = auxWidth * deltaAngle;
         double relativeX = deltaHorizontal - horizontalOffset;

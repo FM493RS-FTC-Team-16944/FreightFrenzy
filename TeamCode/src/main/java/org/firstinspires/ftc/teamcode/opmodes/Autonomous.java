@@ -26,20 +26,22 @@ public class Autonomous extends LinearOpMode {
     private GoToPosition rotateCarousel;
     private GoToPosition goToShippingHub;
     private GoToPosition unRotateCarousel;
+    private GoToPosition warehouseA;
+    private GoToPosition warehouseB;
     private long startSpin;
     public int j;
 
     private SequentialMovements goToWarehouse;
 
     List<Task> tasks = new ArrayList<>();
-    private boolean mvmt1, mvmt2, mvmt3, mvmt4, mvmt5;
+    private boolean mvmt1, mvmt2, mvmt3, mvmt4, mvmt5, mvmt6, mvmt7;
     public long timestamp;
 
     @Override
     public void runOpMode() {
         tasks.add(arg -> spinCarousel((Long) arg));
         tasks.add(arg -> goDropShippingHub());
-        //tasks.add(arg -> goToWarehouse());
+        tasks.add(arg -> goToWarehouse());
 
         robot = new Robot(this);
         hardware = robot.hardware;
@@ -50,6 +52,8 @@ public class Autonomous extends LinearOpMode {
         this.rotateCarousel = new GoToPosition(robot, new XyhVector(15,65, Math.toRadians(30)), this, true);
         this.unRotateCarousel = new GoToPosition(robot, new XyhVector(15,65,Math.toRadians(0)), this, true);
         this.goToShippingHub = new GoToPosition(robot, new XyhVector(105,0,0), this, false);
+        this.warehouseA = new GoToPosition(robot, new XyhVector(20,0,0), this, false);
+        this.warehouseB = new GoToPosition(robot, new XyhVector(0,200,0), this, false);
 
         flagsInit();
         robot.movement.activateFlywheel(0);
@@ -74,7 +78,18 @@ public class Autonomous extends LinearOpMode {
     }
 
     public boolean goToWarehouse() {
-        return this.goToWarehouse.runMovements();
+        boolean warehouseA = this.warehouseA.runWithPID(THRESHOLD);
+
+        if (warehouseA) {
+            boolean warehouseB = this.warehouseB.runWithPID(THRESHOLD);
+
+            if (warehouseB) {
+                robot.movement.strafe(0,0,0);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean goDropShippingHub() {
@@ -85,16 +100,16 @@ public class Autonomous extends LinearOpMode {
         t1.start();
 
         boolean finished = this.goToShippingHub.runWithPID(THRESHOLD);
-        telemetry.addData("Finished moving to hub", finished);
 
         if (finished) {
             mvmt5 = true;
+            telemetry.addData("Finished moving to hub", finished);
         }
 
-        if(mvmt5 && !t1.isAlive()) {
+        if(mvmt5) {
             telemetry.addLine("Hi");
             if (j==0){
-                this.robot.movement.toggleClaw();
+                this.robot.movement.toggleClaw(1);
                 j++;
             }
 
@@ -102,7 +117,7 @@ public class Autonomous extends LinearOpMode {
             Thread t2 = new Thread(liftMacroDown);
             t2.start();
 
-            return !t2.isAlive();
+            return true;
 
             //return true;
         }
@@ -130,7 +145,7 @@ public class Autonomous extends LinearOpMode {
                     startSpin = this.timestamp;
                 }
 
-                if(startSpin + 5000 < this.timestamp) {
+                if(startSpin + 3000 < this.timestamp) {
                     robot.movement.activateFlywheel(0);
                     mvmt3 = true;
                 }
@@ -175,5 +190,7 @@ public class Autonomous extends LinearOpMode {
         this.mvmt3 = false;
         this.mvmt4 = false;
         this.mvmt5 = false;
+        this.mvmt6 = false;
+        this.mvmt7 = false;
     }
 }

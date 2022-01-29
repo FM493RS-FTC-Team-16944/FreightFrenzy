@@ -28,6 +28,12 @@ public class LiftMacro implements Runnable {
             movement.toggleArm(0.5);
             this.complete = true;
         } else {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             movement.toggleClaw(0.675);
             movement.toggleArm(0.98);
 

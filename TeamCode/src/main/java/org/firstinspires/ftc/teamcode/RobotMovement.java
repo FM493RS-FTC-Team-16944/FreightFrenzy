@@ -56,7 +56,7 @@ public class RobotMovement {
 
     public void toggleRaiseLift() {
         if(open == 0) {
-            if (hardware.liftSpeed == 0.5) {
+            if (hardware.liftSpeed != 0) {
                 hardware.liftSpeed = 0.0;
                 hardware.lift.setPower(0.0);
             } else {
@@ -67,7 +67,7 @@ public class RobotMovement {
     }
 
     public void toggleLowerLift() {
-        if(hardware.liftSpeed == -0.2) {
+        if(hardware.liftSpeed != 0) {
             hardware.liftSpeed = 0.0;
             hardware.lift.setPower(0.0);
         } else {
@@ -77,10 +77,11 @@ public class RobotMovement {
     }
 
     public void moveLift(double Power) {
-        if (Power!=0){
+        //if (Power!=0){
             hardware.liftSpeed = Power;
-        }
-        hardware.lift.setPower(Power);
+            hardware.lift.setPower(Power);
+        //}
+
     }
 
 

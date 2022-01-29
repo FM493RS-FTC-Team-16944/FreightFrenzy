@@ -32,7 +32,7 @@ public class Autonomous extends LinearOpMode {
     private SequentialMovements goToWarehouse;
 
     List<Task> tasks = new ArrayList<>();
-    private boolean mvmt1, mvmt2, mvmt3, mvmt4;
+    private boolean mvmt1, mvmt2, mvmt3, mvmt4, mvmt5;
     public long timestamp;
 
     @Override
@@ -49,7 +49,7 @@ public class Autonomous extends LinearOpMode {
         this.goToCarousel = new GoToPosition(robot, new XyhVector(15,65,0), this, false);
         this.rotateCarousel = new GoToPosition(robot, new XyhVector(15,65, Math.toRadians(30)), this, true);
         this.unRotateCarousel = new GoToPosition(robot, new XyhVector(15,65,Math.toRadians(0)), this, true);
-        this.goToShippingHub = new GoToPosition(robot, new XyhVector(100,0,0), this, false);
+        this.goToShippingHub = new GoToPosition(robot, new XyhVector(105,0,0), this, false);
 
         flagsInit();
         robot.movement.activateFlywheel(0);
@@ -85,9 +85,13 @@ public class Autonomous extends LinearOpMode {
         t1.start();
 
         boolean finished = this.goToShippingHub.runWithPID(THRESHOLD);
+        telemetry.addData("Finished moving to hub", finished);
 
+        if (finished) {
+            mvmt5 = true;
+        }
 
-        if(finished  && !t1.isAlive()) {
+        if(mvmt5 && !t1.isAlive()) {
             telemetry.addLine("Hi");
             if (j==0){
                 this.robot.movement.toggleClaw();
@@ -99,6 +103,7 @@ public class Autonomous extends LinearOpMode {
             t2.start();
 
             return !t2.isAlive();
+
             //return true;
         }
 
@@ -169,5 +174,6 @@ public class Autonomous extends LinearOpMode {
         this.mvmt2 = false;
         this.mvmt3 = false;
         this.mvmt4 = false;
+        this.mvmt5 = false;
     }
 }

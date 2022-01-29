@@ -17,12 +17,14 @@ public class GamePad {
     private boolean previousFly = false;
     private boolean previousUp = false;
     private boolean previousDown = false;
+    private int i;
 
     public GamePad(Robot robot, Gamepad hardwareGamepad) {
         this.hardware = robot.hardware;
         this.movement = robot.movement;
 
         this.gamepad = hardwareGamepad;
+        this.i = 0;
     }
 
     public void updateRobot() {
@@ -82,19 +84,23 @@ public class GamePad {
 
         previousFly = gamepad.right_bumper;
 
+        LiftMacro liftMacroUp = new LiftMacro(movement, Lift.UP);
+        Thread t1 = new Thread(liftMacroUp);
+        LiftMacro liftMacroDown = new LiftMacro(movement, Lift.DOWN);
+        Thread t2 = new Thread(liftMacroDown);
+
+
         if (gamepad.dpad_up && gamepad.dpad_up != previousUp) {
-            LiftMacro liftMacro = new LiftMacro(movement, Lift.UP);
-            Thread t1 = new Thread(liftMacro);
             t1.start();
         } else if (gamepad.dpad_down && gamepad.dpad_down != previousDown) {
-            LiftMacro liftMacro = new LiftMacro(movement, Lift.DOWN);
-            Thread t1 = new Thread(liftMacro);
-            t1.start();
+            t2.start();
         } else if (gamepad.dpad_right) {
             movement.moveLift(0.5);
+            i = 0;
         } else if (gamepad.dpad_left) {
             movement.moveLift(-0.2);
-        } else {
+            i = 0;
+        } else if (gamepad.b){
             movement.moveLift(0);
         }
 

@@ -77,6 +77,16 @@ public class GoToPosition {
             } else {
                 opMode.telemetry.addLine("Not finished turning yet man");
             }
+        } else {
+            opMode.telemetry.addData("Heading", correctedHardware.pos.h);
+            forwardCtrl.h = 0;
+            if (complete_x && complete_y) {
+                if (i==0) {
+                    correctedHardware.pos = targetPosition;
+                    i++;
+                }
+            }
+            //opMode.telemetry.addData("TargetH", forwardCtrl.)
         }
 
         if (complete_x && complete_y && complete_h) {

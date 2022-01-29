@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.models.Lift;
 public class LiftMacro implements Runnable {
     RobotMovement movement;
     Lift liftUpDown;
+    public boolean complete;
 
     public LiftMacro(RobotMovement movement, Lift liftUpDown) {
         this.movement = movement;
@@ -14,7 +15,7 @@ public class LiftMacro implements Runnable {
     @Override
     public void run() {
         if(liftUpDown == Lift.UP) {
-            movement.toggleRaiseLift();
+            movement.moveLift(0.5);
 
             try {
                 Thread.sleep(2500);
@@ -22,14 +23,15 @@ public class LiftMacro implements Runnable {
                 e.printStackTrace();
             }
 
-            movement.toggleRaiseLift();
+            movement.moveLift(0);
 
             movement.toggleArm(0.5);
+            this.complete = true;
         } else {
             movement.toggleClaw(0.675);
             movement.toggleArm(0.98);
 
-            movement.toggleLowerLift();
+            movement.moveLift(-0.2);
 
             try {
                 Thread.sleep(5900);
@@ -37,7 +39,7 @@ public class LiftMacro implements Runnable {
                 e.printStackTrace();
             }
 
-            movement.toggleLowerLift();
+            movement.moveLift(0);
 
             movement.toggleClaw(1);
         }

@@ -17,7 +17,7 @@ public class LiftMacro implements Runnable {
             movement.toggleRaiseLift();
 
             try {
-                Thread.sleep(4000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

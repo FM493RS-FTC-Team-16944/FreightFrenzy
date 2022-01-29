@@ -27,6 +27,7 @@ public class TeleOP extends LinearOpMode {
         hardware = robot.hardware;
         gamepad = new GamePad(robot, gamepad1);
 
+        /*
         XyhVector targetVector = new XyhVector(10, 0, Math.toRadians(0));
         GoToPosition runToTarget = new GoToPosition(robot, targetVector, this);
 
@@ -45,13 +46,15 @@ public class TeleOP extends LinearOpMode {
 
         int navigator = 0;
 
+         */
+
         hardware.resetDriveEncoders();
 
         while (opModeIsActive() && !isStopRequested()) {
             hardware.odometry();
             gamepad.updateRobot();
 
-            path.runMovements();
+            //path.runMovements();
 
             telemetry.addData("Position X", hardware.pos.x);
             telemetry.addData("Position Y", hardware.pos.y);

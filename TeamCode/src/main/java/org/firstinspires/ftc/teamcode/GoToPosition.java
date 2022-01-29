@@ -12,14 +12,16 @@ public class GoToPosition {
     public XyhVector targetPosition;
     public PositionVelocityCtrl forward;
     public boolean complete;
-    public int i;
+    public boolean turn;
+    private int i;
 
-    public GoToPosition(Robot robot, XyhVector targetPosition, LinearOpMode opMode) {
+    public GoToPosition(Robot robot, XyhVector targetPosition, LinearOpMode opMode, boolean turn) {
         this.opMode = opMode;
         this.hardware = robot.hardware;
         this.movement = robot.movement;
         this.correctedHardware = robot.hardware;
         this.complete = false;
+        this.turn = turn;
         i = 0;
 
 
@@ -53,7 +55,7 @@ public class GoToPosition {
             //correctedHardware.pos.y = targetPosition.y;
             forwardCtrl.y = 0;
             } else if(complete_h) {
-            //correctedHardware.pos.h = targetPosition.h;
+            correctedHardware.pos.h = targetPosition.h;
             forwardCtrl.h = 0;
         }
 
@@ -61,11 +63,20 @@ public class GoToPosition {
         // teleOP.telemetry.addData("PID Output Y", forwardCtrl.y);
         //opMode.telemetry.addData("PID Output H", forwardCtrl.h);
 
-        if (targetPosition.h!=0) {
+        if (turn) {
             forwardCtrl.x = 0;
             forwardCtrl.y = 0;
             //correctedHardware.pos.x = targetPosition.x;
             //correctedHardware.pos.y = targetPosition.y;
+            if (complete_h) {
+                this.complete = true;
+                if (i == 0) {
+                    correctedHardware.pos = targetPosition;
+                    i++;
+                }
+            } else {
+                opMode.telemetry.addLine("Not finished turning yet man");
+            }
         }
 
         if (complete_x && complete_y && complete_h) {
@@ -76,8 +87,10 @@ public class GoToPosition {
             }
         }
 
-        if (this.complete == false) {
+        if (!this.complete) {
             movement.strafe(forwardCtrl.x, -forwardCtrl.y, forwardCtrl.h);
+        } else {
+            movement.strafe(0,0,0);
         }
 
         return this.complete;

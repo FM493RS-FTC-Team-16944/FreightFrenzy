@@ -30,12 +30,12 @@ public class RobotMovement {
     }
 
     public void activateFlywheel() {
-        if(hardware.flyWheelSpeed == 1) {
+        if(hardware.flyWheelSpeed == 0.5) {
             hardware.flyWheelSpeed = 0.0;
             hardware.flywheel.setPower(0.0);
         } else {
-            hardware.flyWheelSpeed = 1.0;
-            hardware.flywheel.setPower(1.0);
+            hardware.flyWheelSpeed = 0.5;
+            hardware.flywheel.setPower(0.5);
         }
     }
 
@@ -45,12 +45,12 @@ public class RobotMovement {
     }
 
     public void activateIntake() {
-        if(hardware.intakeSpeed == 1) {
+        if(hardware.intakeSpeed == 0.75) {
             hardware.intakeSpeed = 0.0;
             hardware.intake.setPower(0.0);
         } else {
-            hardware.intakeSpeed = 1.0;
-            hardware.intake.setPower(1.0);
+            hardware.intakeSpeed = 0.75;
+            hardware.intake.setPower(0.75);
         }
     }
 

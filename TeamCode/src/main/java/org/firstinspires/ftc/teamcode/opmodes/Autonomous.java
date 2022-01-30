@@ -50,7 +50,7 @@ public class Autonomous extends LinearOpMode {
 
         robot = new Robot(this);
         hardware = robot.hardware;
-        hardware.pos = hardware.START_POS;
+        //hardware.pos = hardware.START_POS;
 
         robot.movement.toggleClaw(0.675);
 

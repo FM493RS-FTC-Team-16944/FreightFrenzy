@@ -17,7 +17,7 @@ public class LiftMacro implements Runnable {
     @Override
     public void run() {
         if(liftUpDown == Lift.UP) {
-            movement.activateIntake(0);
+            movement.activateIntake(-0.8);
             movement.moveLift(0.5);
 
             try {
@@ -25,6 +25,8 @@ public class LiftMacro implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            movement.activateIntake(0);
 
             movement.moveLift(0);
             if (height > 2000) {

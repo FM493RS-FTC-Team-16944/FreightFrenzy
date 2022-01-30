@@ -54,14 +54,14 @@ public class Autonomous extends LinearOpMode {
 
         robot.movement.toggleClaw(0.675);
 
-        this.goToCarousel = new GoToPosition(robot, new XyhVector(15,65,0), this, false);
-        this.rotateCarousel = new GoToPosition(robot, new XyhVector(15,65, Math.toRadians(30)), this, true);
-        this.unRotateCarousel = new GoToPosition(robot, new XyhVector(15,65,Math.toRadians(0)), this, true);
-        this.goToShippingHubTop = new GoToPosition(robot, new XyhVector(100,0,0), this, false);
-        this.goToShippingHubMiddle = new GoToPosition(robot, new XyhVector(100,20,0), this, false);  //TODO: WHAT PSOITONS
-        this.goToShippingHubBottom = new GoToPosition(robot, new XyhVector(100,30,0), this, false);
-        this.warehouseA = new GoToPosition(robot, new XyhVector(0,-20,0), this, false);
-        this.warehouseB = new GoToPosition(robot, new XyhVector(0,-192,0), this, false);
+        this.goToCarousel = new GoToPosition(robot, new XyhVector(14,65,0), this, false);
+        this.rotateCarousel = new GoToPosition(robot, new XyhVector(14,65, Math.toRadians(40)), this, true);
+        this.unRotateCarousel = new GoToPosition(robot, new XyhVector(14,65,Math.toRadians(0)), this, true);
+        this.goToShippingHubTop = new GoToPosition(robot, new XyhVector(100,10,0), this, false);
+        //this.goToShippingHubMiddle = new GoToPosition(robot, new XyhVector(100,20,0), this, false);  //TODO: WHAT PSOITONS
+        //this.goToShippingHubBottom = new GoToPosition(robot, new XyhVector(100,30,0), this, false);
+        this.warehouseA = new GoToPosition(robot, new XyhVector(5,-20,0), this, false);
+        this.warehouseB = new GoToPosition(robot, new XyhVector(5,-192,0), this, false);
 
         flagsInit();
         robot.movement.activateFlywheel(0);
@@ -164,7 +164,7 @@ public class Autonomous extends LinearOpMode {
 
             if(mvmt2) {
                 if(hardware.flyWheelSpeed == 0) {
-                    robot.movement.activateFlywheel(0.5);
+                    robot.movement.activateFlywheel(0.4);
                     telemetry.addLine("Spinning carousel");
                     startSpin = this.timestamp;
                 }

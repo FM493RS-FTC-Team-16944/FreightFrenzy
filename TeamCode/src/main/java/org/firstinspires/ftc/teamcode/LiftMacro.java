@@ -30,7 +30,7 @@ public class LiftMacro implements Runnable {
 
             movement.moveLift(0);
             if (height > 2000) {
-                movement.toggleArm(0.5);
+                movement.toggleArm(0.65 );
             }
 
             this.complete = true;

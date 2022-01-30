@@ -29,15 +29,17 @@ public class GamePad {
 
     public void updateRobot() {
         if(hardware.currentMode == Mode.DRIVER_CONTROL) {
-            double x = -gamepad.left_stick_x;
-            double y = -gamepad.left_stick_y; // Remember, this is reversed!
+            double x = gamepad.left_stick_x;
+            double y = gamepad.left_stick_y; // Remember, this is reversed!
             double h = gamepad.right_stick_x;
 
-            movement.strafe(x, y, h);
+            movement.strafeR(x, y, h);
         }
 
         // change mode
         if (gamepad.a) {
+            this.hardware.resetAngle();
+            /*
             switch (hardware.currentMode) {
                 case DRIVER_CONTROL:
                     hardware.currentMode = Mode.AUTOMATIC_CONTROL;
@@ -45,6 +47,8 @@ public class GamePad {
                 case AUTOMATIC_CONTROL:
                     hardware.currentMode = Mode.DRIVER_CONTROL;
             }
+
+             */
         }
 
         // no clue
@@ -84,9 +88,9 @@ public class GamePad {
 
         previousFly = gamepad.right_bumper;
 
-        LiftMacro liftMacroUp = new LiftMacro(movement, Lift.UP);
+        LiftMacro liftMacroUp = new LiftMacro(movement, Lift.UP, 2500);
         Thread t1 = new Thread(liftMacroUp);
-        LiftMacro liftMacroDown = new LiftMacro(movement, Lift.DOWN);
+        LiftMacro liftMacroDown = new LiftMacro(movement, Lift.DOWN, 2500);
         Thread t2 = new Thread(liftMacroDown);
 
 

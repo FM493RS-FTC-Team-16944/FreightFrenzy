@@ -49,10 +49,10 @@ public class GoToPosition {
         XyhVector forwardCtrl = forward.calculatePID(correctedHardware.pos);
 
         if(complete_x) {
-            //correctedHardware.pos.x = targetPosition.x;
+            correctedHardware.pos.x = targetPosition.x;
             forwardCtrl.x = 0;
         } else if(complete_y) {
-            //correctedHardware.pos.y = targetPosition.y;
+            correctedHardware.pos.y = targetPosition.y;
             forwardCtrl.y = 0;
             } else if(complete_h) {
             correctedHardware.pos.h = targetPosition.h;
@@ -79,6 +79,9 @@ public class GoToPosition {
             }
         } else {
             opMode.telemetry.addData("Heading", correctedHardware.pos.h);
+            opMode.telemetry.addData("X", correctedHardware.pos.x);
+            opMode.telemetry.addData("Y", correctedHardware.pos.y);
+
             forwardCtrl.h = 0;
             if (complete_x && complete_y) {
                 if (i==0) {

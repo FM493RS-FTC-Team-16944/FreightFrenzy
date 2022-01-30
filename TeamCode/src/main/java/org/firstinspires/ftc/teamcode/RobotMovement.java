@@ -24,6 +24,23 @@ public class RobotMovement {
         hardware.backRightMotor.setPower(0.5*backRightPower);
     }
 
+    public void strafeR(double x, double y, double h) {
+        double xR = -x * Math.cos(-this.hardware.pos.h) + y * Math.sin(-this.hardware.pos.h);
+        double yR = -x * Math.sin(-this.hardware.pos.h) - y * Math.cos(-this.hardware.pos.h);
+
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(h), 1);
+
+        double frontLeftPower = (yR + xR + h) / denominator;
+        double backLeftPower = (yR - xR + h) / denominator;
+        double frontRightPower = (yR + xR - h) / denominator;
+        double backRightPower = (yR - xR - h) / denominator;
+
+        hardware.frontLeftMotor.setPower(0.5*frontLeftPower);
+        hardware.backLeftMotor.setPower(0.5*backLeftPower);
+        hardware.frontRightMotor.setPower(0.5*frontRightPower);
+        hardware.backRightMotor.setPower(0.5*backRightPower);
+    }
+
     public void activateFlywheel(double speed) {
         hardware.flyWheelSpeed = speed;
         hardware.flywheel.setPower(speed);
@@ -45,12 +62,12 @@ public class RobotMovement {
     }
 
     public void activateIntake() {
-        if(hardware.intakeSpeed == 0.75) {
+        if(hardware.intakeSpeed == 0.8) {
             hardware.intakeSpeed = 0.0;
             hardware.intake.setPower(0.0);
         } else {
-            hardware.intakeSpeed = 0.75;
-            hardware.intake.setPower(0.75);
+            hardware.intakeSpeed = 0.8;
+            hardware.intake.setPower(0.8);
         }
     }
 

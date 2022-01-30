@@ -6,34 +6,39 @@ public class LiftMacro implements Runnable {
     RobotMovement movement;
     Lift liftUpDown;
     public boolean complete;
+    long height;
 
-    public LiftMacro(RobotMovement movement, Lift liftUpDown) {
+    public LiftMacro(RobotMovement movement, Lift liftUpDown, long height) {
         this.movement = movement;
+        this.height = height;
         this.liftUpDown = liftUpDown;
     }       
 
     @Override
     public void run() {
         if(liftUpDown == Lift.UP) {
+            movement.activateIntake(0);
             movement.moveLift(0.5);
 
             try {
-                Thread.sleep(2500);
+                Thread.sleep(height);         //2500 is max height
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             movement.moveLift(0);
+            if (height > 2000) {
+                movement.toggleArm(0.5);
+            }
 
-            movement.toggleArm(0.5);
             this.complete = true;
         } else {
+            movement.toggleClaw(1);
             try {
-                Thread.sleep(300);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             movement.toggleClaw(0.675);
             movement.toggleArm(0.98);
 

@@ -25,11 +25,15 @@ public class Autonomous extends LinearOpMode {
     private GoToPosition goToCarousel;
     private GoToPosition rotateCarousel;
     private GoToPosition goToShippingHub;
+    private GoToPosition goToShippingHubTop;
+    private GoToPosition goToShippingHubMiddle;
+    private GoToPosition goToShippingHubBottom;
     private GoToPosition unRotateCarousel;
     private GoToPosition warehouseA;
     private GoToPosition warehouseB;
     private long startSpin;
     public int j;
+    public int spot;
 
     private SequentialMovements goToWarehouse;
 
@@ -42,18 +46,22 @@ public class Autonomous extends LinearOpMode {
         tasks.add(arg -> spinCarousel((Long) arg));
         tasks.add(arg -> goDropShippingHub());
         tasks.add(arg -> goToWarehouse());
+        spot = 2;
 
         robot = new Robot(this);
         hardware = robot.hardware;
+        hardware.pos = hardware.START_POS;
 
         robot.movement.toggleClaw(0.675);
 
         this.goToCarousel = new GoToPosition(robot, new XyhVector(15,65,0), this, false);
         this.rotateCarousel = new GoToPosition(robot, new XyhVector(15,65, Math.toRadians(30)), this, true);
         this.unRotateCarousel = new GoToPosition(robot, new XyhVector(15,65,Math.toRadians(0)), this, true);
-        this.goToShippingHub = new GoToPosition(robot, new XyhVector(105,0,0), this, false);
-        this.warehouseA = new GoToPosition(robot, new XyhVector(20,0,0), this, false);
-        this.warehouseB = new GoToPosition(robot, new XyhVector(0,200,0), this, false);
+        this.goToShippingHubTop = new GoToPosition(robot, new XyhVector(100,0,0), this, false);
+        this.goToShippingHubMiddle = new GoToPosition(robot, new XyhVector(100,20,0), this, false);  //TODO: WHAT PSOITONS
+        this.goToShippingHubBottom = new GoToPosition(robot, new XyhVector(100,30,0), this, false);
+        this.warehouseA = new GoToPosition(robot, new XyhVector(0,-20,0), this, false);
+        this.warehouseB = new GoToPosition(robot, new XyhVector(0,-192,0), this, false);
 
         flagsInit();
         robot.movement.activateFlywheel(0);
@@ -78,13 +86,19 @@ public class Autonomous extends LinearOpMode {
     }
 
     public boolean goToWarehouse() {
+        telemetry.addLine("Warehouse");
         boolean warehouseA = this.warehouseA.runWithPID(THRESHOLD);
 
         if (warehouseA) {
+            mvmt6 = true;
+        }
+
+        if (mvmt6) {
+            telemetry.addLine("hi");
             boolean warehouseB = this.warehouseB.runWithPID(THRESHOLD);
 
             if (warehouseB) {
-                robot.movement.strafe(0,0,0);
+                //robot.movement.strafe(0,0,0);
                 return true;
             }
         }
@@ -94,8 +108,18 @@ public class Autonomous extends LinearOpMode {
 
     public boolean goDropShippingHub() {
         telemetry.addLine("Shipping hub");
+        long height = 2500;
+        goToShippingHub = goToShippingHubTop;
 
-        LiftMacro liftMacroUp = new LiftMacro(robot.movement, Lift.UP);
+        if (this.spot == 0) {
+            height = 1500;
+            goToShippingHub = goToShippingHubBottom;
+        } else if (this.spot == 1) {
+            height = 1500;
+            goToShippingHub = goToShippingHubMiddle;
+        }
+
+        LiftMacro liftMacroUp = new LiftMacro(robot.movement, Lift.UP, height);
         Thread t1 = new Thread(liftMacroUp);
         t1.start();
 
@@ -113,7 +137,7 @@ public class Autonomous extends LinearOpMode {
                 j++;
             }
 
-            LiftMacro liftMacroDown = new LiftMacro(robot.movement, Lift.DOWN);
+            LiftMacro liftMacroDown = new LiftMacro(robot.movement, Lift.DOWN, 2500);
             Thread t2 = new Thread(liftMacroDown);
             t2.start();
 

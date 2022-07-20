@@ -87,6 +87,7 @@ public class Autonomous extends LinearOpMode {
 
     public boolean goToWarehouse() {
         telemetry.addLine("Warehouse");
+
         boolean warehouseA = this.warehouseA.runWithPID(THRESHOLD);
 
         if (warehouseA) {
@@ -125,6 +126,10 @@ public class Autonomous extends LinearOpMode {
 
         boolean finished = this.goToShippingHub.runWithPID(THRESHOLD);
 
+        LiftMacro liftMacroDown = new LiftMacro(robot.movement, Lift.DOWN, 2500);
+        Thread t2 = new Thread(liftMacroDown);
+        t2.start();
+
         if (finished) {
             mvmt5 = true;
             telemetry.addData("Finished moving to hub", finished);
@@ -137,9 +142,7 @@ public class Autonomous extends LinearOpMode {
                 j++;
             }
 
-            LiftMacro liftMacroDown = new LiftMacro(robot.movement, Lift.DOWN, 2500);
-            Thread t2 = new Thread(liftMacroDown);
-            t2.start();
+
 
             return true;
 
@@ -150,17 +153,18 @@ public class Autonomous extends LinearOpMode {
     }
 
     public boolean spinCarousel(long start) {
-        boolean finished = this.goToCarousel.runWithPID(THRESHOLD);
-        if (finished) {
-            mvmt1 = true;
-        }
-
+//        boolean finished = this.goToCarousel.runWithPID(THRESHOLD);
+//        if (finished) {
+//            mvmt1 = true;
+//        }
+        mvmt1 = true;
+        mvmt2 = true;
         if(mvmt1) {
-            boolean finishedRotate = this.rotateCarousel.runWithPID(THRESHOLD);
-            if (finishedRotate) {
-                mvmt2 = true;
-                telemetry.addLine("Rotated");
-            }
+//            boolean finishedRotate = this.rotateCarousel.runWithPID(THRESHOLD);
+//            if (finishedRotate) {
+//                mvmt2 = true;
+//                telemetry.addLine("Rotated");
+//            }
 
             if(mvmt2) {
                 if(hardware.flyWheelSpeed == 0) {

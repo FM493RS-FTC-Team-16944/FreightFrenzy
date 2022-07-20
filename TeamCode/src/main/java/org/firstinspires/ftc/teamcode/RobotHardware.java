@@ -10,8 +10,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
 import org.firstinspires.ftc.teamcode.models.Mode;
+import org.firstinspires.ftc.teamcode.models.Translation2d;
 import org.firstinspires.ftc.teamcode.models.XyhVector;
+import org.firstinspires.ftc.teamcode.models.Twist2d;
+import org.firstinspires.ftc.teamcode.models.Rotation2d;
+import org.firstinspires.ftc.teamcode.models.Transform2d;
+import org.firstinspires.ftc.teamcode.models.Translation2d;
+import org.firstinspires.ftc.teamcode.models.Pose2d;
 
 public class RobotHardware {
 
@@ -29,6 +36,8 @@ public class RobotHardware {
     public double liftSpeed = 0.0;
     public double clawPosition = 0.0;
     public double armPosition = 0.0;
+
+    public Pose2d robotPose = new Pose2d();
 
     public boolean freightLoaded = true;
 
@@ -50,6 +59,7 @@ public class RobotHardware {
     private double previousRightPos = 0;
     private double previousLeftPos = 0;
     private double previousAuxPos = 0;
+    private Rotation2d previousAngle = new Rotation2d(0);
     public double globalAngle = 0;
     public double dx;
     public double dy;
@@ -157,6 +167,8 @@ public class RobotHardware {
 
     public void odometry() {
 
+
+
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
 
         double deltaAngle = -(angles.firstAngle - lastAngles.firstAngle);
@@ -171,17 +183,36 @@ public class RobotHardware {
 
 
         double leftPosition = this.leftEncoder.getCurrentPosition() *cm_per_tick; //due to poor mapping
+        double rightPosition = this.rightEncoder.getCurrentPosition() * cm_per_tick;
         double horizontalPosition = this.auxEncoder.getCurrentPosition() *cm_per_tick;
 
-        double rightPosition = ((globalAngle * trackWidth) - leftPosition);
+
 
         double deltaLeft = leftPosition - previousLeftPos;
         this.previousLeftPos = leftPosition; // Stores the current leftPosition to be used during the next update
-
         double deltaRight = rightPosition - previousRightPos;
         this.previousRightPos = rightPosition; // Stores the current rightPosition to be used during the next update
         double deltaHorizontal = horizontalPosition - previousAuxPos;
         this.previousAuxPos = horizontalPosition; // Stores the current horizontalPosition to be used during the next update
+
+        Rotation2d angle = previousAngle.plus(
+                new Rotation2d(
+                        (deltaLeft - deltaRight) / trackWidth
+                )
+        );
+
+        double dw = (angle.minus(previousAngle).getRadians());
+
+        double dx = (deltaLeft + deltaRight) / 2;
+        double dy = deltaHorizontal - (auxWidth * dw); //check this, supossed to be centerWheelOffset
+
+        Twist2d twist2d = new Twist2d(dx,dy,dw);
+
+        Pose2d newPose = robotPose.exp(twist2d);
+
+        previousAngle = angle;
+
+        robotPose = new Pose2d(newPose.getTranslation(), angle);
 
         //double deltaHeading = (-deltaLeft + deltaRight) / trackWidth;
 
@@ -193,4 +224,31 @@ public class RobotHardware {
         pos.y -= Math.sin(globalAngle) * relativeX + Math.cos(globalAngle) * relativeY;
         pos.h = globalAngle;
     }
+
+    public Pose2d exp(Twist2d twist){
+        double dx = twist.dx;
+        double dy = twist.dy;
+        double dtheta = twist.dtheta;
+
+        double sinTheta = Math.sin(dtheta);
+        double cosTheta = Math.cos(dtheta);
+
+        double s;
+        double c;
+
+        if (Math.abs(dtheta) < 1E-9){
+            s = 1.0 - 1.0 / 6.0 * dtheta * dtheta;
+            c = 0.5 * dtheta;
+        }else{
+            s = sinTheta / dtheta;
+            c = (1 - cosTheta) / dtheta;
+        }
+
+        Transform2d transform = new Transform2d(new Translation2d(dx * s - dy * c, dx * c + dy * s),
+                new Rotation2d(cosTheta,sinTheta));
+
+        return robotPose.plus(transform);
+    }
 }
+
+

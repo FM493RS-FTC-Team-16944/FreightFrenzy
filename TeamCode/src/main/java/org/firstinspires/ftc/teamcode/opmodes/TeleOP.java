@@ -56,9 +56,9 @@ public class TeleOP extends LinearOpMode {
 
             //path.runMovements();
 
-            telemetry.addData("Position X", hardware.pos.x);
-            telemetry.addData("Position Y", hardware.pos.y);
-            telemetry.addData("Posiion H", Math.toDegrees(hardware.pos.h));
+            telemetry.addData("Position X", hardware.robotPose.getX());
+            telemetry.addData("Position Y", hardware.robotPose.getY());
+            telemetry.addData("Posiion H", Math.toDegrees(hardware.robotPose.getHeading()));
 
             // telemetry.addData("Claw Position", hardware.claw.getPosition());
             // telemetry.addData("Arm Position", hardware.arm.getPosition());
